@@ -15,5 +15,9 @@
      <loc>https://gchoi.github.io/posts/deep-learning/object-detection-using-fast-rcnn/</loc>
      <lastmod>2020-10-02</lastmod>
      <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/scientific-computing/realtime-fluid-simulation-using-cuda/</loc>
+     <lastmod>2020-10-02</lastmod>
+     <changefreq>daily</changefreq>
     </url>
 </urlset>
