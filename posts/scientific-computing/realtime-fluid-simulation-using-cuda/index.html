@@ -314,6 +314,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    RESULTS
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -366,6 +373,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    RESULTS
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -385,33 +399,37 @@
                   <h1>Realtime Fluid Simulation Using CUDA</h1>
                 
                 <p>This is one of our researches done in CJ POWERCAST, which is dedicated from the members of our team, T.J. Kwak and J.M. Park and G.Choi.</p>
-<h2 id="intoruduction">INTORUDUCTION</h2>
 <hr />
+<h2 id="intoruduction">INTORUDUCTION</h2>
 <p>GPU (Graphics Process Unit) has been traditionally used only for display of graphical contents with graphics acceleration.</p>
 <p>Because of the characteristics of display that represent pixels as a massive array, memory and processing architectures of GPU are structured in parallel in order to process the massive graphical data in a short period.</p>
 <p>Some pioneers have used these features for parallel computation as well as displaying computer graphics. Consequently GPU manufacturers realized their needs of general purposes of GPU.</p>
-<p><img src="{{ site.baseurl }}/assets/posts/2014-04-06-Realtime-Fluid-Simulation-using-CUDA/01.png">
-[FIG 1. Comparsion of Processor Structures: CPU VS GPU]</p>
+<figure>
+  <img src="https://gchoi.github.io/assets/img/posts/realtime-fluid-simulation-using-cuda/01.png" width="100%" />
+  <figcaption>FIG 1. Comparsion of Processor Structures: CPU VS GPU</figcaption>
+</figure>
+
 <p>As shown in FIG 1., GPU has a huge number of ALUs, which are in charge of arithmetic operations, enabling massively parallel processing.</p>
 <p>With this background, GPGPU (<a href="http://en.wikipedia.org/wiki/Gpgpu">General Purpose Graphics Process Unit</a>) comes into the world and aims to process massively parallel computations not only for computer graphics but for general fields such as prediction of stock, weather, science, etc.</p>
 <p>Most of the simulations in computer graphics are based on natural phenomena and tend to need massive computations to mimic the real nature.</p>
 <p>Our research team has expected that GPGPU technology would be used for wider fields of our related research works.</p>
-<h2 id="implementation">IMPLEMENTATION</h2>
 <hr />
+<h2 id="implementation">IMPLEMENTATION</h2>
 <p>The goal of this research is, as a preceding research, to apply the GPU technology to a realtime fluid simulation that needs to solve the natural phonomenon called "Navier-Stokes equation" with parallel processing.</p>
 <p>To this end we adopted the algorhithms from the simplified version of Navier-Stokes equation(<a href="http://www.autodeskresearch.com/pdf/talks/jos_gdc03.pdf">Jos Stam, Real-Time Fluid Dynamics for Games, 2003 Game Development Conference</a>) and modified the processing structures in order for GPUs to perform the massive calculation in parallel.</p>
 <p>The simplified Navier-Stokes equation for a realtime calculation used in this research looks like:</p>
 <div class="arithmatex">\[ \frac{\partial \mathrm{u}}{\partial t} = -(\mathrm{u} \cdot \nabla) \mathrm{u} + \nu \nabla^2 \mathrm{u} + \mathrm{f} \]</div>
-<p><nbsf>
-$$ \frac{\partial \rho}{\partial t} = -(\mathrm{u} \cdot \nabla) \rho + \kappa \nabla^2 \rho + S $$</p>
+<div class="arithmatex">\[ \frac{\partial \rho}{\partial t} = -(\mathrm{u} \cdot \nabla) \rho + \kappa \nabla^2 \rho + S \]</div>
 <p>The above equation describes that the state of fluid at a given instant of time is modeled as a velocity field: a function that assigns a velocity vector to every point in space.
 
 Following this equation we designed the processing structure from Jos Stam's algorithms.
 
 <br/><br/>
 
-<img src="{{ site.baseurl }}/assets/posts/2014-04-06-Realtime-Fluid-Simulation-using-CUDA/02.png">
-[FIG 2. Fluid Simulation Processing Flow of CPU Sequential Processing and GPU Parallel Processing]
+<figure>
+  <img src="https://gchoi.github.io/assets/img/posts/realtime-fluid-simulation-using-cuda/02.png" width="100%" />
+  <figcaption>FIG 2. Fluid Simulation Processing Flow of CPU Sequential Processing and GPU Parallel Processing</figcaption>
+</figure>
 
 <br/><br/>
 Since this simulation performs calculations on each point within a specific area, it is a good case to verify massively parallel computation performance by GPGPU.
@@ -422,51 +440,41 @@ As a result the simulation from CPU shows a good performance if the resolution i
 
 However, if not the case, the performance is very poor.</p>
 
-<h2>RESULTS</h2>
-
-<p><hr/>
-<p>As you can see the results on the video below, the simulation on 512 x 512 resolution goes terribly slow since CPU does sequential computations while the GPU simulation shows a nice result on the same resolution.</p>
-<p><br/><br/></p>
+<hr />
+<h2 id="results">RESULTS</h2>
+<p><p>As you can see the results on the video below, the simulation on 512 x 512 resolution goes terribly slow since CPU does sequential computations while the GPU simulation shows a nice result on the same resolution.</p>
 <iframe width="100%" height="684" src="https://www.youtube.com/embed/a2OX8FWJc5o" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<p><br/><br/></p>
 <p>The performance table of frame rates by testing the same simulation between CPU and GPU is given.</p>
-<p><br/><br/></p>
 <p>[TABLE 1. Comparison of results between from CPU and from GPU for realtime fluid simulation]</p>
 <table>
-  <tbody>
-    <tr>
-      <td><p>Resolution</p></td>
-      <td><p>128 × 128</p></td>
-      <td><p>256 × 256</p></td>
-      <td><p>512 × 128</p></td>
-    </tr>
-
-    <tr>
-      <td><p>Framerates from CPU Processing</p></td>
-      <td><p>60 fps</p></td>
-      <td><p>30 fps</p></td>
-      <td><p>0.7 fps</p></td>
-    </tr>
-
-    <tr>
-      <td><p>Framerates from GPU Processing</p></td>
-      <td><p>-</p></td>
-      <td><p>-</p></td>
-      <td><p>60 fps</p></td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th align="right">Resolution</th>
+<th align="center">128 ×128</th>
+<th align="center">256×256</th>
+<th align="center">512×128</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">Framerates from CPU Processing</td>
+<td align="center">60 fps</td>
+<td align="center">30 fps</td>
+<td align="center">0.7 fps</td>
+</tr>
+<tr>
+<td align="right">Framerates from GPU Processing</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">60 fps</td>
+</tr>
+</tbody>
 </table>
-
-<p><br/><br/>
-<p>The simulation on CPU is performed for three different resolutions while that on GPU only for one resolution, 512 X 512, which is sufficient to verify the performance since running on CPU is very slow on 512 X 512 resolution.</p>
-<p><br/><br/></p>
+<p>The simulation on CPU is performed for three different resolutions while that on GPU only for one resolution, 512 × 512, which is sufficient to verify the performance since running on CPU is very slow on 512 × 512 resolution.</p>
 <p>The test is run with Intel Xeon CPU 3.07Ghz 12 cores, 12GB RAM and NVIDIA Quadro 5000.</p>
-<p><br/><br/></p>
 <p>In conclusion this research inspires us with the potential of GPU usage for general computation purposes. By theses reasons we should keep up with GPGPU technology corresponding to real-time simulations with massive computation.</p>
-<p><br/><br/></p>
-<p>Why? Because the technology world requires us more and more massive computations.
-</p></p>
+<p>Why? Because the technology world requires us more and more massive computations.</p>
                 
               
               
