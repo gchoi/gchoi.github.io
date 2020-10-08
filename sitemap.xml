@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
+     <loc>https://gchoi.github.io/</loc>
+     <lastmod>2020-10-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/about/</loc>
+     <lastmod>2020-10-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/deep-learning/object-detection-using-rcnn/</loc>
+     <lastmod>2020-10-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/deep-learning/object-detection-using-fast-rcnn/</loc>
+     <lastmod>2020-10-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/deep-learning/setting-up-pytorch-centernet-dev-env/</loc>
+     <lastmod>2020-10-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/scientific-computing/realtime-fluid-simulation-using-cuda/</loc>
+     <lastmod>2020-10-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+</urlset>
