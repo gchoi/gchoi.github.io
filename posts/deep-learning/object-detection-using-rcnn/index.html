@@ -364,21 +364,21 @@
 <h2 id="region-proposal">Region Proposal</h2>
 <p>가장 단순하고 직관적으로 생각하면, 다양한 크기와 다양한 종횡비(Aspect Ratio)를 갖는 Windows를 설정하여 이미지를 쭈욱 훑어가며 오브젝트의 유무 및 종류를 알아내는 방법이 있을 수 있습니다. 이를 <a href="https://www.pyimagesearch.com/2015/03/23/sliding-windows-for-object-detection-with-python-and-opencv/">Sliding Window</a> 기법이라고 합니다. 그러나, 이미지 내의 오브젝트가 어떤 크기로 어떤 종횡비를 갖는지 알 수 없기 때문에 매우 많은 종류의 WIndows를 생성해야 하기 때문에 매우 비효율적인 방법이라고 할 수 있습니다.</p>
 <figure>
-  <img src="https://gchoi.github.io/assets/img/posts/object-detection-using-rcnn/07.gif" width="500" />
+  <img src="../../../assets/img/posts/object-detection-using-rcnn/07.gif" width="500" />
   <figcaption>Sliding Window를 이용한 Object Detection 예시 - Image from <a href="https://www.pyimagesearch.com/">pyimagesearch.com</a></figcaption>
 </figure>
 
 <p>오브젝트가 존재할 것 같은 영역을 제안하는 것을 Region Proposals라고 하는데, Sliding Window의 이러한 비효율성 때문에 본 논문에서는 Region Proposals로서 <a href="https://www.learnopencv.com/selective-search-for-object-detection-cpp-python/">Selective Search</a> 기법을 이용합니다.</p>
 <p>Selective Search는 Object Detection을 위한 Region Proposal 알고리즘으로 픽셀 간의 컬러, 텍스쳐, 크기, 모양 등의 유사성을 기반으로 영역을 넓혀가며 Segnmentation(또는 Grouping)하는 기법입니다.</p>
 <figure>
-  <img src="https://gchoi.github.io/assets/img/posts/object-detection-using-rcnn/01.jpg" width="500" />
+  <img src="../../../assets/img/posts/object-detection-using-rcnn/01.jpg" width="500" />
   <figcaption>Selective Search 예시 - Image from <a href="https://www.learnopencv.com/selective-search-for-object-detection-cpp-python/">learnopencv.com</a></figcaption>
 </figure>
 
 <h2 id="r-cnn_1">R-CNN 구조</h2>
 <p>논문에 제시된 R-CNN의 구조는 아래 이미지와 같습니다.</p>
 <figure>
-  <img src="https://gchoi.github.io/assets/img/posts/object-detection-using-rcnn/02.jpg" width="100%" />
+  <img src="../../../assets/img/posts/object-detection-using-rcnn/02.jpg" width="100%" />
 </figure>
 
 <ol>
@@ -411,15 +411,15 @@
 <p>따라서, <span class="arithmatex">\(P^i\)</span>가 <span class="arithmatex">\(G^i\)</span>에 근접할 수 있도록 적절한 Loss를 정의하여 이를 최소화하도록 학습을 합니다. 이에 대한 자세한 내용은 논문의 [C. Bounding-box regression] 부분을 참고하시면 되겠습니다.</p>
 <p>아래 이미지들은 R-CNN을 이용하여 Object Detection한 결과들입니다.</p>
 <figure>
-  <img src="https://gchoi.github.io/assets/img/posts/object-detection-using-rcnn/04.jpg" width="100%" />
+  <img src="../../../assets/img/posts/object-detection-using-rcnn/04.jpg" width="100%" />
 </figure>
 
 <figure>
-  <img src="https://gchoi.github.io/assets/img/posts/object-detection-using-rcnn/05.jpg" width="100%" />
+  <img src="../../../assets/img/posts/object-detection-using-rcnn/05.jpg" width="100%" />
 </figure>
 
 <figure>
-  <img src="https://gchoi.github.io/assets/img/posts/object-detection-using-rcnn/06.jpg" width="100%" />
+  <img src="../../../assets/img/posts/object-detection-using-rcnn/06.jpg" width="100%" />
 </figure>
 
 <hr />
