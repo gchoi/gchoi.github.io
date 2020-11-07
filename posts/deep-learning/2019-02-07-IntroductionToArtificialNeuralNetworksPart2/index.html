@@ -1,0 +1,911 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>Introduction to Artificial Neural Network Part 2. - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Introduction to Artificial Neural Network Part 2.
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Introduction to Artificial Neural Network Part 2.
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link md-nav__link--active">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1. 데이터 획득
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    2. 데이터 관찰 및 가공
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-nuralnet" class="md-nav__link">
+    3. nuralnet 패키지 설치
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-ann" class="md-nav__link">
+    4. ANN 모델 및 가시화
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ann" class="md-nav__link">
+    5. ANN 모델을 이용한 테스트 데이터 예측
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-ann" class="md-nav__link">
+    6. ANN 모델 성능 개선
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../MongoDB/01-starting-mongodb.md" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../MongoDB/02-mongodb-basic-queries.md" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../MongoDB/03-mongodb-lifecycle.md" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../MongoDB/04-mongodb-update-modifiers-inc.md" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1. 데이터 획득
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    2. 데이터 관찰 및 가공
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-nuralnet" class="md-nav__link">
+    3. nuralnet 패키지 설치
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-ann" class="md-nav__link">
+    4. ANN 모델 및 가시화
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ann" class="md-nav__link">
+    5. ANN 모델을 이용한 테스트 데이터 예측
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-ann" class="md-nav__link">
+    6. ANN 모델 성능 개선
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                  <h1>Introduction to Artificial Neural Network Part 2.</h1>
+                
+                <p><em>Written by Alex Choi, Feb. 07, 2019.</em></p>
+<p><a href="../../../posts/deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/">Part 1.</a>에 이어 이번 글에서는 R에서 인공신경망(Artificial Neural Networks, ANN)을 이용하여 분류(Classification) 문제를 풀어보도록 하겠습니다. 본 포스팅의 모든 코드는 R 코드입니다.</p>
+<h2 id="1">1. 데이터 획득</h2>
+<hr />
+<p>ANN을 이용하여 분류할 학습 데이터와 테스트 데이터가 필요합니다. 대표적인 Machine Learning 저장소인 <a href="http://archive.ics.uci.edu/ml/index.html">UCI Machine Learning Data Repository</a>에서 데이터를 획득하도록 합니다. 이 중 <a href="http://archive.ics.uci.edu/ml/datasets/MONK's+Problems">몽크 문제(Monk's Problem)</a> 데이터를 이용하기로 하겠습니다. 몽크 문제는 최초의 학습 알고리즘 비교를 위한 기초문제입니다.</p>
+<p>먼저 몽크 문제의 학습 데이터를 다운받도록 합니다: <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/monks-problems/monks-1.train">몽크 문제 학습 데이터</a></p>
+<p>또한 몽크 문제의 테스트 데이터를 다운받도록 합니다: <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/monks-problems/monks-1.test">몽크 문제 테스트 데이터</a></p>
+<p>다운받은 파일들의 확장자를 모두 .csv로 변환합니다. 만약 위의 과정이 번거로울 경우 다음 CSV 파일을 다운 받습니다:</p>
+<ul>
+<li><a href="http://cinema4dr12.tistory.com/attachment/cfile29.uf@237B24445866529F16C02A.csv">monk_train_1.csv</a></li>
+<li><a href="http://cinema4dr12.tistory.com/attachment/cfile5.uf@244C45445866529F3BF4D9.csv">monk_test_1.csv</a></li>
+</ul>
+<h2 id="2">2. 데이터 관찰 및 가공</h2>
+<hr />
+<p>이제 데이터를 불러오고 살펴보도록 합니다.</p>
+<div class="highlight"><pre><span></span><code>&gt; utils::head(monk_train)
+X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
+1 NA  1    1    1    1    1  3    2  data_6
+2 NA  1    1    1    1    3  2    1 data_19
+3 NA  1    1    1    1    3  3    2 data_22
+4 NA  1    1    1    2    1  2    1 data_27
+5 NA  1    1    1    2    1  2    2 data_28
+6 NA  1    1    1    2    2  3    1 data_37
+</code></pre></div>
+
+<p>과 같은데, 각 피쳐(Feature)의 이름을 정해놓지 않았기 때문에 자동으로 생성되어 있음을 알 수 있습니다. 우선 <code>X열</code>을 삭제합니다.</p>
+<div class="highlight"><pre><span></span><code>monk_train$X &lt;- NULL
+</code></pre></div>
+
+<p>다시 데이터 몇 개를 살펴보면,</p>
+<div class="highlight"><pre><span></span><code>&gt; utils::head(monk_train)
+  X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
+1  1    1    1    1    1  3    2  data_6
+2  1    1    1    1    3  2    1 data_19
+3  1    1    1    1    3  3    2 data_22
+4  1    1    1    2    1  2    1 data_27
+5  1    1    1    2    1  2    2 data_28
+6  1    1    1    2    2  3    1 data_37
+</code></pre></div>
+
+<p>첫번째 열이었던 X 피쳐가 삭제되었음을 확인할 수 있습니다. 이제 피쳐들의 이름을 지정하도록 합니다. UCI Machine Learning Repository의 몽크 문제 사이트를 살펴보면, Attribute Information에서 각 피쳐의 이름을 알 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>Attribute Information:
+
+1. class: 0, 1
+2. a1: 1, 2, 3
+3. a2: 1, 2, 3
+4. a3: 1, 2
+5. a4: 1, 2, 3
+6. a5: 1, 2, 3, 4
+7. a6: 1, 2
+8. Id: (A unique symbol for each instance)
+</code></pre></div>
+
+<p>총 8개의 피쳐가 있고 이름은 위와 같습니다. 따라서, 위와 같이 피쳐의 이름을 부여하고,</p>
+<div class="highlight"><pre><span></span><code>base::names(monk_train) &lt;- c(&quot;class&quot;,&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;,&quot;a4&quot;,&quot;a5&quot;,&quot;a6&quot;,&quot;id&quot;)
+</code></pre></div>
+
+<p>다시 데이터를 몇 개 살펴보면,</p>
+<div class="highlight"><pre><span></span><code>&gt; utils::head(monk_train)
+  class a1 a2 a3 a4 a5 a6      id
+1     1  1  1  1  1  3  2  data_6
+2     1  1  1  1  3  2  1 data_19
+3     1  1  1  1  3  3  2 data_22
+4     1  1  1  2  1  2  1 data_27
+5     1  1  1  2  1  2  2 data_28
+6     1  1  1  2  2  3  1 data_37
+</code></pre></div>
+
+<p>이 중 사실 id는 필요가 없으므로, 다시 이 피쳐를 삭제하도록 합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="n">monk_train</span><span class="o">$</span><span class="n">id</span> <span class="o">&lt;-</span> <span class="kc">NULL</span>
+</code></pre></div>
+
+<p>이제 <code>id</code> 피쳐가 삭제되었습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">utils</span><span class="o">::</span><span class="nf">head</span><span class="p">(</span><span class="n">monk_train</span><span class="p">)</span>
+  <span class="n">class</span> <span class="n">a1</span> <span class="n">a2</span> <span class="n">a3</span> <span class="n">a4</span> <span class="n">a5</span> <span class="n">a6</span>
+<span class="m">1</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">3</span>  <span class="m">2</span>
+<span class="m">2</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">3</span>  <span class="m">2</span>  <span class="m">1</span>
+<span class="m">3</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">3</span>  <span class="m">3</span>  <span class="m">2</span>
+<span class="m">4</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">1</span>
+<span class="m">5</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">2</span>
+<span class="m">6</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">1</span>
+</code></pre></div>
+
+<p>이제 전체적으로 데이터를 살펴보면,</p>
+<div class="highlight"><pre><span></span><code>&gt; utils::str(monk_train)
+&#39;data.frame&#39;:   123 obs. of  7 variables:
+ $ class: int  1 1 1 1 1 1 1 1 1 0 ...
+ $ a1   : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ a2   : int  1 1 1 1 1 1 1 1 2 2 ...
+ $ a3   : int  1 1 1 2 2 2 2 2 1 1 ...
+ $ a4   : int  1 3 3 1 1 2 2 3 1 1 ...
+ $ a5   : int  3 2 3 2 2 3 4 1 1 2 ...
+ $ a6   : int  2 1 2 1 2 1 1 2 2 1 ...
+</code></pre></div>
+
+<p><code>monk_train</code>은 7개의 피쳐를 갖는 총 123개의 데이터로 구성되어 있음을 알 수 있습니다. 학습 데이터와 마찬가지로, 테스트 데이터 또한 동일한 방식으로 가공하도록 합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="n">monk_test</span> <span class="o">&lt;-</span> <span class="n">utils</span><span class="o">::</span><span class="nf">read.csv</span><span class="p">(</span><span class="n">file</span> <span class="o">=</span> <span class="s">&quot;monk_test_1.csv&quot;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+<span class="n">monk_test</span><span class="o">$</span><span class="n">X</span> <span class="o">&lt;-</span> <span class="kc">NULL</span>
+<span class="n">base</span><span class="o">::</span><span class="nf">names</span><span class="p">(</span><span class="n">monk_test</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;class&quot;</span><span class="p">,</span><span class="s">&quot;a1&quot;</span><span class="p">,</span><span class="s">&quot;a2&quot;</span><span class="p">,</span><span class="s">&quot;a3&quot;</span><span class="p">,</span><span class="s">&quot;a4&quot;</span><span class="p">,</span><span class="s">&quot;a5&quot;</span><span class="p">,</span><span class="s">&quot;a6&quot;</span><span class="p">,</span><span class="s">&quot;id&quot;</span><span class="p">)</span>
+<span class="n">monk_test</span><span class="o">$</span><span class="n">id</span> <span class="o">&lt;-</span> <span class="kc">NULL</span>
+<span class="n">utils</span><span class="o">::</span><span class="nf">str</span><span class="p">(</span><span class="n">monk_test</span><span class="p">)</span>
+</code></pre></div>
+
+<p>피쳐마다 값의 범위가 제각각이기 때문에 이를 정규화(Normalization)할 필요가 있으므로, 정규화 함수를 정의하도록 합니다. 정규화 함수는 벡터의 값에서 해당 벡터의 최소값을 뺀 값을 최대값과 최소값과의 차이로 나눈 것입니다:</p>
+<div class="highlight"><pre><span></span><code><span class="n">normalize</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">return</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="nf">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="nf">min</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>따라서, 위의 함수를 이용하면, 입력된 값에 <code>[0,1]</code>의 범위로 변환됩니다. <code>lapply</code> 함수를 이용하여 <code>monk_train</code>의 각 열에 <code>normalize()</code> 함수를 적용하고, 이를 Data Frame으로 변환합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="n">monk_train_norm</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">lapply</span><span class="p">(</span><span class="n">monk_train</span><span class="p">,</span> <span class="n">normalize</span><span class="p">))</span>
+</code></pre></div>
+
+<p>그러나, <code>class</code> 피쳐는 정규화 되지 않기를 원하기 때문에 이 피쳐에 대해서는 다시 원래 데이터를 저장하도록 합니다:
+(사실 class 피쳐값들은 0 아니면 1이므로 굳이 데이터를 되돌릴 필요는 없지만, 몽크 문제가 아닌 다른 데이터인 경우에는 이 과정이 반드시 필요합니다.)</p>
+<div class="highlight"><pre><span></span><code><span class="n">monk_train_norm</span><span class="o">$</span><span class="n">class</span> <span class="o">&lt;-</span> <span class="n">monk_train</span><span class="o">$</span><span class="n">class</span>
+</code></pre></div>
+
+<p>테스트 데이터에 대해서도 동일한 과정을 수행합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="n">monk_test_norm</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">lapply</span><span class="p">(</span><span class="n">monk_test</span><span class="p">,</span> <span class="n">normalize</span><span class="p">))</span>
+<span class="n">monk_test_norm</span><span class="o">$</span><span class="n">class</span> <span class="o">&lt;-</span> <span class="n">monk_test</span><span class="o">$</span><span class="n">class</span>
+</code></pre></div>
+
+<h2 id="3-nuralnet">3. nuralnet 패키지 설치</h2>
+<hr />
+<p>이제 R의 인공신경망 패키지 중 하나인 <code>neuralnet</code>을 다운 받습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;neuralnet&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>그리고 이 패키지를 로딩합니다:</p>
+<div class="highlight"><pre><span></span><code>base::library(neuralnet)
+</code></pre></div>
+
+<h2 id="4-ann">4. ANN 모델 및 가시화</h2>
+<hr />
+<p>은닉 레이어를 1개만 갖는 간단한 ANN 모델을 세웁니다:</p>
+<div class="highlight"><pre><span></span><code><span class="n">monk_model</span> <span class="o">&lt;-</span> <span class="n">neuralnet</span><span class="o">::</span><span class="nf">neuralnet</span><span class="p">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">class</span>
+                                   <span class="o">~</span> <span class="n">a1</span> <span class="o">+</span> <span class="n">a2</span> <span class="o">+</span> <span class="n">a3</span> <span class="o">+</span> <span class="n">a4</span> <span class="o">+</span> <span class="n">a5</span> <span class="o">+</span> <span class="n">a6</span><span class="p">,</span>
+                                   <span class="n">data</span> <span class="o">=</span> <span class="n">monk_train</span><span class="p">,</span>
+                                   <span class="n">hidden</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</code></pre></div>
+
+<p>이제 세워진 ANN 모델에 대한 네트워크 토폴로지를 가시화해 보겠습니다.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">graphics</span><span class="o">::</span><span class="nf">plot</span><span class="p">(</span><span class="n">monk_model</span><span class="p">)</span>
+</code></pre></div>
+
+<p><br/>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/01.png" width="100%" />
+  <figcaption>모델 아키텍쳐</figcaption>
+</figure></p>
+<p>구성된 노드 및 레이어와 노드 가중치를 한 눈에 볼 수 있습니다.</p>
+<p>상기 이미지의 파란색 노드는 편향(Bias)값을 나타내며, 이 값은 노드의 값이 이동하도록 하는 상수값인데, 마치 선형 회귀모델에서 좌표 Intercept와 유사합니다. 그러나, 에러값이 상당히 높으므로 이 모델로 예측할 경우 상당히 안 좋은 결과를 얻게 될 것이라는 것을 알 수 있습니다.</p>
+<h2 id="5-ann">5. ANN 모델을 이용한 테스트 데이터 예측</h2>
+<hr />
+<p>세워진 모델을 이용하여 테스트 데이터의 모델 결과를 얻어보도록 합니다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_results</span> <span class="o">&lt;-</span> <span class="n">neuralnet</span><span class="o">::</span><span class="nf">compute</span><span class="p">(</span><span class="n">monk_model</span><span class="p">,</span> <span class="n">monk_test</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="m">7</span><span class="p">])</span>
+</code></pre></div>
+
+<p>위의 코드의 의미는 <code>monk_model</code>을 이용하여 <code>monk_test[2:7]</code>에 대한 예측 모델 결과를 얻는 것입니다.</p>
+<p><code>monk_test[2:7]</code>는 <code>monk_test[1]</code>인 Class 피쳐에 대한 모델 결과를 얻기 위하여 나머지 피쳐인 a1~a6를 이용한다는 의미입니다. <code>model_results</code>가 가지고 있는 데이터 이름를 살펴보면,</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="nf">names</span><span class="p">(</span><span class="n">model_results</span><span class="p">)</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&quot;neurons&quot;</span>    <span class="s">&quot;net.result&quot;</span>
+</code></pre></div>
+
+<p>인데, <code>neurons</code>는 뉴럴 네트워크의 각 레이어의 뉴런 출력값들이며, <code>net.result</code>는 뉴럴 네트워크의 전체 결과를 행렬 형태로 저장한 값(현재 우리가 풀고 있는 문제에서는 벡터)입니다.</p>
+<p><code>net.result</code>이 테스트 데이터에 대한 분류 결과입니다. 이 값을 예측 결과값이라는 다른 변수에 저장합니다.</p>
+<div class="highlight"><pre><span></span><code><span class="n">predicted_monk</span> <span class="o">&lt;-</span> <span class="n">model_results</span><span class="o">$</span><span class="n">net.result</span>
+</code></pre></div>
+
+<p>값을 몇 개 살펴보면,</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">predicted_monk</span><span class="p">)</span>
+             <span class="p">[,</span><span class="m">1</span><span class="p">]</span>
+<span class="p">[</span><span class="m">1</span><span class="p">,]</span> <span class="m">1.0102054821</span>
+<span class="p">[</span><span class="m">2</span><span class="p">,]</span> <span class="m">0.3010884442</span>
+<span class="p">[</span><span class="m">3</span><span class="p">,]</span> <span class="m">0.3014953569</span>
+<span class="p">[</span><span class="m">4</span><span class="p">,]</span> <span class="m">0.3010585095</span>
+<span class="p">[</span><span class="m">5</span><span class="p">,]</span> <span class="m">0.3010585096</span>
+<span class="p">[</span><span class="m">6</span><span class="p">,]</span> <span class="m">0.3010585095</span>
+</code></pre></div>
+
+<p>첫번째 값을 볼 수 있듯이 테스트 데이터에서 class의 값은 0과 1사이였는데 1을 살짝 넘는 값도 보입니다. 즉, 계산이 충분히 정확하지 않음을 다시 한 번 확인할 수 있습니다.</p>
+<p>그러면 실제 데이터의 class와  ANN을 통해 예측된 값의 오차를 확인해 보도록 합니다. 이를 확인하려면 두 값 사이의 의존성을 분석하면 되는데, 이것을 상관관계(Correlation) 분석이라고 하며 대표적인 것으로 피어슨(Pearson), 켄달(Kendall), 스피어만(Spearman) 상관계수 등이 있습니다.</p>
+<p>테스트 데이터와 ANN을 통해 예측된 데이터와의 상관관계를 계산해 보도록 합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">stats</span><span class="o">::</span><span class="nf">cor</span><span class="p">(</span><span class="n">predicted_monk</span><span class="p">,</span> <span class="n">monk_test</span><span class="o">$</span><span class="n">class</span><span class="p">)</span>
+             <span class="p">[,</span><span class="m">1</span><span class="p">]</span>
+<span class="p">[</span><span class="m">1</span><span class="p">,]</span> <span class="m">0.5479135178</span>
+</code></pre></div>
+
+<p>상관관계 결과값은 <code>[-1,1]</code> 범위를 갖는데, -1은 음의 완전상관관계, 0은 상관관계가 하나도 없는 것이며, 1은 양의 완전상관관계입니다.</p>
+<p>값이 0.5 근처로 두 값 사이에 상관관계는 있긴 하지만 크지 않음을 알 수 있습니다. 즉, 계산 결과가 그리 만족스럽지 못하며, 실제 에러도 컸음을 알 수 있었습니다.</p>
+<h2 id="6-ann">6. ANN 모델 성능 개선</h2>
+<hr />
+<p>은닉 레이어를 단지 1개만 사용한 경우, 결과가 썩 만족스럽지 못했습니다.</p>
+<p>은닉 레이어를 추가할 수록 해가 조금씩 개선될 것이지만 계산량이 매우 늘어날 것입니다. 계속해서 은닉 레이어를 추가하다보면 결과는 더이상 눈에 띄게 개선되지 않을 수 있는데 해가 수렴되었다고 볼 수 있을 것입니다.</p>
+<p>또한 은닉 레이어를 너무 많이 추가하다보면 오히려 결과가 더 안 좋아지는 경우도 있습니다. 어쨌든 은닉 레이어를 2로 지정해서 결과를 확인해 보겠습니다.</p>
+<div class="highlight"><pre><span></span><code><span class="nf">set.seed</span><span class="p">(</span><span class="m">12345</span><span class="p">)</span>
+<span class="n">monk_model</span> <span class="o">&lt;-</span> <span class="n">neuralnet</span><span class="o">::</span><span class="nf">neuralnet</span><span class="p">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">class</span>
+                                   <span class="o">~</span> <span class="n">a1</span> <span class="o">+</span> <span class="n">a2</span> <span class="o">+</span> <span class="n">a3</span> <span class="o">+</span> <span class="n">a4</span> <span class="o">+</span> <span class="n">a5</span> <span class="o">+</span> <span class="n">a6</span><span class="p">,</span>
+                                   <span class="n">data</span> <span class="o">=</span> <span class="n">monk_train</span><span class="p">,</span>
+                                   <span class="n">hidden</span> <span class="o">=</span> <span class="m">2</span><span class="p">)</span>
+
+<span class="n">graphics</span><span class="o">::</span><span class="nf">plot</span><span class="p">(</span><span class="n">monk_model</span><span class="p">)</span>
+<span class="n">model_results</span> <span class="o">&lt;-</span> <span class="n">neuralnet</span><span class="o">::</span><span class="nf">compute</span><span class="p">(</span><span class="n">monk_model</span><span class="p">,</span> <span class="n">monk_test</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="m">7</span><span class="p">])</span>
+<span class="n">predicted_monk</span> <span class="o">&lt;-</span> <span class="n">model_results</span><span class="o">$</span><span class="n">net.result</span>
+</code></pre></div>
+
+<p><br/>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/02.png" width="100%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>이 때의 결과는,</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">stats</span><span class="o">::</span><span class="nf">cor</span><span class="p">(</span><span class="n">predicted_monk</span><span class="p">,</span> <span class="n">monk_test</span><span class="o">$</span><span class="n">class</span><span class="p">)</span>
+             <span class="p">[,</span><span class="m">1</span><span class="p">]</span>
+<span class="p">[</span><span class="m">1</span><span class="p">,]</span> <span class="m">0.5604624596</span>
+</code></pre></div>
+
+<p>이며, 은닉 레이어가 1개인 경우보다 결과가 약간 개선 되었음을 알 수 있습니다. 은닉 레이어를 5개까지 늘리면서 테스트 해 보면,</p>
+<table>
+<thead>
+<tr>
+<th align="center">No. of Hidden Layers</th>
+<th align="center">Error</th>
+<th align="center">Steps</th>
+<th align="center">Correlation Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">1</td>
+<td align="center">10.858</td>
+<td align="center">2523</td>
+<td align="center">0.54791</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">6.829</td>
+<td align="center">3884</td>
+<td align="center">0.50605</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">0.024</td>
+<td align="center">4553</td>
+<td align="center">0.99862</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">4.2716</td>
+<td align="center">8082</td>
+<td align="center">0.67534</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">0.018</td>
+<td align="center">7760</td>
+<td align="center">0.99712</td>
+</tr>
+</tbody>
+</table>
+<p>와 같은데, 은닉 레이어가 3개 사용된 경우 극적으로 결과가 좋아졌음을 알 수 있습니다.</p>
+<p>그러나, 3개 사용된 경우에 비해 4개 사용되는 경우 계산량은 2개 가까이 많아졌는데 결과는 오히려 더 안 좋아졌으며, 5개 사용된 경우 결과는 다시 좋아졌음을 알 수 있습니다.</p>
+<p><br/>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/03.png" width="100%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>위의 이미지는 시험삼아 은닉 레이어를 10개 사용한 경우인데 눈이 돌아갈 정도로 복잡해 보입니다.</p>
+<p>UCI Machine Learning Repository의 <a href="http://archive.ics.uci.edu/ml/datasets/MONK's+Problems">몽크 문제(Monk's Problem) 데이터</a>에서 데이터셋 2와 3에 대해서도 연습삼아 위의 과정을 테스트해 보길 바랍니다.</p>
+<p>이로써 R의 ANN 패키지인 neuralnet을 이용하여 분류 문제를 푸는 방법에 대해서 알아보았습니다.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Introduction to Artificial Neural Network Part 1.
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Object Detection Using R-CNN
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

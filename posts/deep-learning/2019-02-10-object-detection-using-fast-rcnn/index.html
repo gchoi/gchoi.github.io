@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/MongoDB/03-mongodb-lifecycle/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/deep-learning/2019-02-10-object-detection-using-fast-rcnn/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>03. MongoDB 라이프사이클 - Alex Choi's Blog</title>
+        <title>Object Detection Using Fast R-CNN - Alex Choi's Blog</title>
       
     
     
@@ -51,6 +51,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#r-cnn" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -75,7 +80,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              03. MongoDB 라이프사이클
+              Object Detection Using Fast R-CNN
             
           </span>
         </div>
@@ -194,10 +199,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
     
     <label class="md-nav__link" for="nav-3-1">
       Deep Learning
@@ -217,7 +224,31 @@
 
 
   <li class="md-nav__item">
-    <a href="../../deep-learning/object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
       Object Detection Using R-CNN
     </a>
   </li>
@@ -227,11 +258,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../deep-learning/object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="Object Detection Using Fast R-CNN" class="md-nav__link md-nav__link--active">
       Object Detection Using Fast R-CNN
     </a>
+    
   </li>
 
         
@@ -241,7 +281,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../deep-learning/setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
       How to Set Up PyTorch CenterNet Development Environment
     </a>
   </li>
@@ -279,7 +319,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../scientific-computing/realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
       Realtime Fluid Simulation Using CUDA
     </a>
   </li>
@@ -294,12 +334,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
     
     <label class="md-nav__link" for="nav-3-3">
       MongoDB
@@ -319,7 +357,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+    <a href="../../MongoDB/01-starting-mongodb.md" title="01. MongoDB 시작하기" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
   </li>
@@ -331,7 +369,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+    <a href="../../MongoDB/02-mongodb-basic-queries.md" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
   </li>
@@ -341,18 +379,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-    
-    <a href="./" title="03. MongoDB 라이프사이클" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../MongoDB/03-mongodb-lifecycle.md" title="03. MongoDB 라이프사이클" class="md-nav__link">
       03. MongoDB 라이프사이클
     </a>
-    
   </li>
 
         
@@ -362,7 +393,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../04-mongodb-update-modifiers-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+    <a href="../../MongoDB/04-mongodb-update-modifiers-inc.md" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
       04. MongoDB Update Operators Part 1. - $inc
     </a>
   </li>
@@ -385,6 +416,21 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -394,65 +440,59 @@
                   
                 
                 
-                  <h1>03. MongoDB 라이프사이클</h1>
-                
-                <p>이번 포스팅에서는 다음 코드 예시를 통해 MongoDB의 라이프사이클에 대하여 알아보도록 하겠습니다.</p>
-<div class="highlight"><pre><span></span><code>// user DB &quot;foobar&quot;
-use foobar
-
-// define user1
-var user1 = {&quot;username&quot; : &quot;gchoi&quot;}
-user1.relationships = {&quot;friends&quot; : 100, &quot;enemies&quot; : 1}
-
-// define user2
-var user2 = {&quot;username&quot; : &quot;tjkwak&quot;}
-user2.relationships = {&quot;friends&quot; : 50, &quot;enemies&quot; : 5}
-
-// define user3
-var user3 = {&quot;username&quot; : &quot;jmpark&quot;}
-user3.relationships = {&quot;friends&quot; : 10, &quot;enemies&quot; : 3}
-
-// define user4
-var user4 = {&quot;username&quot; : &quot;jhlee&quot;}
-user4.relationships = {&quot;friends&quot; : 1, &quot;enemies&quot; : 300}
-
-// insert users into &quot;users&quot; collection of DB &quot;foobar&quot;
-db.users.insert(user1)
-db.users.insert(user2)
-db.users.insert(user3)
-db.users.insert(user4)
-
-// show users collection
-db.users.find()
-
-// show db stats
-db.stats()
-
-// change username of user4
-user4.username = &quot;hskim&quot;
-// change the numbner of friednds
-user4.relationships.friends = 5
-// change the number of enemies
-user4.relationships.enemies = 500
-
-db.users.update({&quot;username&quot; : &quot;jhlee&quot;}, user4)
-
-// show users collection
-db.users.find()
-
-// drop the collection &quot;users&quot;
-db.users.drop()
-
-// drop the current database
-db.dropDatabase()
-
-// show database stats - nothing to show
-db.stats()
-
-// shutdown the server
-use admin
-db.shutdownServer()
-</code></pre></div>
+                <p><em>Written by Alex Choi, Feb. 10, 2019.</em></p>
+<p>이번 포스팅에서는 Object Detection의 초기 어플리케이션인 R-CNN의 속도와 정확도를 개선한 Fast R-CNN에 대하여 간단하게 알아보도록 하겠습니다.</p>
+<hr />
+<h1 id="r-cnn">R-CNN의 단점</h1>
+<p>그러면 우선 기존의 R-CNN이 가지고 있는 단점이 무엇인지 살펴보겠습니다.</p>
+<ol>
+<li>
+<p>R-CNN에서는 하나의 이미지에서 Selective Search를 통하여 최대 2,000개의 Region Proposals를 생성하고 각각에 대하여 ConvNet(가령, AlexNet)에 대한 Forward Pass를 연산합니다. 이는 학습시간도 상당한 시간이 요구되지만 Runtime에서는 사용할 수 있는 수준이 되지 못합니다.</p>
+</li>
+<li>
+<p>R-CNN에서는 세 개의 모델을 별도록 학습시킵니다:</p>
+</li>
+<li>Image Features를 추출하기 위한 CNN Model</li>
+<li>이미지를 분류하기 위한 Classifier</li>
+<li>바운딩 박스를 실제 오브젝트 위치에 정합하기 위한 Bounding Regressor</li>
+</ol>
+<p>그런데, 이 3개의 모델을 별도로 학습시키는 것은 효율적이지 않습니다.</p>
+<hr />
+<h1 id="fast-r-cnn">Fast R-CNN의 등장</h1>
+<p>위에 언급된 R-CNN의 단점을 극복하기 위해 R-CNN 논문의 저자인 Roos Girshick은 2015년에 아래와 같은 새로운 논문을 발표합니다:</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1504.08083">Fast R-CNN, Ross Girshick, 2015</a></li>
+</ul>
+<p>위 논문의 <strong>2가지 핵심 아이디어</strong>는 다음과 같습니다.</p>
+<hr />
+<h2 id="idea-1-roi-pooling">Idea 1: RoI Pooling</h2>
+<p>R-CNN은 이미지 상에서 Region Proposals를 생성 시, 이들의 영역이 서로 겹치는 경우가 많아 불필요하게 CNN의 반복적인 Forward 계산(최대 2,000번)으로 계산 효율성을 떨어뜨립니다. Ross가 제안한 아이디어는 이미지 상이 아닌 CNN의 Feature Map 상에서 RoI(Region of Interest)를 추출하는 것입니다. 즉, CNN의 Forward Pass는 하나의 이미지에 대하여 딱 한 번만 수행하여 Feature Map을 얻고, 최대 2,000개의 Region Proposals 간에 Fearue Map을 서로 공유할 수 있도록 하는 것입니다.</p>
+<p><br/>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2019-02-10-object-detection-using-fast-rcnn/01.jpg" width="100%" />
+  <figcaption>RoI Pooling, Image from Stanford’s CS231N 슬라이드</figcaption>
+</figure></p>
+<p>위의 이미지는 입력 이미지로부터 CNN에 대하여 Forward Pass하여 Conv Feature Map을 얻고, Region Proposal 영역을 Feature Map 상에 투영(Projection)한 후, 이를 정해진 차원(Dimension, 가로-세로 해상도)로 영역을 분할합니다.</p>
+<p>가령, 3 × 800 × 600(채널 수 = 3, 높이 = 800, 넓이 = 600)의 입력 이미지를 CNN에 Forward Pass하여 얻는 Conv Feature Map의 상에 투영된 Region Proposal 영역의 차원이 <span class="arithmatex">\(C × h × w\)</span> 라고 하면, 이 영역을 각 채널에 대하여 <span class="arithmatex">\(H × W\)</span> 개수로 분할합니다(<span class="arithmatex">\(H\)</span>와 <span class="arithmatex">\(W\)</span>를 Layer Hyper-parameters라고 합니다).</p>
+<p>RoI Max-pooling은 <span class="arithmatex">\(h × w\)</span> 크기의 RoI Windows를 <span class="arithmatex">\(H × W\)</span> 개수만큼의 Sub-window로 분할하므로 각 Sub-window의 크기는 대략 <span class="arithmatex">\(h/H × w/W\)</span>이 되며, 각 Sub-window 내의 값들을 Max-pooling하여 Grid Cell로 출력합니다.</p>
+<hr />
+<h2 id="idea-2">Idea 2: 하나의 네트워크에서 모두 트레이닝</h2>
+<p>Fast R-CNN의 두번째 핵심 아이디어는, (1) Feature 학습을 위한 CNN, (2) 분류를 위한 Classifier(SVM), (3) 바운딩 박스를 오브젝트에 정합시키는 Regression (Linear Regressor)을 각각 트레이닝하는 R-CNN과는 달리, Fast R-CNN은 이 세가지를 하나의 네트워크 내에서 학습시킵니다.</p>
+<p><br/>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2019-02-10-object-detection-using-fast-rcnn/02.jpg" width="100%" />
+  <figcaption>Fast R-CNN 아키텍쳐 및 구조</figcaption>
+</figure></p>
+<p>위의 이미지를 자세하게 살펴보면 다음과 요약할 수 있습니다:</p>
+<ul>
+<li>입력 이미지를 CNN에 대하여 Forward Pass하여 Conv Feature Map을 얻고, Max-pooling Layer를 얻습니다.</li>
+<li>프로젝션 된 각각의 RoI에 대하여 Pooling Layer는 Conv Feature Map으로부터 고정된 크기의 Feature Vector를 추출합니다.</li>
+<li>각각의 Feature Vector는 일련의 Fully Connected(FC) Layer를 거쳐서</li>
+<li><span class="arithmatex">\(K\)</span>개의 클래스 + 배경 클래스에 대한 Softmax 확률을 구합니다.</li>
+<li>각각의 <span class="arithmatex">\(K\)</span>개의 오브젝트 클래스에 대한 4개의 변수 - <span class="arithmatex">\((r,c,w,h)\)</span> - 바운딩 박스의 왼쪽 상단 모서리 좌표 <span class="arithmatex">\((r,c)\)</span> 및 크기 <span class="arithmatex">\((w,h)\)</span> - 를 출력합니다.</li>
+</ul>
+<hr />
+<p>지금까지 Fast R-CNN을 이용한 Object Detection에 대하여 알아보았습니다. 다음 포스팅에서는 Faster R-CNN을 이용한 Object Detection에 대하여 알아보도록 하겠습니다.</p>
                 
               
               
@@ -471,7 +511,7 @@ db.shutdownServer()
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -480,19 +520,19 @@ db.shutdownServer()
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                02. MongoDB 기본 Query 명령문 테스트
+                Object Detection Using R-CNN
               </div>
             </div>
           </a>
         
         
-          <a href="../04-mongodb-update-modifiers-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                04. MongoDB Update Operators Part 1. - $inc
+                How to Set Up PyTorch CenterNet Development Environment
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
