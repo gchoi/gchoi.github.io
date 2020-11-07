@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/deep-learning/setting-up-pytorch-centernet-dev-env/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/MongoDB/04-mongodb-update-modifiers-inc/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>How to Set Up PyTorch CenterNet Development Environment - Alex Choi's Blog</title>
+        <title>04. MongoDB Update Operators Part 1. - $inc - Alex Choi's Blog</title>
       
     
     
@@ -51,11 +51,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#basic-environment" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -80,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              How to Set Up PyTorch CenterNet Development Environment
+              04. MongoDB Update Operators Part 1. - $inc
             
           </span>
         </div>
@@ -199,12 +194,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
     
     <label class="md-nav__link" for="nav-3-1">
       Deep Learning
@@ -224,7 +217,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+    <a href="../../deep-learning/object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
       Object Detection Using R-CNN
     </a>
   </li>
@@ -236,7 +229,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+    <a href="../../deep-learning/object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
       Object Detection Using Fast R-CNN
     </a>
   </li>
@@ -246,20 +239,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../deep-learning/setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
       How to Set Up PyTorch CenterNet Development Environment
     </a>
-    
   </li>
 
         
@@ -310,10 +294,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
     
     <label class="md-nav__link" for="nav-3-3">
       MongoDB
@@ -333,7 +319,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../MongoDB/01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
   </li>
@@ -345,7 +331,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../MongoDB/02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
   </li>
@@ -357,7 +343,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../MongoDB/03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+    <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
       03. MongoDB 라이프사이클
     </a>
   </li>
@@ -367,11 +353,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../MongoDB/04-mongodb-update-modifiers-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link md-nav__link--active">
       04. MongoDB Update Operators Part 1. - $inc
     </a>
+    
   </li>
 
         
@@ -392,21 +385,6 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -416,148 +394,37 @@
                   
                 
                 
-                <p><em>Written by Alex Choi, Oct. 8, 2020.</em></p>
-<hr />
-<h1 id="basic-environment">Basic Environment</h1>
-<ul>
-<li><a href="https://www.anaconda.com/products/individual#windows">Anaconda</a></li>
-<li><a href="https://git-scm.com">Git</a></li>
-</ul>
-<hr />
-<h1 id="creating-conda-environment">Creating CONDA Environment</h1>
-<ul>
-<li>
-<p>Run a command line tool, i.e. Anaconda Prompt and type the following command:
-<div class="highlight"><pre><span></span><code>conda create -n centernet python=3.7
+                  <h1>04. MongoDB Update Operators Part 1. - $inc</h1>
+                
+                <p>이번 포스팅부터 몇차례에 걸쳐 MongoDB Update Operators에 대하여 알아보도록 하겠습니다.</p>
+<p>MongoDB Update Operators에 대하여 보다 자세한 내용은 MongoDB의 공식 웹사이트의 <a href="https://docs.mongodb.com/manual/reference/operator/update/">Update Operators 페이지</a>에서 확인하실 수 있습니다.</p>
+<p>DB 작업을 하다보면, 특정 도큐먼트의 일부분만 변경해야 할 상황에 처할 수 있습니다.</p>
+<p>Update Operators를 이용하여 도큐먼트의 변경, 추가, 삭제를 할 수 있으며, 임베디드 도큐먼트 및 어레이(array)에 대해서는 핸들링 할 수 있습니다.</p>
+<p>다음 상황을 가정해 보겠습니다:
+여러분이 세 개의 웹페이지를 관리해야 하고 있으며, 방문자가 방문 시 DB의 페이지 뷰 관련 내용을 1씩 증가시키는 작업을 해야한다고 가정합니다.</p>
+<p>우선 다음과 같이 데이터를 준비합니다:</p>
+<div class="highlight"><pre><span></span><code>// user DB &quot;foobar&quot;
+use foobar
+
+// define webpage1
+var page1 = {&quot;url&quot; : &quot;www.gchoi.net&quot;, &quot;pageviews&quot; : 100}
+// define webpage2
+var page2 = {&quot;url&quot; : &quot;www.google.com&quot;, &quot;pageviews&quot; : 1000}
+// define webpage3
+var page3 = {&quot;url&quot; : &quot;www.apple.com&quot;, &quot;pageviews&quot; : 500}
+
+// insert items into DB
+db.analytics.insert(page1)
+db.analytics.insert(page2)
+db.analytics.insert(page3)
+db.analytics.find()
 </code></pre></div>
-<em>NOTE: Python 3.8 not tested yet. But you can try if you want.</em></p>
-</li>
-<li>
-<p>Activate centernet Anaconda environment:
-<div class="highlight"><pre><span></span><code>conda activate centernet
-</code></pre></div></p>
-</li>
-</ul>
-<hr />
-<h1 id="installing-python-packages">Installing Python Packages</h1>
-<ul>
-<li>
-<p>Install pytorch(ver.1.4) and torchvision based on your cudatoolkit version.
-<div class="highlight"><pre><span></span><code>conda install pytorch=1.4 torchvision cudatoolkit=10.1 -c pytorch
+
+<p>"www.gchoi.net" URL의 페이지 뷰를 1씩 증가시킵니다:</p>
+<div class="highlight"><pre><span></span><code>// increase pageviews of url &quot;www.gchoi.net&quot; by 1
+db.analytics.update({&quot;url&quot; : &quot;www.gchoi.net&quot;}, {&quot;$inc&quot; : {&quot;pageviews&quot; : 1}})
+db.analytics.findOne({&quot;url&quot; : &quot;www.gchoi.net&quot;})
 </code></pre></div>
-<em>NOTE: CenterNet build didn't work with pytorch version 1.5 or 1.6.</em><br>
-<em>NOTE: cudatoolkit version 10.2 not tested yet.</em></p>
-</li>
-<li>
-<p>Install necessary python packages:
-<div class="highlight"><pre><span></span><code>python -m pip install opencv-python Cython numba progress matplotlib easydict scipy
-</code></pre></div></p>
-</li>
-</ul>
-<hr />
-<h1 id="building-cocoapi-tools">Building cocoapi Tools</h1>
-<ul>
-<li>
-<p>Clone <a href="https://github.com/cocodataset/cocoapi">cocoapi tools git repository</a> to any path where you want
-<div class="highlight"><pre><span></span><code>git clone https://github.com/cocodataset/cocoapi.git
-</code></pre></div></p>
-</li>
-<li>
-<p>Open <code>cocoapi/PythonAPI/setup.py</code> using a text editor and modify the following line:
-<div class="highlight"><pre><span></span><code>extra_compile_args=[&#39;-Wno-cpp&#39;, &#39;-Wno-unused-function&#39;, &#39;-std=c99&#39;]
-</code></pre></div>
-to
-<div class="highlight"><pre><span></span><code>extra_compile_args={&#39;gcc&#39;: [&#39;/Qstd=c99&#39;]},
-</code></pre></div></p>
-</li>
-<li>
-<p>In the command line tool move to the following path:
-<div class="highlight"><pre><span></span><code>cd cocoapi/PythonAPI
-</code></pre></div></p>
-</li>
-<li>
-<p>Build cocoapi tools:
-<div class="highlight"><pre><span></span><code>python setup.py build_ext install
-</code></pre></div></p>
-</li>
-</ul>
-<hr />
-<h1 id="modifying-cpp_extensionpy">Modifying cpp_extension.py</h1>
-<ul>
-<li>Using a text editor open up <code>C:/ProgramData/Anaconda3/envs/centernet/Lib/site-packages/torch/utils/cpp_extension.py</code> and modify the following line:
-<div class="highlight"><pre><span></span><code>match = re.search(r&#39;(\d+)\.(\d+)\.(\d+)&#39;, compiler_info.decode().strip())
-</code></pre></div>
-to
-<div class="highlight"><pre><span></span><code>match = re.search(r&#39;(\d+)\.(\d+)\.(\d+)&#39;, compiler_info.decode(&quot;utf8&quot;, &quot;ignore&quot;).strip())
-</code></pre></div></li>
-</ul>
-<hr />
-<h1 id="copying-and-unzipping-centernetzip">Copying and Unzipping CenterNet.zip</h1>
-<ul>
-<li>Copy "CenterNet.zip" file to any path you want (maybe COI project folder).</li>
-<li>Unzip the file using <a href="https://en.bandisoft.com">BandiZip</a> or any unzipping software you want.
-<em>NOTE: You can find more information from the <a href="https://github.com/xingyizhou/CenterNet">PyTorch CenterNet official repo</a>.</em></li>
-</ul>
-<hr />
-<h1 id="building-nms">Building NMS</h1>
-<ul>
-<li>'nms' is short for "Non-Maximum Suppression." CenterNet does not usually use Non-Maximum Suppression, but it is sometimes useful.</li>
-<li>In order to avoid build error comment out the following line after opening <code>CenterNet/src/lib/external/setup.py</code> up using a text editor.
-<div class="highlight"><pre><span></span><code>#extra_compile_args=[&quot;-Wno-cpp&quot;, &quot;-Wno-unused-function&quot;]
-</code></pre></div>
-<em>NOTE: The line above may be already commented out actually.</em></li>
-<li>Build nms with the following command line:
-<div class="highlight"><pre><span></span><code>python setup.py  build_ext --inplace
-</code></pre></div>
-<em>NOTE: You can find more information about building nms <a href="https://github.com/xingyizhou/CenterNet/issues/7">here</a>.</em></li>
-</ul>
-<hr />
-<h1 id="building-dcnv2">Building DCNv2</h1>
-<ul>
-<li>Move to the following path in your CenterNet path:
-<div class="highlight"><pre><span></span><code>cd CenterNet/src/lib/models/networks/DCNv2/
-</code></pre></div></li>
-<li>Build DCNv2 using the following command line (this may take some time to finish building):
-<div class="highlight"><pre><span></span><code>python setup.py build develop
-</code></pre></div>
-<em>NOTE: You can find more information about DCNv2 <a href="https://github.com/CharlesShang/DCNv2">here</a>.</em></li>
-</ul>
-<hr />
-<h1 id="test-with-pre-trained-models">Test with Pre-trained Models</h1>
-<ul>
-<li>Unzip "ImageNet-Weights.zip" and copy all the contained files (ImageNet pre-trained models) to <code>C:\Users\{WINDOWS_USER_ACCOUNT_NAME}\.cache\torch\checkpoints\</code>.</li>
-<li>Unzip "Centernet-Models.zip" and copy all the contained files to <code>CenterNet/models/</code>.</li>
-<li>Finally, test with some COI images using the following command line:
-<div class="highlight"><pre><span></span><code>python demo.py ctdet --demo ../data/COI/images/image_0001.jpg --load_model ../exp/ctdet/COI/model_best.pth
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>python demo.py ctdet --demo ../data/COI/images/image_0002.jpg --load_model ../exp/ctdet/COI/model_best.pth
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>python demo.py ctdet --demo ../data/COI/images/image_0003.jpg --load_model ../exp/ctdet/COI/model_best.pth
-</code></pre></div></li>
-</ul>
-<hr />
-<h1 id="simple-trial-for-training">Simple Trial for Training</h1>
-<ul>
-<li>If you are using <code>CenterNet.zip</code> you can find the training information for COI from <code>CenterNet/exp/ctdet/COI/</code>.</li>
-<li>There are 2 options for training:<ul>
-<li>One is training from scratch (random initialization).
-<div class="highlight"><pre><span></span><code>python main.py ctdet --exp_id COI --batch_size 16 --lr 1.25e-4 --gpus 0 --load_model ../models/ctdet_coco_resdcn18.pth --resume False
-</code></pre></div></li>
-<li>The other is resume training from pre-trained model.
-<div class="highlight"><pre><span></span><code>python main.py ctdet --exp_id COI --batch_size 16 --lr 1.25e-4 --gpus 0 --load_model ../models/ctdet_coco_resdcn18.pth --resume True
-</code></pre></div></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h1 id="checking-training-information">Checking Training Information</h1>
-<ul>
-<li>You can check your training information such as loss history, accuracy history and so on using <a href="https://www.tensorflow.org/tensorboard">TensorBoard</a>.</li>
-<li>You can find your training information for COI from the path, <code>CenterNet/exp/ctdet/COI/</code></li>
-<li>Install <code>tensorboard</code> using the following command line:
-<div class="highlight"><pre><span></span><code>python -m pip install tensorboard
-</code></pre></div></li>
-</ul>
                 
               
               
@@ -576,7 +443,7 @@ to
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -585,25 +452,11 @@ to
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Object Detection Using Fast R-CNN
+                03. MongoDB 라이프사이클
               </div>
             </div>
           </a>
         
-        
-          <a href="../../scientific-computing/realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Realtime Fluid Simulation Using CUDA
-              </div>
-            </div>
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-            </div>
-          </a>
         
       </nav>
     </div>
