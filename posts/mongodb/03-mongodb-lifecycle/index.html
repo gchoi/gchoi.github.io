@@ -18,7 +18,7 @@
     
     
       
-        <title>03 mongodb lifecycle - Alex Choi's Blog</title>
+        <title>03. MongoDB 라이프사이클 - Alex Choi's Blog</title>
       
     
     
@@ -75,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              03 mongodb lifecycle
+              03. MongoDB 라이프사이클
             
           </span>
         </div>
@@ -171,10 +171,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
     <label class="md-nav__link" for="nav-3">
       Posts
@@ -316,10 +318,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
     
     <label class="md-nav__link" for="nav-3-3">
       MongoDB
@@ -339,7 +343,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../MongoDB/01-starting-mongodb.md" title="01. MongoDB 시작하기" class="md-nav__link">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
   </li>
@@ -351,7 +355,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../MongoDB/02-mongodb-basic-queries.md" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
   </li>
@@ -361,11 +365,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../MongoDB/03-mongodb-lifecycle.md" title="03. MongoDB 라이프사이클" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="03. MongoDB 라이프사이클" class="md-nav__link md-nav__link--active">
       03. MongoDB 라이프사이클
     </a>
+    
   </li>
 
         
@@ -375,7 +386,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../MongoDB/04-mongodb-update-modifiers-inc.md" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+    <a href="../04-mongodb-update-modifiers-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
       04. MongoDB Update Operators Part 1. - $inc
     </a>
   </li>
@@ -407,7 +418,7 @@
                   
                 
                 
-                  <h1>03 mongodb lifecycle</h1>
+                  <h1>03. MongoDB 라이프사이클</h1>
                 
                 <p>이번 포스팅에서는 다음 코드 예시를 통해 MongoDB의 라이프사이클에 대하여 알아보도록 하겠습니다.</p>
 <div class="highlight"><pre><span></span><code>// user DB &quot;foobar&quot;
@@ -480,6 +491,41 @@ db.shutdownServer()
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                02. MongoDB 기본 Query 명령문 테스트
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../04-mongodb-update-modifiers-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                04. MongoDB Update Operators Part 1. - $inc
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

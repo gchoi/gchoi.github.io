@@ -31,5 +31,21 @@
      <loc>https://gchoi.github.io/posts/scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/</loc>
      <lastmod>2020-11-07</lastmod>
      <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/01-starting-mongodb/</loc>
+     <lastmod>2020-11-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/02-mongodb-basic-queries/</loc>
+     <lastmod>2020-11-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/03-mongodb-lifecycle/</loc>
+     <lastmod>2020-11-07</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/04-mongodb-update-modifiers-inc/</loc>
+     <lastmod>2020-11-07</lastmod>
+     <changefreq>daily</changefreq>
     </url>
 </urlset>
