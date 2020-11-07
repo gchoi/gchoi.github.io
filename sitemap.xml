@@ -23,5 +23,9 @@
      <loc>https://gchoi.github.io/posts/scientific-computing/realtime-fluid-simulation-using-cuda/</loc>
      <lastmod>2020-11-07</lastmod>
      <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/MongoDB/01-starting-mongodb/</loc>
+     <lastmod>2020-11-07</lastmod>
+     <changefreq>daily</changefreq>
     </url>
 </urlset>

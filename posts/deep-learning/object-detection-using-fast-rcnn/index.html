@@ -306,6 +306,44 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../MongoDB/01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -369,7 +407,7 @@
 <h2 id="idea-1-roi-pooling">Idea 1: RoI Pooling</h2>
 <p>R-CNN은 이미지 상에서 Region Proposals를 생성 시, 이들의 영역이 서로 겹치는 경우가 많아 불필요하게 CNN의 반복적인 Forward 계산(최대 2,000번)으로 계산 효율성을 떨어뜨립니다. Ross가 제안한 아이디어는 이미지 상이 아닌 CNN의 Feature Map 상에서 RoI(Region of Interest)를 추출하는 것입니다. 즉, CNN의 Forward Pass는 하나의 이미지에 대하여 딱 한 번만 수행하여 Feature Map을 얻고, 최대 2,000개의 Region Proposals 간에 Fearue Map을 서로 공유할 수 있도록 하는 것입니다.</p>
 <figure>
-  <img src="https://gchoi.github.io/assets/img/posts/object-detection-using-fast-rcnn/01.jpg" width="100%" />
+  <img src="../../../assets/img/posts/object-detection-using-fast-rcnn/01.jpg" width="100%" />
   <figcaption>RoI Pooling, Image from Stanford’s CS231N 슬라이드</figcaption>
 </figure>
 
