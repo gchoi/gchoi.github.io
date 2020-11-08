@@ -1,51 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://gchoi.github.io/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/about/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/</loc>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2019-02-09-object-detection-using-rcnn/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2019-02-10-object-detection-using-fast-rcnn/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/01-starting-mongodb/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/02-mongodb-basic-queries/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/03-mongodb-lifecycle/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/04-mongodb-update-modifiers-inc/</loc>
-     <lastmod>2020-11-07</lastmod>
+     <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

@@ -1,0 +1,1564 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>Deep Learning from Scratch Part 1. - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Deep Learning from Scratch Part 1.
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Deep Learning from Scratch Part 1.
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Deep Learning from Scratch Part 1." class="md-nav__link md-nav__link--active">
+      Deep Learning from Scratch Part 1.
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    이론적 배경
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    기본 개념과 구성요소
+  </a>
+  
+    <nav class="md-nav" aria-label="기본 개념과 구성요소">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#weight-bias" class="md-nav__link">
+    Weight와 Bias
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#neuron" class="md-nav__link">
+    뉴런(Neuron)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    구현 팁
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer" class="md-nav__link">
+    레이어(Layer)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    신경망 구축하기: 아키텍쳐, 예측 그리고 학습
+  </a>
+  
+    <nav class="md-nav" aria-label="신경망 구축하기: 아키텍쳐, 예측 그리고 학습">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    네트워크 아키텍쳐
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    예측
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    학습
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    테스트 및 시각화
+  </a>
+  
+    <nav class="md-nav" aria-label="테스트 및 시각화">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2016428" class="md-nav__link">
+    업데이트: 2016/4/28
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    요약
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-codes" class="md-nav__link">
+    Source Codes
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+      Deep Learning from Scratch Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/04-mongodb-update-modifiers-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    이론적 배경
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    기본 개념과 구성요소
+  </a>
+  
+    <nav class="md-nav" aria-label="기본 개념과 구성요소">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#weight-bias" class="md-nav__link">
+    Weight와 Bias
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#neuron" class="md-nav__link">
+    뉴런(Neuron)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    구현 팁
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer" class="md-nav__link">
+    레이어(Layer)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    신경망 구축하기: 아키텍쳐, 예측 그리고 학습
+  </a>
+  
+    <nav class="md-nav" aria-label="신경망 구축하기: 아키텍쳐, 예측 그리고 학습">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    네트워크 아키텍쳐
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    예측
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    학습
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    테스트 및 시각화
+  </a>
+  
+    <nav class="md-nav" aria-label="테스트 및 시각화">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2016428" class="md-nav__link">
+    업데이트: 2016/4/28
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    요약
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-codes" class="md-nav__link">
+    Source Codes
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                  <h1>Deep Learning from Scratch Part 1.</h1>
+                
+                <p><em>Written by Alex Choi, Feb. 21, 2017.</em></p>
+<p>이 글은 <a href="http://www.parallelr.com/">Parallel R</a>의 <a href="http://www.parallelr.com/r-deep-neural-network-from-scratch/">R for Deep Learning (I): Build Fully Connected Neural Network from Scratch</a>를 번역한 것입니다.</p>
+<ul>
+<li>Source Code: <a href="http://cinema4dr12.tistory.com/attachment/cfile1.uf@27259F3C58B0D0D2014703.zip">DNN from Scratch.zip</a></li>
+<li>GitHub: https://github.com/PatricZhao/ParallelR</li>
+</ul>
+<h2 id="_1">이론적 배경</h2>
+<hr />
+<p><a href="https://en.wikipedia.org/wiki/Deep_learning">심층 인공신경망</a>(이하 원어 사용: Deep Neural Network; DNN)는 최근 몇년간 이미지 인식, 자연어 처리 및 자율주행차 분야에서 막대한 성과를 이루어 냈으며, 그림 1.에서 보이는 바와 같이 2012년에서 2015년 사이 DNN은 <a href="http://image-net.org/challenges/LSVRC/2015/">IMAGNET</a>의 정확도를 80%에서 95%까지 끌어올렸습니다. 이는 전통적인 컴퓨터 비전(Computer Vision; CV) 방법론들을 꺾은 것입니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/01.png" width="80%" />
+  <figcaption>그림 1. <a href="https://www.youtube.com/playlist?list=PLZHnYvH1qtObAdk3waYMalhA8bdbhyTm2">CES16의 NVIDIA CEO 젠슨 황의 연설에서 발췌</a></figcaption>
+</figure></p>
+<p>이 글에서는 데이터 과학 분야에서 공통적으로 DNN이라 부르는 Fully Connected Neural Networks에 대해 집중적으로 다루고자 합니다. DNN의 가장 큰 장점은, <a href="http://blog.kaggle.com/2014/08/01/learning-from-the-best/">Kaggle</a>의 예제처럼 엔지니어가 쉽게 정의할 수 없는 복잡하고 고차원적인 데이터를 Deep Layers 아키텍쳐를 이용하여 자동으로 피쳐(Feature)들을 추출하고 학습할 수 있다는 것입니다. 따라서, DNN은 데이터 과학자들에게 매우 매력적이며, <a href="https://blog.dominodatalab.com/using-r-h2o-and-domino-for-a-kaggle-competition/">Nick이 쓴 글</a>과 <a href="https://www.r-bloggers.com/using-neural-networks-for-credit-scoring-a-simple-example/">DNN을 이용한 신용점수 매기기</a>처럼 분류(Classification), 시계열(Time Series), 추천 등의 분야에서 성공적인 케이스가 존재합니다. CRAN과 R 커뮤니티에 <code>nnet</code>, <code>nerualnet</code>, <code>H2O</code>, <code>DARCH</code>, <code>deepnet</code> 및 <code>mxnet</code> 등과 같은 인기가 많고 성숙한 DNN 패키지들이 많이 존재하지만, <a href="http://www.h2o.ai/verticals/algos/deep-learning/">H2O DNN 알고리즘-R 인터페이스</a>를 강력하게 권장합니다.</p>
+<table>
+<thead>
+<tr>
+<th align="center">패키지</th>
+<th align="center">백엔드</th>
+<th align="center">컴퓨터 자원</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">nnet</td>
+<td align="center">C/C++</td>
+<td align="center">싱글 스레드 (Single Thread)</td>
+</tr>
+<tr>
+<td align="center">neuralnet</td>
+<td align="center">C/C++</td>
+<td align="center">싱글 스레드 (Single Thread)</td>
+</tr>
+<tr>
+<td align="center">DARCH</td>
+<td align="center">C/C++</td>
+<td align="center">싱글 스레드 (Single Thread)</td>
+</tr>
+<tr>
+<td align="center">deepnet</td>
+<td align="center">R</td>
+<td align="center">싱글 스레드 (Single Thread)</td>
+</tr>
+<tr>
+<td align="center">h2o</td>
+<td align="center">Java</td>
+<td align="center">멀티-스레드, 멀티-노드</td>
+</tr>
+<tr>
+<td align="center">mxnet</td>
+<td align="center">C/C++/CUDA</td>
+<td align="center">멀티-스레드, GPU, 멀티-노드</td>
+</tr>
+</tbody>
+</table>
+<p><br/>
+그러면 굳이 DNN을 바닥부터 구현할 필요가 있는 것일까요?</p>
+<p>– <em>신경망의 작동 원리를 이해할 수 있습니다</em></p>
+<p>대부분의 경우 기존의 DNN 패키지를 이용하여 DNN 모델에 대한 한 줄의 R 코드만으로 해결할 수 있는데, <a href="https://www.r-bloggers.com/fitting-a-neural-network-in-r-neuralnet-package/"><code>neuralnet</code> 패키지의 예</a>가 그렇습니다. 그러나, 경험이 없는 유저라면 처리 과정과 결과를 이해하기 어려울 수 있습니다. 따라서, 메커니즘에서 연산 시각에 이르는 보다 상세한 내용을 이해하려면 자신만의 네트워크를 구현해 보는 연습이 매우 가치있는 작업일 것입니다.</p>
+<p>– <em>자신의 새로운 아이디어를 네트워크에 접목할 수 있다</em></p>
+<p>DNN은 급속도로 발전하는 분야 중 하나입니다. 많은 훌륭한 작업과 연구 결과들이 톱저널과 인터넷에 매주마다 게재되며, 유저들은 자신들의 특정 네트워크 설정이 다양한 활성 함수(Activation Function), 손실 함수(Loss Function), 정규화(Regularization), 연결 그래프 등의 문제를 만족하도록 하고 있다. 반면에 기존의 패키지들은 분명 최근의 연구를 모두 반영하지는 못하고 있으며, 기존의 거의 대부분의 패키지들은 C/C++, Java로 작성되었기 때문에 최근의 변화와 당신의 아이디어에 유연하게 대응하지 못합니다.</p>
+<p>– <em>네트워크와 데이터를 디버깅하고 시각화할 수 있다</em></p>
+<p>언급한 바와 같이, 기존의 DNN 패키지들은 고도로 조합되었으며 저수준 언어로 작성되었기 때문에 레이어 별로 또는 노드 별로 네트워크를 디버깅하는 것은 악몽과도 같은 것입니다. 각 레이어의 결과를 시각화하는 것이 쉬운 일은 아니더라도, 학습 과정 동안 데이터 또는 Weight들을 모니터링하고 네트워크에서 발견된 패턴들을 시각화하는 것은 중요합니다.</p>
+<h2 id="_2">기본 개념과 구성요소</h2>
+<hr />
+<p>데이터 과학에서 DNN이라고 부르는, <a href="http://lo.epfl.ch/files/content/sites/lo/files/shared/1990/IEEE_78_1637_Oct1990.pdf">Fully Connected Neural Network</a>는 인접하는 네트워크 레이어 간에 완전히 연결되는 네트워크이다. 네트워크 내 모든 뉴런이 인접하는 레이어의 모든 뉴런과 연결되는 것입니다.</p>
+<p>아래의 그림은 1개의 입력 레이어, 2개의 은닉 레이어, 1개의 출력 레이어로 구성된 매우 간단하고 전형적인 네트워크를 보여줍니다. 대부분 연구자들이 네트워크 아키텍쳐에 대해 언급할 때, 이는 네트워크 내의 레이어 개수, 각 레이어 내 뉴런의 개수, 사용된 활성함수, 손실함수, 정규화의 형태 등과 같은 DNN의 설정을 일컫습니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/02.png" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>이제 DNN의 기본 구성요소를 훑어보고 이것이 R에서 어떻게 구현되는지 알아보도록 하겠습니다.</p>
+<h3 id="weight-bias">Weight와 Bias</h3>
+<p>위의 DNN 아키텍쳐를 예를 들어보면, 3개의 Weight 그룹이 있는데, 입력 레이어에서 첫번째 은닉 레이어까지, 첫번째 은닉 레이어에서 두번째 은닉 레이어까지, 두번째 은닉 레이어에서 출력 레이어까지입니다. Bias 단위는 모든 은닉 노드로 연결되며 이는 출력 점수에 영향을 주지만 실제 데이터와 상호작용이 없는 것을 가정합니다.</p>
+<p>R에서의 구현에서 Weight와 Bias는 행렬로 표현합니다. Weight의 크기는 다음과 같이 정의합니다:</p>
+<p>(레이어 M 내 뉴런의 개수) X (레이어 M+1 내 뉴런의 개수)</p>
+<p>그리고 Weight들은 rnorm으로부터 임의로 초기화 됩니다. Bias는 단지 뉴런의 크기와 동일한 1차원 행렬이며 0으로 설정됩니다. <code>1/sqrt(n)</code>을 이용한 분산 보정과 Sparse 초기화와 같은 다른 초기화 방법은 <a href="http://cs231n.github.io/neural-networks-2/#init">Stanford CS231n의 Weight Initialization</a>에 소개되어 있습니다.</p>
+<p><strong>R CODE:</strong>
+<div class="highlight"><pre><span></span><code>weight.i &lt;- 0.01*matrix(rnorm(layer.size(i)*layer.size(i+1)),
+                        nrow=layer.size(i),
+                        ncol=layer.size(i+1))
+bias.i &lt;- matrix(0, nrow=1, ncol = layer.size(i))
+</code></pre></div></p>
+<p>다른 일반적인 구현 방법은 Weight들과 Bias를 결합하여 입력 차원이 N+1이 되도록 하는 것인데, N은 아래와 같이 1개의 Bias를 갖는 입력 피쳐의 개수입니다.</p>
+<div class="highlight"><pre><span></span><code>weight &lt;- 0.01*matrix(rnorm((layer.size(i)+1)*layer.size(i+1)),
+                        nrow=layer.size(i)+1,
+                        ncol=layer.size(i+1))
+</code></pre></div>
+
+<h3 id="neuron">뉴런(Neuron)</h3>
+<p>뉴런은 인간의 생물학적 뉴런 모델에서 영감을 얻은 DNN의 기본 단위입니다. 하나의 뉴런은 데이터 과학의 선형 회귀분석과 같이 Weight과 입력을 곱하고 더하는 연산을 수행(FMA)하는데, FMA의 결과는 활성함수로 전달됩니다. 주로 사용되는 활성함수들에는 <a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid</a>, <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">ReLu</a>, <a href="https://reference.wolfram.com/language/ref/Tanh.html">Tanh</a> 및 <a href="http://jmlr.org/proceedings/papers/v28/goodfellow13.pdf">Maxout</a> 등이 있습니다. 이 글에서는 Rectified Linear Unit (ReLU), <code>f(x) = max(0, x)</code>를 활성함수로 사용할 것입니다. 다른 활성함수에 대해 알아보려면 <a href="http://cs231n.github.io/neural-networks-1/#actfun">여기</a>를 참고하도록 합니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/03.png" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>R에서 <code>sum(xi*wi)</code>과 같이 다양한 방법으로 뉴런을 구현할 수 있지만, 보다 효율적인 표현은 행렬 곱셈을 이용하는 것입니다.</p>
+<div class="highlight"><pre><span></span><code>neuron.ij &lt;- max(0, input %*% weight + bias)
+</code></pre></div>
+
+<h3 id="_3">구현 팁</h3>
+<p>실질적으로, 성능을 고려하여 항상 일괄적으로 레이어 내 모든 뉴런을 업데이트합니다. 따라서, 위의 코드는 제대로 동작하지 않을 것입니다.</p>
+<p><strong>1) 행렬 곱셈과 덧셈</strong></p>
+<p>아래의 코드에서 보는 바와 같이, 서로 다른 차원을 갖는 <code>input %*% weights</code>와 <code>bias</code>를 직접 더할 수는 없습니다. 이에 대한 두가지 솔루션이 있습니다. 첫번째는 Bias를 ncol번 반복하는 것인데, 크기가 큰 데이터 입력에 대하여 메모리를 낭비할 수 있기 때문에 두번째 방법이 더 낫습니다.</p>
+<div class="highlight"><pre><span></span><code># dimension: 2X2
+input &lt;- matrix(1:4, nrow=2, ncol=2)
+# dimension: 2x3
+weights &lt;- matrix(1:6, nrow=2, ncol=3)
+# dimension: 1*3
+bias &lt;- matrix(1:3, nrow=1, ncol=3)
+# doesn&#39;t work since unmatched dimension
+input %*% weights + bias
+Error input %*% weights + bias : non-conformable arrays
+
+# solution 1: repeat bias aligned to 2X3
+s1 &lt;- input %*% weights + matrix(rep(bias, each=2), ncol=3)
+
+# solution 2: sweep addition
+s2 &lt;- sweep(input %*% weights ,2, bias, &#39;+&#39;)
+
+all.equal(s1, s2)
+[1] TRUE
+</code></pre></div>
+
+<p><strong>2) 행렬에 대한 요소 최대값</strong></p>
+<p>여기에서 다른 트릭은 <code>pmax</code>를 <code>max</code>로 교체하여 행렬 전체의 최대값 대신 행렬의 요소에 대한 최대값을 얻는 것인데, 특히 <code>pmax</code>의 순서에 유의해야 합니다.</p>
+<div class="highlight"><pre><span></span><code># the original matrix
+&gt; s1
+     [,1] [,2] [,3]
+[1,]    8   17   26
+[2,]   11   24   37
+
+# max returns global maximum
+&gt; max(0, s1)
+[1] 37
+
+# s1 is aligned with a scalar, so the matrix structure is lost
+&gt; pmax(0, s1)
+[1]  8 11 17 24 26 37
+
+# correct
+# put matrix in the first, the scalar will be recycled to match matrix structure
+&gt; pmax(s1, 0)
+     [,1] [,2] [,3]
+[1,]    8   17   26
+[2,]   11   24   37
+</code></pre></div>
+
+<h3 id="layer">레이어(Layer)</h3>
+<p><strong>입력 레이어</strong></p>
+<p>입력 레이어는 1개의 레이어로 상대적으로 고정되어 있으며 기본 개수는 입력 데이터의 피쳐(Feature) 개수와 동일합니다.</p>
+<p><strong>은닉 레이어</strong></p>
+<p>은닉 레이어는 매우 다양하며 DNN의 핵심 구성요소입니다. 그러나 일반적으로 문제가 복잡할수록(비선형) 바람직한 패턴을 찾기 위해서는 더 많은 은닉 레이어가 필요합니다.</p>
+<p><strong>출력 레이어</strong></p>
+<p>출력 레이어의 단위는 Classification에 있어서는 각 클래스의 점수를 표현하기 위해 사용되고 회귀분석에 있어서는 임의의 실수 값을 나타내기 때문에 일반적으로 활성함수를 갖지 않습니다. 회귀분석에 대해서 출력 노드는 단 한 개이지만, Classification에 있어서는 출력 단위의 개수는 예측의 카테고리의 개수와 일치합니다.</p>
+<h2 id="_4">신경망 구축하기: 아키텍쳐, 예측 그리고 학습</h2>
+<hr />
+<p>지금까지, Deep Neural Network의 기본 개념에 대해 알아보았으며, 이제 Deep Neural Network을 구축해 보려고 하는데, 이는 네트워크 아키텍쳐, 학습 네트워크를 결정하는 것과 학습된 네트워크를 가지고 새로운 데이터를 예측하는 일을 포함합니다. 쉽게 이해하기 위해서, 우리는 작은 데이터세트인  Edgar Anderson의 데이터(<a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">iris</a>)를 사용하여 DNN으로 Classification을 수행하고자 합니다.</p>
+<h3 id="_5">네트워크 아키텍쳐</h3>
+<p><code>IRIS</code>는 잘 알려진 머신러닝용 stock R의 빌트인(Built-In) 데이터세트입니다. 따라서 아래와 같이 콘솔에서 직접 <code>summary</code>를 통해 데이터세트를 확인할 수 있습니다.</p>
+<div class="highlight"><pre><span></span><code>summary(iris)
+  Sepal.Length    Sepal.Width     Petal.Length    Petal.Width          Species
+ Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100   setosa    :50
+ 1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300   versicolor:50
+ Median :5.800   Median :3.000   Median :4.350   Median :1.300   virginica :50
+ Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199
+ 3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800
+ Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500
+</code></pre></div>
+
+<p>Summary로부터 4개의 피쳐와 3개의 Species 카테고리가 있음을 알 수 있습니다. 그래서 아래와 같이 DNN 아키텍쳐를 설계할 수 있습니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/04.png" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>그리고나서 list로 DNN 모델을 저장할 수 있는데, 이것은 아래와 같이 저장 또는 예측을 위해 사용될 수 있습니다. 사실, 유연하게 모델에 대한 더많은 관심 파라미터들을 저장할 수 있습니다.</p>
+<div class="highlight"><pre><span></span><code>List of 7
+ $ D : int 4
+ $ H : num 6
+ $ K : int 3
+ $ W1: num [1:4, 1:6] 1.34994 1.11369 -0.57346 -1.12123 -0.00107 ...
+ $ b1: num [1, 1:6] 1.336621 -0.509689 -0.000277 -0.473194 0 ...
+ $ W2: num [1:6, 1:3] 1.31464 -0.92211 -0.00574 -0.82909 0.00312 ...
+ $ b2: num [1, 1:3] 0.581 0.506 -1.088
+</code></pre></div>
+
+<h3 id="_6">예측</h3>
+<p>머신러닝 분야에서 Classification 또는 추론이라고도 불리우는 예측은 학습와 비교할 때 함축적인 개념이며 행렬 곱셈을 통해 입력으로부터 출력 레이어 간 네트워크를 훑고 지나갑니다. 출력 레이어는 활성함수를 필요로 하지 않습니다. 회귀분석에서는 출력은 예측된 실수 값을 나타내는 반면, Classification에서는 <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax</a>에 의해 확률이 계산될 것입니다. 이 과정은 Feed Forward 또는 Feed Propagation이라고 불리웁니다.</p>
+<div class="highlight"><pre><span></span><code># Prediction
+predict.dnn &lt;- function(model, data = X.test) {
+  # new data, transfer to matrix
+  new.data &lt;- data.matrix(data)
+
+  # Feed Forwad
+  hidden.layer &lt;- sweep(new.data %*% model$W1 ,2, model$b1, &#39;+&#39;)
+  # neurons : Rectified Linear
+  hidden.layer &lt;- pmax(hidden.layer, 0)
+  score &lt;- sweep(hidden.layer %*% model$W2, 2, model$b2, &#39;+&#39;)
+
+  # Loss Function: softmax
+  score.exp &lt;- exp(score)
+  probs &lt;-sweep(score.exp, 1, rowSums(score.exp), &#39;/&#39;)
+
+  # select max possiblity
+  labels.predicted &lt;- max.col(probs)
+  return(labels.predicted)
+}
+</code></pre></div>
+
+<h3 id="_7">학습</h3>
+<p>학습은 주어진 네트워크 아키텍쳐에서 최적화 파라미터(Weight들과 Bias)를 찾고 Classification 오차 또는 잔류오차를 최소화하는 것입니다. 이 과정은 Feed Forward와 Back Propagation의 두 개의 파트로 나눌 수 있습니다. Feed Forward는 입력 데이터 (예측 부분)를 갖는 네트워크를 훑고 지나가고 <a href="https://en.wikipedia.org/wiki/Loss_function">Loss Function</a> (Cost Function)으로 출력 레이터의 데이터 손실을 계산합니다. "데이터 손실은 예측(가령, Classification에서 Class 점수 실지 검증 라벨) 간의 호환성을 측정합니다." 본 예제 코드에서 데이터 손실을 평가하기 위해 Cross-Entropy 함수를 선택하였으며 이에 대한 자세한 내용은 <a href="http://cs231n.github.io/neural-networks-2/#losses">여기</a>를 참고하기 바랍니다.</p>
+<p>데이터 손실값을 얻은 후, Weights와 Bias를 변경하여 데이터 손실을 최소화해야 합니다. 가장 많이 사용되는 방법은 각 파라미터(<code>W1</code>, <code>W2</code>, <code>b1</code>, <code>b2</code>)에 대하여 데이터 손실의 미분을 계산해야 하는 급강하법(<a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent</a>)이나 확률적 급강하법(<a href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">Stochastic Gradient Descent</a>)으로 모든 레이어와 뉴런으로 손실을 역전파(Back Propagation)시키는 것입니다. 역전파는 다양한 활성함수에 다라 달라질 것이며 역전파식과 방법은 <a href="http://mochajl.readthedocs.org/en/latest/user-guide/neuron.html">여기</a>와 <a href="http://like.silk.to/studymemo/ChainRuleNeuralNetwork.pdf">여기</a>를 참고하기 바랍니다. <a href="http://cs231n.github.io/neural-networks-3/">Stanford CS231n</a>에서 더 자세한 팁을 얻을 수 있습니다.</p>
+<p>본 예제에서 ReLU에 대한 각 포인트에 대한 미분은:</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/05.png" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<div class="highlight"><pre><span></span><code># Train: build and train a 2-layers neural network
+train.dnn &lt;- function(x, y, traindata=data, testdata=NULL,
+                  # set hidden layers and neurons
+                  # currently, only support 1 hidden layer
+                  hidden=c(6),
+                  # max iteration steps
+                  maxit=2000,
+                  # delta loss
+                  abstol=1e-2,
+                  # learning rate
+                  lr = 1e-2,
+                  # regularization rate
+                  reg = 1e-3,
+                  # show results every &#39;display&#39; step
+                  display = 100,
+                  random.seed = 1)
+{
+  # to make the case reproducible.
+  set.seed(random.seed)
+
+  # total number of training set
+  N &lt;- nrow(traindata)
+
+  # extract the data and label
+  # don&#39;t need atribute
+  X &lt;- unname(data.matrix(traindata[,x]))
+  Y &lt;- traindata[,y]
+  if(is.factor(Y)) { Y &lt;- as.integer(Y) }
+  # updated: 10.March.2016: create index for both row and col
+  Y.len   &lt;- length(unique(Y))
+  Y.set   &lt;- sort(unique(Y))
+  Y.index &lt;- cbind(1:N, match(Y, Y.set))
+
+  # number of input features
+  D &lt;- ncol(X)
+  # number of categories for classification
+  K &lt;- length(unique(Y))
+  H &lt;-  hidden
+
+  # create and init weights and bias
+  W1 &lt;- 0.01*matrix(rnorm(D*H), nrow=D, ncol=H)
+  b1 &lt;- matrix(0, nrow=1, ncol=H)
+
+  W2 &lt;- 0.01*matrix(rnorm(H*K), nrow=H, ncol=K)
+  b2 &lt;- matrix(0, nrow=1, ncol=K)
+
+  # use all train data to update weights since it&#39;s a small dataset
+  batchsize &lt;- N
+  # updated: March 17. 2016
+  # init loss to a very big value
+  loss &lt;- 100000
+
+  # Training the network
+  i &lt;- 0
+  while(i &lt; maxit &amp;&amp; loss &gt; abstol ) {
+
+    # iteration index
+    i &lt;- i +1
+
+    # forward ....
+    # 1 indicate row, 2 indicate col
+    hidden.layer &lt;- sweep(X %*% W1 ,2, b1, &#39;+&#39;)
+    # neurons : ReLU
+    hidden.layer &lt;- pmax(hidden.layer, 0)
+    score &lt;- sweep(hidden.layer %*% W2, 2, b2, &#39;+&#39;)
+
+    # softmax
+    score.exp &lt;- exp(score)
+    probs &lt;-sweep(score.exp, 1, rowSums(score.exp), &#39;/&#39;)
+
+    # compute the loss
+    corect.logprobs &lt;- -log(probs[Y.index])
+    data.loss  &lt;- sum(corect.logprobs)/batchsize
+    reg.loss   &lt;- 0.5*reg* (sum(W1*W1) + sum(W2*W2))
+    loss &lt;- data.loss + reg.loss
+
+    # display results and update model
+    if( i %% display == 0) {
+        if(!is.null(testdata)) {
+            model &lt;- list( D = D,
+                           H = H,
+                           K = K,
+                           # weights and bias
+                           W1 = W1,
+                           b1 = b1,
+                           W2 = W2,
+                           b2 = b2)
+            labs &lt;- predict.dnn(model, testdata[,-y])
+            # updated: 10.March.2016
+            accuracy &lt;- mean(as.integer(testdata[,y]) == Y.set[labs])
+            cat(i, loss, accuracy, &quot;\n&quot;)
+        } else {
+            cat(i, loss, &quot;\n&quot;)
+        }
+    }
+
+    # backward ....
+    dscores &lt;- probs
+    dscores[Y.index] &lt;- dscores[Y.index] -1
+    dscores &lt;- dscores / batchsize
+
+
+    dW2 &lt;- t(hidden.layer) %*% dscores
+    db2 &lt;- colSums(dscores)
+
+    dhidden &lt;- dscores %*% t(W2)
+    dhidden[hidden.layer &lt;= 0] &lt;- 0
+
+    dW1 &lt;- t(X) %*% dhidden
+    db1 &lt;- colSums(dhidden)
+
+    # update ....
+    dW2 &lt;- dW2 + reg*W2
+    dW1 &lt;- dW1  + reg*W1
+
+    W1 &lt;- W1 - lr * dW1
+    b1 &lt;- b1 - lr * db1
+
+    W2 &lt;- W2 - lr * dW2
+    b2 &lt;- b2 - lr * db2
+
+  }
+
+  # final results
+  # creat list to store learned parameters
+  # you can add more parameters for debug and visualization
+  # such as residuals, fitted.values ...
+  model &lt;- list( D = D,
+                 H = H,
+                 K = K,
+                 # weights and bias
+                 W1= W1,
+                 b1= b1,
+                 W2= W2,
+                 b2= b2)
+
+  return(model)
+}
+</code></pre></div>
+
+<h2 id="_8">테스트 및 시각화</h2>
+<hr />
+<p>2개의 레이어를 갖는 간단한 DNN 모델을 구성하였으니 이제 우리의 모델을 테스트할 수 있게 되었습니다. 먼저, 데이터세트를 학습용과 테스트용 그룹으로 분리하고 학습 데이터세트를 이용하여 학습 모델을 세우는 한편 테스트 데이터세트를 이용하여 우리의 모델의 일반화 가능성을 측정하고자 합니다.</p>
+<div class="highlight"><pre><span></span><code>########################################################################
+# testing
+#######################################################################
+set.seed(1)
+
+# 0. EDA
+summary(iris)
+plot(iris)
+
+# 1. split data into test/train
+samp &lt;- c(sample(1:50,25), sample(51:100,25), sample(101:150,25))
+
+# 2. train model
+ir.model &lt;- train.dnn(x=1:4, y=5, traindata=iris[samp,], testdata=iris[-samp,], hidden=6, maxit=2000, display=50)
+
+# 3. prediction
+labels.dnn &lt;- predict.dnn(ir.model, iris[-samp, -5])
+
+# 4. verify the results
+table(iris[-samp,5], labels.dnn)
+#          labels.dnn
+#            1  2  3
+#setosa     25  0  0
+#versicolor  0 24  1
+#virginica   0  0 25
+
+#accuracy
+mean(as.integer(iris[-samp, 5]) == labels.dnn)
+# 0.98
+</code></pre></div>
+
+<p>학습 데이터세트의 데이터 손실과 정확도는 아래와 같습니다:</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/06.png" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>아래의 코드와 같이, 작성한 DNN 모델과 <code>nnet</code> 패키지를 비교하였습니다.</p>
+<div class="highlight"><pre><span></span><code>library(nnet)
+ird &lt;- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
+                  species = factor(c(rep(&quot;s&quot;,50), rep(&quot;c&quot;, 50), rep(&quot;v&quot;, 50))))
+ir.nn2 &lt;- nnet(species ~ ., data = ird, subset = samp, size = 6, rang = 0.1,
+               decay = 1e-2, maxit = 2000)
+
+labels.nnet &lt;- predict(ir.nn2, ird[-samp,], type=&quot;class&quot;)
+table(ird$species[-samp], labels.nnet)
+#  labels.nnet
+#   c  s  v
+#c 22  0  3
+#s  0 25  0
+#v  3  0 22
+
+# accuracy
+mean(ird$species[-samp] == labels.nnet)
+# 0.96
+</code></pre></div>
+
+<h3 id="2016428">업데이트: 2016/4/28</h3>
+<p>Google의 TensorFlow는 신경망을 시각화 할 수 있는 매우 훌륭한 웹사이트를 공개했습니다 (<a href="http://playground.tensorflow.org/">여기</a>를 참고).</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/07.png" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<h2 id="_9">요약</h2>
+<hr />
+<p>이 글에서, 바닥에서부터 R의 신경망을 구현하는 방법에 대하여 알아보았습니다. 그러나 예제 코드는 단지 DNN의 핵심 개념을 구현한 것이며, 독자들은 다음과 같이 보다 심화된 연습을 할 수 있습니다:</p>
+<ul>
+<li>다른 Classification 문제를 해결해 본다. 가령 여기의 테스트 케이스를 활용할 수 있습니다.</li>
+<li>은닉 레이어 사이즈, 활성함수, 손실함수를 다양하게 선택해 봅니다.</li>
+<li>단일 은닉 레이어 네트워크에서 다중 은닉 레이어로 확장해 봅니다.</li>
+<li>회귀 문제를 해결하는 네트워크를 설계해 봅니다.</li>
+<li>네트워크 아키텍쳐, Weights, Bias를 시각화 해봅니다. 여기를 참고하도록 합니다.</li>
+</ul>
+<h2 id="source-codes">Source Codes</h2>
+<hr />
+<p><code>train.dnn.R</code></p>
+<div class="highlight"><pre><span></span><code># Train: build and train a 2-layers neural network
+train.dnn &lt;- function(x, y, traindata=data, testdata=NULL,
+                      model = NULL,
+                      # set hidden layers and neurons
+                      # currently, only support 1 hidden layer
+                      hidden=c(6),
+                      # max iteration steps
+                      maxit=2000,
+                      # delta loss
+                      abstol=1e-2,
+                      # learning rate
+                      lr = 1e-2,
+                      # regularization rate
+                      reg = 1e-3,
+                      # show results every &#39;display&#39; step
+                      display = 100,
+                      random.seed = 1)
+{
+  # to make the case reproducible.
+  set.seed(random.seed)
+
+  # total number of training set
+  N &lt;- nrow(traindata)
+
+  # extract the data and label
+  # don&#39;t need atribute
+  X &lt;- unname(data.matrix(traindata[,x]))
+  # correct categories represented by integer
+  Y &lt;- traindata[,y]
+  if(is.factor(Y)) { Y &lt;- as.integer(Y) }
+  # create index for both row and col
+  # create index for both row and col
+  Y.len   &lt;- length(unique(Y))
+  Y.set   &lt;- sort(unique(Y))
+  Y.index &lt;- cbind(1:N, match(Y, Y.set))
+
+  # create model or get model from parameter
+  if(is.null(model)) {
+    # number of input features
+    D &lt;- ncol(X)
+    # number of categories for classification
+    K &lt;- length(unique(Y))
+    H &lt;-  hidden
+
+    # create and init weights and bias
+    W1 &lt;- 0.01*matrix(rnorm(D*H), nrow=D, ncol=H)
+    b1 &lt;- matrix(0, nrow=1, ncol=H)
+
+    W2 &lt;- 0.01*matrix(rnorm(H*K), nrow=H, ncol=K)
+    b2 &lt;- matrix(0, nrow=1, ncol=K)
+  } else {
+    D  &lt;- model$D
+    K  &lt;- model$K
+    H  &lt;- model$H
+    W1 &lt;- model$W1
+    b1 &lt;- model$b1
+    W2 &lt;- model$W2
+    b2 &lt;- model$b2
+  }
+
+  # use all train data to update weights since it&#39;s a small dataset
+  batchsize &lt;- N
+  # init loss to a very big value
+  loss &lt;- 100000
+
+  # Training the network
+  i &lt;- 0
+  while(i &lt; maxit &amp;&amp; loss &gt; abstol ) {
+
+    # iteration index
+    i &lt;- i +1
+
+    # forward ....
+    # 1 indicate row, 2 indicate col
+    hidden.layer &lt;- sweep(X %*% W1 ,2, b1, &#39;+&#39;)
+    # neurons : ReLU
+    hidden.layer &lt;- pmax(hidden.layer, 0)
+    score &lt;- sweep(hidden.layer %*% W2, 2, b2, &#39;+&#39;)
+
+    # softmax
+    score.exp &lt;- exp(score)
+    # debug
+    probs &lt;- score.exp/rowSums(score.exp)
+
+    # compute the loss
+    corect.logprobs &lt;- -log(probs[Y.index])
+    data.loss  &lt;- sum(corect.logprobs)/batchsize
+    reg.loss   &lt;- 0.5*reg* (sum(W1*W1) + sum(W2*W2))
+    loss &lt;- data.loss + reg.loss
+
+    # display results and update model
+    #if( i %% display == 0) {
+    if( 1 == 1 ) {
+      if(!is.null(testdata)) {
+        model &lt;- list( D = D,
+                       H = H,
+                       K = K,
+                       # weights and bias
+                       W1 = W1,
+                       b1 = b1,
+                       W2 = W2,
+                       b2 = b2)
+        labs &lt;- predict.dnn(model, testdata[,-y])
+        accuracy &lt;- mean(as.integer(testdata[,y]) == Y.set[labs])
+        cat(i, loss, accuracy, &quot;\n&quot;)
+      } else {
+        cat(i, loss, &quot;\n&quot;)
+      }
+    }
+
+    # backward ....
+    dscores &lt;- probs
+    dscores[Y.index] &lt;- dscores[Y.index] - 1
+    dscores &lt;- dscores / batchsize
+
+
+    dW2 &lt;- t(hidden.layer) %*% dscores
+    db2 &lt;- colSums(dscores)
+
+    dhidden &lt;- dscores %*% t(W2)
+    dhidden[hidden.layer &lt;= 0] &lt;- 0
+
+    dW1 &lt;- t(X) %*% dhidden
+    db1 &lt;- colSums(dhidden)
+
+    # update ....
+    dW2 &lt;- dW2 + reg*W2
+    dW1 &lt;- dW1  + reg*W1
+
+    W1 &lt;- W1 - lr * dW1
+    b1 &lt;- b1 - lr * db1
+
+    W2 &lt;- W2 - lr * dW2
+    b2 &lt;- b2 - lr * db2
+  }
+
+  # final results
+  # creat list to store learned parameters
+  # you can add more parameters for debug and visualization
+  # such as residuals, fitted.values ...
+  model &lt;- list( D = D,
+                 H = H,
+                 K = K,
+                 # weights and bias
+                 W1= W1,
+                 b1= b1,
+                 W2= W2,
+                 b2= b2)
+
+  return(model)
+}
+</code></pre></div>
+
+<p><code>predict.dnn.R</code></p>
+<div class="highlight"><pre><span></span><code># Prediction
+predict.dnn &lt;- function(model, data = X.test) {
+  # new data, transfer to matrix
+  new.data &lt;- data.matrix(data)
+
+  # Feed Forwad
+  hidden.layer &lt;- sweep(new.data %*% model$W1 ,2, model$b1, &#39;+&#39;)
+  # neurons : Rectified Linear
+  hidden.layer &lt;- pmax(hidden.layer, 0)
+  score &lt;- sweep(hidden.layer %*% model$W2, 2, model$b2, &#39;+&#39;)
+
+  # Loss Function: softmax
+  score.exp &lt;- exp(score)
+  probs &lt;-sweep(score.exp, 1, rowSums(score.exp), &#39;/&#39;)
+
+  # select max possiblity
+  labels.predicted &lt;- max.col(probs)
+  return(labels.predicted)
+}
+</code></pre></div>
+
+<p><code>main.R</code></p>
+<div class="highlight"><pre><span></span><code># Copyright 2016: www.ParallelR.com
+# Parallel Blog : R For Deep Learning (I): Build Fully Connected Neural Network From Scratch
+# Classification by 2-layers DNN and tested by iris dataset
+# Author: Peng Zhao, patric.zhao@gmail.com
+
+base::rm(list = ls())
+base::gc()
+
+source(&#39;./train.dnn.R&#39;, echo=FALSE)
+source(&#39;./predict.dnn.R&#39;, echo=FALSE)
+
+########################################################################
+# testing
+#######################################################################
+set.seed(1)
+
+# 0. EDA
+summary(iris)
+names(iris)
+plot(iris)
+
+# 1. split data into test/train
+samp &lt;- c(sample(1:50,25), sample(51:100,25), sample(101:150,25))
+length(samp)
+
+# 2. train model
+ir.model &lt;- train.dnn(x=1:4, y=5, traindata=iris[samp,], testdata=iris[-samp,], hidden=10, maxit=2000, display=50)
+# ir.model &lt;- train.dnn(x=1:4, y=5, traindata=iris[samp,], hidden=6, maxit=2000, display=50)
+
+# 3. prediction
+# NOTE: if the predict is factor, we need to transfer the number into class manually.
+#       To make the code clear, I don&#39;t write this change into predict.dnn function.
+labels.dnn &lt;- predict.dnn(ir.model, iris[-samp, -5])
+
+# 4. verify the results
+table(iris[-samp,5], labels.dnn)
+#          labels.dnn
+#            1  2  3
+#setosa     25  0  0
+#versicolor  0 24  1
+#virginica   0  0 25
+
+#accuracy
+mean(as.integer(iris[-samp, 5]) == labels.dnn)
+# 0.98
+
+# 5. compare with nnet
+library(nnet)
+ird &lt;- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
+                  species = factor(c(rep(&quot;s&quot;,50), rep(&quot;c&quot;, 50), rep(&quot;v&quot;, 50))))
+ir.nn2 &lt;- nnet(species ~ ., data = ird, subset = samp, size = 6, rang = 0.1,
+               decay = 1e-2, maxit = 2000)
+
+
+labels.nnet &lt;- predict(ir.nn2, ird[-samp,], type=&quot;class&quot;)
+table(ird$species[-samp], labels.nnet)
+#  labels.nnet
+#   c  s  v
+#c 22  0  3
+#s  0 25  0
+#v  3  0 22
+
+# accuracy
+mean(ird$species[-samp] == labels.nnet)
+# 0.96
+
+
+# Visualization
+# the output from screen, copy and paste here.
+data1 &lt;- (&quot;i loss accuracy
+          50 1.098421 0.3333333
+          100 1.098021 0.3333333
+          150 1.096843 0.3333333
+          200 1.093393 0.3333333
+          250 1.084069 0.3333333
+          300 1.063278 0.3333333
+          350 1.027273 0.3333333
+          400 0.9707605 0.64
+          450 0.8996356 0.6666667
+          500 0.8335469 0.6666667
+          550 0.7662386 0.6666667
+          600 0.6914156 0.6666667
+          650 0.6195753 0.68
+          700 0.5620381 0.68
+          750 0.5184008 0.7333333
+          800 0.4844815 0.84
+          850 0.4568258 0.8933333
+          900 0.4331083 0.92
+          950 0.4118948 0.9333333
+          1000 0.392368 0.96
+          1050 0.3740457 0.96
+          1100 0.3566594 0.96
+          1150 0.3400993 0.9866667
+          1200 0.3243276 0.9866667
+          1250 0.3093422 0.9866667
+          1300 0.2951787 0.9866667
+          1350 0.2818472 0.9866667
+          1400 0.2693641 0.9866667
+          1450 0.2577245 0.9866667
+          1500 0.2469068 0.9866667
+          1550 0.2368819 0.9866667
+          1600 0.2276124 0.9866667
+          1650 0.2190535 0.9866667
+          1700 0.2111565 0.9866667
+          1750 0.2038719 0.9866667
+          1800 0.1971507 0.9866667
+          1850 0.1909452 0.9866667
+          1900 0.1852105 0.9866667
+          1950 0.1799045 0.9866667
+          2000 0.1749881 0.9866667  &quot;)
+
+data.v &lt;- read.table(text=data1, header=T)
+par(mar=c(5.1, 4.1, 4.1, 4.1))
+plot(x=data.v$i, y=data.v$loss, type=&quot;o&quot;, col=&quot;blue&quot;, pch=16,
+     main=&quot;IRIS loss and accuracy by 2-layers DNN&quot;,
+     ylim=c(0, 1.2),
+     xlab=&quot;&quot;,
+     ylab=&quot;&quot;,
+     axe =F)
+lines(x=data.v$i, y=data.v$accuracy, type=&quot;o&quot;, col=&quot;red&quot;, pch=1)
+box()
+axis(1, at=seq(0,2000,by=200))
+axis(4, at=seq(0,1.0,by=0.1))
+axis(2, at=seq(0,1.2,by=0.1))
+mtext(&quot;training step&quot;, 1, line=3)
+mtext(&quot;loss of training set&quot;, 2, line=2.5)
+mtext(&quot;accuracy of testing set&quot;, 4, line=2)
+
+legend(&quot;bottomleft&quot;,
+       legend = c(&quot;loss&quot;, &quot;accuracy&quot;),
+       pch = c(16,1),
+       col = c(&quot;blue&quot;,&quot;red&quot;),
+       lwd=c(1,1)
+)
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Introduction to Artificial Neural Network Part 2.
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Deep Learning from Scratch Part 2.
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

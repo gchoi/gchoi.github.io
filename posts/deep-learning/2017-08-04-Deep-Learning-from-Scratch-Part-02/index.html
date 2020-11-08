@@ -1,0 +1,1482 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>Deep Learning from Scratch Part 2. - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Deep Learning from Scratch Part 2.
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+      Deep Learning from Scratch Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Deep Learning from Scratch Part 2.
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Deep Learning from Scratch Part 2." class="md-nav__link md-nav__link--active">
+      Deep Learning from Scratch Part 2.
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    부제목: 인공신경망 처절하게 제대로 이해하기
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1. 데이터 준비
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-neural-network" class="md-nav__link">
+    2. Neural Network 구성
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-feed-forward-operations" class="md-nav__link">
+    3. Feed-forward Operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-backward-pass" class="md-nav__link">
+    4. Backward Pass
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-implementation" class="md-nav__link">
+    5. Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-traindnn" class="md-nav__link">
+    5.1. train.dnn() 프로토타입
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    5.2. 부가 변수 설정
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-training" class="md-nav__link">
+    5.3. Training
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-predictdnn" class="md-nav__link">
+    5.4. predict.dnn( ) 프로토타입
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-mainr" class="md-nav__link">
+    5.5. main.R
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    5.6. 실행결과
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../mongodb/04-mongodb-update-modifiers-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    부제목: 인공신경망 처절하게 제대로 이해하기
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1. 데이터 준비
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-neural-network" class="md-nav__link">
+    2. Neural Network 구성
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-feed-forward-operations" class="md-nav__link">
+    3. Feed-forward Operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-backward-pass" class="md-nav__link">
+    4. Backward Pass
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-implementation" class="md-nav__link">
+    5. Implementation
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Implementation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-traindnn" class="md-nav__link">
+    5.1. train.dnn() 프로토타입
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    5.2. 부가 변수 설정
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-training" class="md-nav__link">
+    5.3. Training
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-predictdnn" class="md-nav__link">
+    5.4. predict.dnn( ) 프로토타입
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-mainr" class="md-nav__link">
+    5.5. main.R
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56" class="md-nav__link">
+    5.6. 실행결과
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                  <h1>Deep Learning from Scratch Part 2.</h1>
+                
+                <p><em>Written by Alex Choi, Aug. 04, 2017.</em></p>
+<h3 id="_1">부제목: 인공신경망 처절하게 제대로 이해하기</h3>
+<p><a href="http://cinema4dr12.tistory.com/entry/Artificial-Intelligence-Machine-Learning-R-%EB%94%A5%EB%9F%AC%EB%8B%9D-%EC%9D%B8%EA%B3%B5%EC%8B%A0%EA%B2%BD%EB%A7%9D-%EB%B0%94%EB%8B%A5%EB%B6%80%ED%84%B0-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0">지난 포스팅</a>에서 R에서 딥러닝을 바닥부터(from scratch) 구현하는 방법에 대해 개괄적으로 살펴본 적이 있는데, 이번 포스팅에서는 코드를 자세하게 분석하면서 수학적으로 과정을 풀어보고자 합니다.</p>
+<p><br></p>
+<h2 id="1">1. 데이터 준비</h2>
+<hr />
+<p>딥러닝 코드를 작성하기 위해 테스트 용도의 데이터로 <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">iris 데이터셋</a>을 사용할 것입니다. iris는 일종의 꽃을 꽃받침 및 꽃잎의 폭과 길이 등으로 분류한 데이터입이며, R의 기본 패키지에 포함이 되어 있습니다.</p>
+<p>대략적인 데이터의 형태는 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
+  <span class="n">Sepal.Length</span> <span class="n">Sepal.Width</span> <span class="n">Petal.Length</span> <span class="n">Petal.Width</span> <span class="n">Species</span>
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">3</span>          <span class="m">4.7</span>         <span class="m">3.2</span>          <span class="m">1.3</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">4</span>          <span class="m">4.6</span>         <span class="m">3.1</span>          <span class="m">1.5</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">5</span>          <span class="m">5.0</span>         <span class="m">3.6</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">6</span>          <span class="m">5.4</span>         <span class="m">3.9</span>          <span class="m">1.7</span>         <span class="m">0.4</span>  <span class="n">setosa</span>
+</code></pre></div>
+
+<p>총 4개의 Features(<code>Sepal.Length</code>, <code>Sepal.Width</code>, <code>Petal.Length</code>, <code>Petal.Width</code>)를 가지며, Species는 꽃을 분류한 클래스(<code>setosa</code>, <code>versicolor</code>, <code>virginica</code>로 총 3개의 클래스)입니다. 데이터의 개수는 총 150개입니다.</p>
+<p>주어진 데이터를 이용하여 학습 및 테스트를 위해 <code>test dataset</code>과 <code>train dataset</code>으로 나눕니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. split data into test/train</span>
+<span class="n">samp</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">c</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">50</span><span class="p">,</span><span class="m">25</span><span class="p">),</span>
+                <span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">51</span><span class="o">:</span><span class="m">100</span><span class="p">,</span><span class="m">25</span><span class="p">),</span>
+                <span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">150</span><span class="p">,</span><span class="m">25</span><span class="p">))</span>
+</code></pre></div>
+
+<p><code>samp</code>는 test dataset으로 데이터의 인덱스를 1~50 범위에서 25개, 51~100 범위에서 25개, 101~150 범위에서 25개씩 총 75개를 가급적 고르게 선택한 것입니다.</p>
+<p>선택된 인덱스에 해당하는 데이터셋(Dataset)을 traindata로, 이들을 제외한 나머지를 test data로 지정합니다:</p>
+<div class="highlight"><pre><span></span><code>traindata = iris[samp,]
+testdata = iris[-samp,]
+</code></pre></div>
+
+<p><br></p>
+<h2 id="2-neural-network">2. Neural Network 구성</h2>
+<hr />
+<p>구성한 Neural Network는 Multilayer Perceptron(MLP) 형태로, 4개의 Input Feature를 갖는 입력 레이어(Layer)와 6개의 노드(Node)를 포함하는 1개의 Hidden Layer, 3개의 출력 노드를 갖는 출력 레이어로 구성하였습니다. 다음 이미지를 참고하시기 바랍니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/01.png" width="100%" />
+  <figcaption></figcaption>
+</figure></p>
+<p><code>D(=4)</code>는 Input Feature의 개수를, <code>H(=6)</code>는 Hidden Layer 내 노드 개수를, <code>K(=3)</code>는 클래스 개수를 의미합니다. 앞으로의 설명은 구체적인 숫자를 언급하기 보다는 가급적 일반화를 위해 이들 변수 이름을 이용하여 설명을 사용할 것이니 각 변수의 값을 기억해 두시면 설명을 좀 더 이해하는데 도움이 될 것입니다.</p>
+<p><br></p>
+<h2 id="3-feed-forward-operations">3. Feed-forward Operations</h2>
+<hr />
+<p>전체적인 네트워크 구성은 위의 이미지와 같지만, 사실 활성화 함수(Activation Function), Softmax Classifier 등 더 많은 복잡한 계산이 포함됩니다.</p>
+<p>그래서 좀 더 구체적으로 표현한 것이 다음 이미지입니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/02.jpg" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>조금 복잡해 보이지만 수학적 설명을 곁들여 하나씩 풀어 나가보도록 하겠습니다.</p>
+<p><span class="arithmatex">\(\mathbf{X}\)</span>는 Input Feature 벡터입니다. 75개의 데이터로 구성되어 있지만 설명을 간단하게 하기 위해 1개의 데이터를 갖는다고 가정하도록 하겠습니다. 따라서, <span class="arithmatex">\(\mathbf{X}\)</span>의 차원은 [75×4] (또는 [N×D])가 아닌 [1×4] (또는 [1×D])입니다.</p>
+<p>첫번째 Weight <span class="arithmatex">\(\mathbf{W}^{(1)}\)</span>는 차원 [D×H]를 갖는 행렬이며, 첫번째 Bias <span class="arithmatex">\(\mathbf{b}^{(1)}\)</span>는 차원 [1×D]를 갖는 벡터입니다(사실 1차원 행렬이라고해도 무방합니다).</p>
+<p><span class="arithmatex">\(\mathbf{\Sigma}^{(1)}\)</span>은 <span class="arithmatex">\(\mathbf{W}^{(1)}\)</span>과 <span class="arithmatex">\(\mathbf{X}\)</span>를 행렬곱하고 <span class="arithmatex">\(\mathbf{b}^{(1)}\)</span>을 더한 것입니다. 이를 수학적으로 표현하면 다음과 같습니다(편의 상 Tensor 형식으로 수식을 표현하고자 하며 중복첨자는 Summation을 의미합니다):</p>
+<p>Op.[1] : <span class="arithmatex">\(\displaystyle{ \sigma_{i}^{(1)} = x_k w_{ki}^{(1)} + b_{i}^{(1)} }, i = 1, ..., H, k=1,...,D\)</span></p>
+<p>활성화 함수는 ReLU(Rectified Linear Unit)을 사용하였으며, 이는 0보다 작은 경우에는 0을, 0보다 큰 경우에는 자기 자신을 출력하는 함수입니다. 이에 대한 수식을 다음과 같습니다:</p>
+<p>Op.[2] : <span class="arithmatex">\(h_i = \mathrm{max}(0, \sigma_{i}^{(1)}), i = 1,...,H\)</span></p>
+<p>Hidden Layer <span class="arithmatex">\(\mathbf{H}\)</span>는 두번째 Weight 행렬인 <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>(차원 [H×K])와 행렬곱을 한 후 두번째 Bias 벡터인 <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>(차원 [1×K])와 더해집니다:</p>
+<p>Op.[3] : <span class="arithmatex">\(\sigma_{i}^{(2)} = h_k w_{ki}^{(2)} + b_{i}^{(2)}, i = 1,...,K, k = 1,...,H\)</span></p>
+<p>방금 Op.[3]을 통해 계산된 <span class="arithmatex">\(\mathbf{\Sigma^{(2)}}\)</span>(행렬 형태) 또는 <span class="arithmatex">\(\sigma_{i}^{(2)}\)</span>(행렬의 엘리먼트 형태)를 특별히 score라고 칭하도록 하겠습니다(나중에 코드의 변수와 대응할 것입니다).</p>
+<p>Information Theory에 근거하여 Data Loss를 계산하기 위해 <span class="arithmatex">\(\sigma_{i}^{(2)}\)</span>에 Exponential 함수를 적용합니다.</p>
+<p>Op.[4] : <span class="arithmatex">\(e_i = \mathrm{exp}(\sigma_{i}^{(2)}), i=1,...,K\)</span></p>
+<p>Op.[4]에 의해 계산된 결과, 행렬 <span class="arithmatex">\(\mathbf{E}\)</span>는 차원 [1×3]의 경우 다음과 형태를 갖습니다.</p>
+<p><span class="arithmatex">\( \mathbf{E} = \begin{bmatrix} \mathrm{exp}(\sigma_{1}^{(2)}) &amp; \mathrm{exp}(\sigma_{2}^{(2)}) &amp; \mathrm{exp}(\sigma_{3}^{(2)}) \end{bmatrix} \)</span></p>
+<p>이제 행렬 <span class="arithmatex">\(\mathbf{E}\)</span>의 각 엘리먼트를 엘리먼트를 모두 더한 값으로 나눕니다.</p>
+<p>Op.[5] : <span class="arithmatex">\(\displaystyle{ q_i = \frac{e_i}{\sum_{k=1}^{K}{e_k}} = \frac{e_i}{S} } \), \(i = 1,...,K\)</span></p>
+<p>여기서, <span class="arithmatex">\(S = \displaystyle{\sum_{k=1}^{K}{e_k}} \)</span></p>
+<p>학습하는 과정에서 실제 데이터 라벨(또는 클래스) - 이를 Ground Truth Label이라고 합니다 - 과 예측된 라벨을 비교하여 차이가 나는 경우 Information Theory에 입각하여 이를 데이터 손실(Data Loss)라고 하며, True Distribution <span class="arithmatex">\(p\)</span>와 Estimated Distribution <span class="arithmatex">\(q\)</span> 사이의 Cross-entropy <span class="arithmatex">\(H(p,q)\)</span>로 표현합니다:</p>
+<p><span class="arithmatex">\(H(p,q) = {p \mathrm{log}\begin{pmatrix}\displaystyle{\frac{1}{q}}\end{pmatrix}} = -p \mathrm{log}(q) \)</span></p>
+<p><span class="arithmatex">\(K\)</span>개의 Class에 대하여 표현하면,</p>
+<p><span class="arithmatex">\( H(p,q) = \displaystyle{- \sum_{k=1}^{K}{p_k \mathrm{log}(q_k)}} \)</span></p>
+<p>과 같습니다. True Distribution <span class="arithmatex">\(p\)</span>는,</p>
+<p><span class="arithmatex">\( \mathbf{p} = \begin{bmatrix} p_1 &amp; p_2 &amp; ... &amp; p_K \end{bmatrix} \)</span>, <span class="arithmatex">\( \displaystyle{\sum_{k=1}^{K}{p_K} = 1} \)</span></p>
+<p>인데, Ground Truth Label이 <span class="arithmatex">\(y\)</span>번째 Index, 즉, <span class="arithmatex">\(k=y\)</span>이면 결국, <span class="arithmatex">\(p_{k=y} = 1\)</span>이며, <span class="arithmatex">\(p_{k \ne y} = 0\)</span>으로, <span class="arithmatex">\(y\)</span>번째 Index만이 1이며, 그 외에는 모두 0가 됩니다. 따라서, <a href="https://en.wikipedia.org/wiki/Kronecker_delta">Kronecker Delta Property</a>를 이용하여 다음과 같이 간단하게 표현할 수 있습니다:</p>
+<p><span class="arithmatex">\( H(p,q) = -\mathrm{log}(q_k) \cdot \delta_{ky}\)</span>, <span class="arithmatex">\(k=1,...,K\)</span>, <span class="arithmatex">\(y \in [1,...K]\)</span></p>
+<p>Cross-entropy는 Data Loss를 의미하므로, Ground Truth Label y에 대한 Data Loss <span class="arithmatex">\(L_D\)</span>는,</p>
+<p>Op.[6] : <span class="arithmatex">\(L_D = -\mathrm{log}(q_k) \cdot \delta_{ky}, \ k=1,...,K\)</span></p>
+<p><span class="arithmatex">\(y \in [1,...K] : \mathrm{Ground \ Truth \ Label}\)</span></p>
+<p>위의 식에서 첨자(Subscript) <span class="arithmatex">\(k\)</span>가 두 번 중복되어 있음을 볼 수 있는데 Tensor 표현에 의하면 일반적으로 중복 첨자는 이 첨자에 대하여 합 연산(Summation)을 수행합니다. 따라서, 다음과 같이 Data Loss 식을 더욱 간단히 표현할 수 있습니다:</p>
+<p>Op.[7] : <span class="arithmatex">\(L_D = -\mathrm{log}(q_y)\)</span></p>
+<p>Op.[7]에 의해 계산된 <span class="arithmatex">\(q\)</span>를 <code>correct.logprobs</code>라 칭하도록 하겠습니다. 1개의 데이터에 대한 예를 들어 설명하고 있지만, 만약 여러 개의 데이터인 경우, 이들을 평균을 계산하여 Data Loss로 계산합니다. 가령, <span class="arithmatex">\(N\)</span>개의 데이터에 대하여 Data Loss는,</p>
+<p>Op.[8] : <span class="arithmatex">\(\displaystyle{ L_D = - \frac{1}{N}\sum_{i=1}^{N}{\mathrm{log}(q_i)} }\)</span></p>
+<p>로 확장할 수 있습니다. 여기서, <span class="arithmatex">\(L_D\)</span>는 전체 데이터셋에 대한 평균 Data Loss를 의미하며, <span class="arithmatex">\(q_k\)</span>는 k번째 데이터의 Data Loss를 의미합니다.</p>
+<p>Loss는 앞서 언급한 Data Loss 외에 Regularization Loss라는 것이 있습니다. Stanford CS231n 강의 사이트에 매우 잘 설명되어 있는데, 간략히 요약하자면, 특정 데이터에 대하여 과도하게 가중치가 부여되는 과도적합(Overfitting)이라고 하며 이를 방지하기 위해 Regularization Loss(L-2 Regularization)를 다음과 같이 정의합니다:</p>
+<p>Op.[9] : <span class="arithmatex">\(L_R = \displaystyle{\frac{1}{2}} \lambda \displaystyle{\sum_{k}{\sum_{l}{w_{kl}^2}}}\)</span></p>
+<p>여기서, <span class="arithmatex">\(\lambda\)</span>는 Hyperparameter의 일종으로 Regularization Factor라고 하며 1/2을 곱한 이유는 Weights에 대한 L-2 Regularization(모든 Weights를 제곱을 하여 더한 것)에 대하여 미분을 할 경우 1/2을 제거하기 위함입니다 (상수 계수 어떤 값이 곱해지더라도 최적화의 결과는 동일합니다).</p>
+<p>Data Loss <span class="arithmatex">\(L_D\)</span>와 Regularization Loss <span class="arithmatex">\(L_R\)</span>를 더한 전체 Loss <span class="arithmatex">\(L\)</span>를 변수 <span class="arithmatex">\(\mathbf{W}\)</span>와 <span class="arithmatex">\(\mathbf{b}\)</span>에 대하여 최소화합니다:</p>
+<p>Op.[10] : <span class="arithmatex">\(\displaystyle{ \min_{\mathbf{W, b}}{L = L_D + L_R} }\)</span></p>
+<p>지금까지의 과정을 간단하게 수식으로 정리하면 다음과 같습니다(첨자 표현은 앞의 과정과 일치하지 않을 수 있습니다):</p>
+<p>Op.[ForwardPass] :
+<span class="arithmatex">\(N\)</span>개의 Dataset, <span class="arithmatex">\(D\)</span>개의 Input Dimensionality, <span class="arithmatex">\(H\)</span>개의 뉴런을 갖는 1개의 Hidden Layer, <span class="arithmatex">\(K\)</span>개의 Output Class를 갖는 Multi-layer Perceptron에 대하여,</p>
+<p><span class="arithmatex">\( \sigma_{i,j}^{(1)} = x_{i,k} w_{kj}^{(1)} + b_{i,j}^{(1)} \)</span>, <span class="arithmatex">\(i=1,...,N\)</span>, <span class="arithmatex">\(j=1,...,H\)</span>, <span class="arithmatex">\(k=1,...,D\)</span></p>
+<p><span class="arithmatex">\( h_{i,j} = \mathrm{max}(0, \sigma_{i,j}^{(1)}) \)</span>, <span class="arithmatex">\(i=1,...,N\)</span>, <span class="arithmatex">\(j=1,...,H\)</span></p>
+<p></br>
+● <code>hidden.layer[N×H]</code> = <span class="arithmatex">\(h_{i,j}\)</span></p>
+<p><span class="arithmatex">\( \sigma_{i,j}^{(2)} = h_{i,k} w_{kj}^{(2)} + b_{i,j}^{(2)} \)</span>, <span class="arithmatex">\(i=1,...,K\)</span>, <span class="arithmatex">\(j=1,...,H\)</span>, <span class="arithmatex">\(k=1,...,H\)</span></p>
+<p></br>
+● <code>score[N×K]</code> = <span class="arithmatex">\(\sigma_{i,j}^{(2)}\)</span></p>
+<p><span class="arithmatex">\( e_{i,j} = \mathrm{exp}(\sigma_{i,j}^{(2)}) \)</span>, <span class="arithmatex">\(i=1,...,N\)</span>, <span class="arithmatex">\(j=1,...,K\)</span></p>
+<p></br>
+● <code>score.exp[N×K]</code> = <span class="arithmatex">\(e_{i,j}\)</span></p>
+<p><span class="arithmatex">\( \displaystyle{ q_{i,j} = \frac{e_{i,j}}{\sum_{k=1}^{K}{e_{i,k}}}} \)</span>, <span class="arithmatex">\(i=1,...,N\)</span>, <span class="arithmatex">\(j=1,...,K\)</span></p>
+<p></br>
+● <code>probs[N×K]</code> = <span class="arithmatex">\(q_{i,j}\)</span></p>
+<p><span class="arithmatex">\( L_{D_{i}} = - \mathrm{log}(q_{y_{i}}) \)</span></p>
+<p></br>
+● <code>correct.logprobs[N×1]</code> = <span class="arithmatex">\(L_{D_{i}}\)</span></p>
+<p><span class="arithmatex">\( L_D = \displaystyle{ L_D = \frac{1}{N}\sum_{i=1}^{N}{L_{D_{i}}} = - \frac{1}{N} \sum_{i=1}^{N}{q_{y_{i}}} } \)</span></p>
+<p></br>
+● <code>data.loss</code> = <span class="arithmatex">\(L_D\)</span></p>
+<p><span class="arithmatex">\( \displaystyle{ L_R = \frac{1}{2} \lambda \begin{bmatrix} \displaystyle{\sum_{k=1}^{D}{\sum_{l=1}^{H}{w_{kl}^{(1)}}}^2} + \displaystyle{\sum_{k=1}^{H}{\sum_{l=1}^{K}{w_{kl}^{(2)}}}^2} \end{bmatrix} } \)</span></p>
+<p></br>
+● <code>reg.loss</code> = <span class="arithmatex">\(L_R\)</span></p>
+<p><span class="arithmatex">\( L = L_D + L_R \)</span></p>
+<p></br>
+● <code>loss</code> = <span class="arithmatex">\(L\)</span></p>
+<p><br></p>
+<h2 id="4-backward-pass">4. Backward Pass</h2>
+<hr />
+<p>Backward Pass 또는 <a href="http://cs231n.github.io/optimization-2/">Backpropagation</a>은 학습을 하는 과정 동안 최적화 파라미터들(Optimization Parameters)을 업데이트 하기 위해 이 파라미터들에 대한 전체 Loss의 민감도(Sensitivity)를 계산하는 과정인데, Loss로부터 네트워크를 Feed-forward 방향의 역으로 거슬러 올라가면서 계산하기 때문에 Backward Pass라고 불리워집니다.</p>
+<p>다시 데이터셋트의 1개의 데이터에 대하여 설명을 진행하겠으나, N개의 데이터에서도 쉽게 확장할 수 있으니, 1개의 데이터에 대해 확실히 이해를 하는 것이 중요합니다.</p>
+<p>좀 더 명확한 설명을 위해 Hidden Layer ~ Classification 부분을 다음과 같이 따로 떼어 놓겠습니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/03.jpg" width="100%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>간단하게 그림을 설명 드리면, 우선 Hidden Layer <span class="arithmatex">\(\mathbf{h}\)</span>로부터,</p>
+<p><span class="arithmatex">\( \sigma_{i}^{(2)} = w_{ki}^{(2)}h_k + b_{i}^{(2)} \)</span>, <span class="arithmatex">\(i=1,...,K\)</span> <span class="arithmatex">\(k=1,...,H\)</span></p>
+<p>이며, <span class="arithmatex">\(K\)</span>와 <span class="arithmatex">\(H\)</span>는 각각 Class의 개수와 Hidden Layer 내 Neuron의 개수를 의미합니다. 별다른 설명이 없는 한, Tensor Notation에 의해 중복첨자에 대해서는 합 연산(Summation)을 하는 것으로 간주하도록 하겠습니다.</p>
+<p>그리고, <span class="arithmatex">\(\sigma_{i}^{(2)}\)</span>에 Exponential 함수를 취하여,</p>
+<p><span class="arithmatex">\( e_{i} = \mathrm{exp}(\sigma_{i}^{(2)}) \)</span>, <span class="arithmatex">\(i=1,...,K\)</span></p>
+<p>와 같이 표현하였습니다. 또한 각 Class의 Score 확률 <span class="arithmatex">\(q_i\)</span>는,</p>
+<p><span class="arithmatex">\( q_i = \displaystyle{\frac{e_i}{\displaystyle{\sum_{j=1}^{K}{e_j}}}} = \displaystyle{\frac{e_i}{S}} \)</span></p>
+<p>이며, Ground Truth Label의 Index <span class="arithmatex">\(y\)</span>에 대하여 Data Loss <span class="arithmatex">\(L_D\)</span>는,</p>
+<p><span class="arithmatex">\( L_D = - \displaystyle{ \sum_{i=1}^{N}{\mathrm{log}(q_{y_i})} } \)</span></p>
+<p>입니다.</p>
+<p>일단 1차 목표는, score에 대한 Data Loss의 민감도 식 <span class="arithmatex">\(\displaystyle{ \frac{\partial L_D}{\partial \sigma_{i}^{(2)}} }\)</span>를 구하는 것이 되겠습니다. 이것은 다음과 같은 Chain Rule에 의해 식을 유도할 수 있습니다.</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial \sigma_{i}^{(2)}} = \frac{\partial L_D}{\partial q_y} \frac{\partial q_y}{\partial e_k} \frac{\partial e_k}{\partial \sigma_{i}^{(2)}}}  \)</span></p>
+<p>이에 대한 첫번째 단계는 <code>correct.logprobs</code>에 대한 Data Loss의 민감도 식, 즉, 편미분(Partial Derivatives) 식을 구하는 것입니다. <span class="arithmatex">\(N = 1\)</span>이므로 <span class="arithmatex">\(q_{y_i} \rightarrow q_y\)</span>로 간단히 표현하여,</p>
+<p>Op.[11] : <span class="arithmatex">\(\displaystyle{ \frac{\partial L_D}{\partial q_y} } = \displaystyle{ \frac{\partial}{\partial q_y} \begin{pmatrix} -\mathrm{log}(q_y) \end{pmatrix} } = \displaystyle{-\frac{1}{q_y}}\)</span></p>
+<p>와 같이 식을 얻습니다. 그 다음, <span class="arithmatex">\(q_y\)</span>에 대한 <span class="arithmatex">\(e_k\)</span>의 편미분 식을 구합니다.</p>
+<p>Op.[12] : <span class="arithmatex">\(\displaystyle{ \frac{\partial q_y}{\partial e_k} = \displaystyle{ \frac{\partial}{\partial e_k} \begin{pmatrix} \displaystyle{\frac{e_y}{S}} \end{pmatrix} } } = \displaystyle{ \frac{\delta_{ky} - e_y}{S^2} }\)</span></p>
+<p>이런 식으로 Forward Pass를 차례차례로 역으로 편미분 식을 유도하면 됩니다. 다음은 <span class="arithmatex">\(\sigma_{i}^{(2)}\)</span>에 대한 <span class="arithmatex">\(e_k\)</span>의 편미분을 구하는 식입니다:</p>
+<p>Op.[13] : <span class="arithmatex">\(\displaystyle{ \frac{\partial e_k}{\partial \sigma_{i}^{(2)}} } = \displaystyle{ \frac{\partial}{\partial \sigma_{i}^{(2)}}[\mathrm{exp}(\sigma_{k}^{(2)})] } = \mathrm{exp}(\sigma_{k}^{(2)}) = e_k \delta_{ik} \), no sum on \(k\)</span></p>
+<p>Op.[13]의 경우, <span class="arithmatex">\(k\)</span>가 중복첨자이지만 합 연산을 하지 않습니다. 이제 Op.[11]~[13]의 Chain Rule을 이용하여 <span class="arithmatex">\(\sigma_{i}^{(2)}\)</span> 에 대한 Data Loss의 편미분 값을 구할 수 있습니다:</p>
+<p>Op.[14] : <span class="arithmatex">\( \displaystyle{\frac{\partial L_D}{\partial \sigma_{i}^{(2)}}} = \displaystyle{ \frac{\partial L_D}{\partial q_y} \frac{\partial q_y}{\partial e_k} \frac{\partial e_k}{\partial \sigma_{i}^{(2)}} } = \displaystyle{ -\frac{S}{e_y} \frac{\delta_{ky}S - e_y}{S^2} e_k \delta_{ik} = \frac{e_y e_k \delta_{ik}}{e_y S} - \frac{\delta_{ky} S e_k \delta_{ik}}{e_y S} = \frac{e_i}{S} - \frac{\delta_{ky} e_k \delta_{ik}}{e_y} } \)</span> =  <span class="arithmatex">\(q_i - \delta_{ky} \delta_{ky} \delta_{ik} = q_i - \delta_{iy}\)</span></p>
+<p>지금까지 복잡한 수식을 잘 따라오셨습니다. 1차 목표는 <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>와 <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>의 Data Loss <span class="arithmatex">\(L_D\)</span>에 대한 편미분을 각각 구하는 것입니다. 이 편미분은 <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>와 <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>의 변화가 Data Loss에 대한 변화의 영향을 의미합니다.</p>
+<p>역시 마찬가지로 Chain Rule에 의해 다음 식을 얻을 수 있으며:</p>
+<p>Op.[15] : <span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial b_{j}^{(2)}} = \frac{\partial L_D}{\partial q_y} \frac{\partial q_y}{\partial e_k} \frac{\partial e_k}{\partial \sigma_{i}^{(2)}} \frac{\partial \sigma_{i}^{(2)}}{\partial b_{j}^{(2)}} } \)</span></p>
+<p>다음 식이 성립하므로,</p>
+<p>Op.[16] : <span class="arithmatex">\( \displaystyle{ \frac{\partial \sigma_{i}^{(2)}}{\partial b_{j}^{(2)}} = \frac{\partial}{\partial b_{j}^{(2)}} \begin{bmatrix} \displaystyle{ h_m w_{mj}^{(2)} + b_{i}^{(2)} } \end{bmatrix} = \delta_{ij} } \)</span>, <span class="arithmatex">\(i=1,...,K\)</span>, <span class="arithmatex">\(j=1,...,K\)</span></p>
+<p>을 얻을 수 있습니다. 참고로, 위의 식에서 Index <span class="arithmatex">\(m\)</span>은 Dummy Variable입니다.</p>
+<p>Op.[14]~[16]을 통해 다음 식을 얻을 수 있습니다:</p>
+<p>Op.[17] : <span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial b_{j}^{(2)}} = (q_i - \delta_{yi}) \delta_{ij} = q_j - \delta_{ij} } \)</span></p>
+<p>이와 유사하게,</p>
+<p>Op.[18] : <span class="arithmatex">\( \displaystyle{ \frac{\partial \sigma_{i}^{(2)}}{\partial w_{jl}^{(2)}} = \frac{\partial}{\partial w_{jl}^{(2)}} \begin{bmatrix} h_m w_{mi}^{(2)} + b_{i}^{(2)} \end{bmatrix} = h_m \frac{\partial w_{mi}^{(2)}}{\partial w_{jl}^{(2)}} = h_m \delta_{mj} \delta_{il} = h_j \delta_{il} } \)</span>,</p>
+<p><span class="arithmatex">\(m=1,...,H\)</span>, <span class="arithmatex">\(i=1,...,K\)</span>, <span class="arithmatex">\(j=1,...,H\)</span>, <span class="arithmatex">\(k=1,...,K\)</span></p>
+<p>를 얻을 수 있으므로,</p>
+<p>Op.[19] : <span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial w_{jl}^{(2)}} = \frac{\partial L_D}{\partial q_y} \frac{\partial q_y}{\partial e_k} \frac{\partial e_k}{\partial \sigma_{i}^{(2)}} \frac{\partial \sigma_{i}^{(2)}}{\partial w_{jl}^{(2)}} = h_j (q_l - \delta_{yl}) } \)</span></p>
+<p>와 같이 <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>에 대한 Data Loss <span class="arithmatex">\(L_D\)</span>의 편미분 값을 구할 수 있습니다.</p>
+<p>지금까지 순수하게 Tensor Notation을 이용하여 수식을 유도하였습니다. 그러나, 뭔가 와닿지 않고 머리만 복잡해지고 있는 것 같습니다. 그래서 1개의 데이터에 대한 예를 들어 행렬 형태로 쉽게 설명하고자 합니다.</p>
+<p>Hidden Layer의 Neuron 개수를 4개, 즉 <span class="arithmatex">\(D=4\)</span>이고, Class의 개수를 3개, 즉 <span class="arithmatex">\(K=3\)</span>으로 가정하겠습니다. 앞서 그림에서 표현했듯 <span class="arithmatex">\(\mathbf{\sigma}^{(2)}\)</span>와 <span class="arithmatex">\(\mathbf{h}\)</span>는 다음과 같은 관계가 성립됩니다:</p>
+<p>Op.[20] : <span class="arithmatex">\( \mathbf{\sigma}^{(2)} = \mathbf{W}^{(2)T} \mathbf{h} + \mathbf{b}^{(2)} \)</span></p>
+<p>여기서, 가중치 행렬 <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>는 다음과 같으며:</p>
+<p><span class="arithmatex">\( \mathbf{W}^{(2)} = \begin{bmatrix} w_{11} &amp; w_{12} &amp; w_{13} \\ w_{21} &amp; w_{22} &amp; w_{23} \\ w_{31} &amp; w_{32} &amp; w_{33} \\ w_{41} &amp; w_{42} &amp; w_{43} \\ w_{51} &amp; w_{52}  &amp; w_{53} \\ w_{61} &amp; w_{62} &amp; w_{63} \end{bmatrix}  \)</span></p>
+<p><span class="arithmatex">\(\mathbf{\sigma}^{(2)}\)</span>, <span class="arithmatex">\(\mathbf{h}\)</span>, <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>는 각각,</p>
+<p><span class="arithmatex">\(\mathbf{\sigma}^{(2)} = \begin{bmatrix} \sigma_{1}^{(2)} \\ \sigma_{2}^{(2)} \\  \sigma_{3}^{(2)} \end{bmatrix}\)</span></p>
+<p><span class="arithmatex">\( \mathbf{h} = \begin{bmatrix} h_1 \\ h_2 \\ h_3 \\ h_4 \\ h_5 \\ h_6 \end{bmatrix} \)</span></p>
+<p><span class="arithmatex">\( \mathbf{b}^{(2)} = \begin{bmatrix} b_{1}^{(2)} \\ b_{2}^{(2)} \\ b_{3}^{(2)} \end{bmatrix} \)</span></p>
+<p>입니다. 위의 식을 이용하여 Op.[20]을 풀어쓰면 다음과 같습니다:</p>
+<p>Op.[21] :<br>
+<span class="arithmatex">\( \sigma_{1}^{(2)} = w_{11}^{(1)} h_1 + w_{21}^{(1)} h_2 + w_{31}^{(1)} h_3 + w_{41}^{(1)} h_4 + w_{51}^{(1)} h_5 + w_{61}^{(1)} h_6 + b_{1}^{(2)} \)</span></p>
+<p><span class="arithmatex">\( \sigma_{2}^{(2)} = w_{12}^{(1)} h_1 + w_{22}^{(1)} h_2 + w_{32}^{(1)} h_3 + w_{42}^{(1)} h_4 + w_{52}^{(1)} h_5 + w_{62}^{(1)} h_6 + b_{2}^{(2)} \)</span></p>
+<p><span class="arithmatex">\( \sigma_{3}^{(2)} = w_{13}^{(1)} h_1 + w_{23}^{(1)} h_2 + w_{33}^{(1)} h_3 + w_{43}^{(1)} h_4 + w_{53}^{(1)} h_5 + w_{63}^{(1)} h_6 + b_{3}^{(2)}\)</span></p>
+<p>표현을 간단히 하기위해 <span class="arithmatex">\(\displaystyle{ \frac{\partial L_D}{\partial \sigma_{i}^{(2)}} } = \Delta_i\)</span>로 하면,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial w_{11}^{(2)}} = \frac{\partial L_D}{\partial \sigma_{i}^{(2)}} \frac{\partial \sigma_{i}^{(2)}}{\partial w_{11}^{(2)}} } = \frac{\partial L_D}{\partial \sigma_{1}^{(2)}} \frac{\partial \sigma_{1}^{(2)}}{\partial w_{11}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2}^{(2)}} \frac{\partial \sigma_{2}^{(2)}}{\partial w_{11}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{3}^{(2)}} \frac{\partial \sigma_{3}^{(2)}}{\partial w_{11}^{(2)}} = \Delta_1 h_2 \)</span></p>
+<p>과 같이 표현할 수 있습니다. 이런 식으로,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial w_{21}^{(2)}} = \Delta_1 h_2 } \)</span></p>
+<p>·
+·
+·</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial w_{61}^{(2)}} = \Delta_1 h_6 } \)</span></p>
+<p>이며, 일반적으로는,</p>
+<p>Op.[22]
+<br><br>
+<span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial w_{jl}^{(2)}} } = \Delta_l h_j \)</span></p>
+<p>와 같이 표현할 수 있습니다. 따라서,</p>
+<p>Op.[23]
+<br>
+<span class="arithmatex">\( \mathbf{dW}^{(2)} = \displaystyle{ \frac{\partial L_D}{\partial \mathbf{W}^{(2)}} } = \displaystyle{\begin{bmatrix} \frac{\partial L_D}{\partial w_{11}^{(2)}} &amp; \frac{\partial L_D}{\partial w_{12}^{(2)}} &amp; \frac{\partial L_D}{\partial w_{13}^{(2)}} \\ \frac{\partial L_D}{\partial w_{21}^{(2)}} &amp; \frac{\partial L_D}{\partial w_{22}^{(2)}} &amp; \frac{\partial L_D}{\partial w_{23}^{(2)}} \\ \vdots \\ \frac{\partial L_D}{\partial w_{61}^{(2)}} &amp; \frac{\partial L_D}{\partial w_{62}^{(2)}} &amp; \frac{\partial L_D}{\partial w_{63}^{(2)}} \end{bmatrix} = \begin{bmatrix} \Delta_1 h_1 &amp; \Delta_2 h_1 &amp; \Delta_3 h_1 \\ \Delta_1 h_2 &amp; \Delta_2 h_2 &amp; \Delta_3 h_2 \\ \vdots \\ \Delta_1 h_6 &amp; \Delta_2 h_6 &amp; \Delta_3 h_6 \end{bmatrix} = \begin{bmatrix} h_1 \\ h_2 \\ \vdots \\ h_6 \end{bmatrix} \begin{bmatrix} \Delta_1 &amp; \Delta_2 &amp; \Delta_3 \end{bmatrix} } \)</span></p>
+<p>으로 표현이 가능합니다. 위의 행렬 중,</p>
+<p><span class="arithmatex">\( \displaystyle{ \begin{bmatrix} \Delta_1 &amp; \Delta_2 &amp; \Delta_3 \end{bmatrix} } = \)</span> dscores</p>
+<p><span class="arithmatex">\( \displaystyle{ \begin{bmatrix} h_1 &amp; h_2 &amp; h_3 &amp; h_4 &amp; h_5 &amp; h_6 \end{bmatrix} } = \)</span> hidden.layer</p>
+<p>라고 지칭하겠습니다. 따라서, Op.[22]는,</p>
+<p><code>hidden.layer</code><span class="arithmatex">\(^{T}\)</span> <code>dscores</code></p>
+<p>의 행렬 곱으로 표현이 가능합니다.</p>
+<p>한편, <span class="arithmatex">\(\displaystyle{ \frac{d L_D}{d \mathbf{b}^{(2)}} }\)</span> 역시 다음과 같이 표현됩니다:</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{d L_D}{d b_{1}^{(2)}} = \frac{\partial L_D}{\partial \sigma_{1}^{(2)}} \frac{\partial \sigma_{1}^{(2)}}{\partial b_{1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2}^{(2)}} \frac{\partial \sigma_{2}^{(2)}}{\partial b_{1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{3}^{(2)}} \frac{\partial \sigma_{3}^{(2)}}{\partial b_{1}^{(2)}} = \Delta_1 } \)</span></p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{d L_D}{d b_{2}^{(2)}} = \frac{\partial L_D}{\partial \sigma_{1}^{(2)}} \frac{\partial \sigma_{1}^{(2)}}{\partial b_{2}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2}^{(2)}} \frac{\partial \sigma_{2}^{(2)}}{\partial b_{2}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{3}^{(2)}} \frac{\partial \sigma_{3}^{(2)}}{\partial b_{2}^{(2)}} = \Delta_2 } \)</span></p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{d L_D}{d b_{3}^{(2)}} = \frac{\partial L_D}{\partial \sigma_{1}^{(2)}} \frac{\partial \sigma_{1}^{(2)}}{\partial b_{3}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2}^{(2)}} \frac{\partial \sigma_{2}^{(2)}}{\partial b_{3}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{3}^{(2)}} \frac{\partial \sigma_{3}^{(2)}}{\partial b_{3}^{(2)}} = \Delta_3 } \)</span></p>
+<p>이 역시 간단하게 표현하면,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial b_{j}^{(2)}} = \Delta_j } \)</span></p>
+<p>입니다.</p>
+<p>이제 좀 더 일반적인 식으로 이해하기 위해 2개의 데이터가 입력으로 공급되는 경우, 즉, <span class="arithmatex">\(N = 2\)</span>인 경우를 가정해 보겠습니다.</p>
+<p>우선, Notation을 다음과 같이 정의되며,</p>
+<p>Op.[24] : <span class="arithmatex">\( \sigma_{i,j}^{(2)} \)</span>, for <span class="arithmatex">\(i\)</span>-th Input and <span class="arithmatex">\(j\)</span>-th Class, <span class="arithmatex">\(i=1,2\)</span> &amp; <span class="arithmatex">\(j=1,2,3\)</span></p>
+<p>Weights <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>와 Biases <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>는 두 데이터에 대하여 동일합니다.</p>
+<p>1번째 입력 데이터에 대하여:</p>
+<p>Op.[25] : <br>
+<span class="arithmatex">\( \sigma_{1,1}^{(2)} = w_{11}^{(2)} h_{1,1} + w_{21}^{(2)} h_{1,2} + w_{31}^{(2)} h_{1,3} + \cdots + w_{61}^{(2)} h_{1,6} + b_{1}^{(2)} \)</span></p>
+<p><span class="arithmatex">\( \sigma_{1,2}^{(2)} = w_{12}^{(2)} h_{1,1} + w_{22}^{(2)} h_{1,2} + w_{32}^{(2)} h_{1,3} + \cdots + w_{62}^{(2)} h_{1,6} + b_{2}^{(2)} \)</span></p>
+<p><span class="arithmatex">\( \sigma_{1,3}^{(2)} = w_{13}^{(2)} h_{1,1} + w_{23}^{(2)} h_{1,2} + w_{33}^{(2)} h_{1,3} + \cdots + w_{63}^{(2)} h_{1,6} + b_{3}^{(2)} \)</span></p>
+<p>2번째 입력 데이터에 대하여:</p>
+<p>Op.[26] : <br>
+<span class="arithmatex">\( \sigma_{2,1}^{(2)} = w_{11}^{(2)} h_{2,1} + w_{21}^{(2)} h_{2,2} + w_{31}^{(2)} h_{2,3} + \cdots + w_{61}^{(2)} h_{2,6} + b_{1}^{(2)} \)</span></p>
+<p><span class="arithmatex">\( \sigma_{2,2}^{(2)} = w_{12}^{(2)} h_{2,1} + w_{22}^{(2)} h_{2,2} + w_{32}^{(2)} h_{2,3} + \cdots + w_{62}^{(2)} h_{2,6} + b_{2}^{(2)} \)</span></p>
+<p><span class="arithmatex">\( \sigma_{2,3}^{(2)} = w_{13}^{(2)} h_{2,1} + w_{23}^{(2)} h_{2,2} + w_{33}^{(2)} h_{2,3} + \cdots + w_{63}^{(2)} h_{2,6} + b_{3}^{(2)} \)</span></p>
+<p>또는 간단한 행렬식으로,</p>
+<p><span class="arithmatex">\( \mathbf{\sigma}^{(2)} = \mathbf{h}^{T} \mathbf{W}^{(2)} + \mathbf{b}^{(2)} \)</span></p>
+<p>과 같이 표현할 수 있습니다. 여기서,</p>
+<p><span class="arithmatex">\( \mathbf{h} = \displaystyle{ \begin{bmatrix} h_{1,1} &amp; h_{2,1} \\ h_{1,2} &amp; h_{2,2} \\ h_{1,3} &amp; h_{2,3} \\ h_{1,4} &amp; h_{2,4} \\ h_{1,5} &amp; h_{2,5} \\ h_{1,6} &amp; h_{2,6} \end{bmatrix} } \)</span></p>
+<p><span class="arithmatex">\( \mathbf{W}^{(2)} = \displaystyle{ \begin{bmatrix} w_{11}^{(2)} &amp; w_{12}^{(2)} &amp;&amp; w_{13}^{(2)} \\ w_{21}^{(2)} &amp; w_{22}^{(2)} &amp;&amp; w_{23}^{(2)} \\ w_{31}^{(2)} &amp; w_{32}^{(2)} &amp;&amp; w_{33}^{(2)} \\ w_{41}^{(2)} &amp; w_{42}^{(2)} &amp;&amp; w_{43}^{(2)} \\ w_{51}^{(2)} &amp; w_{52}^{(2)} &amp;&amp; w_{53}^{(2)} \\ w_{61}^{(2)} &amp; w_{62}^{(2)} &amp;&amp; w_{63}^{(2)} \end{bmatrix} } \)</span></p>
+<p><span class="arithmatex">\( \mathbf{\sigma}^{(2)} = \displaystyle{ \begin{bmatrix} \sigma_{11}^{(2)} &amp; \sigma_{12}^{(2)} &amp; \sigma_{13}^{(2)} \\ \sigma_{21}^{(2)} &amp; \sigma_{22}^{(2)} &amp; \sigma_{23}^{(2)} \end{bmatrix} } \)</span></p>
+<p>입니다.</p>
+<p>위의 식을 이용하여 2개의 입력 데이터가 있는 경우, Op.[23]은 다음과 같이 표현됩니다:</p>
+<p><code>dW</code><span class="arithmatex">\(^{(2)}\)</span> = <code>hidden.layer</code> <span class="arithmatex">\(^{T}\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dscores</code></p>
+<p>여기서,</p>
+<p><code>hidden.layer</code> = <span class="arithmatex">\( \displaystyle{ \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} &amp; h_{14} &amp; h_{15} &amp; h_{16} \\ h_{21} &amp; h_{22} &amp; h_{23} &amp; h_{24} &amp; h_{25} &amp; h_{26} \end{bmatrix} } \)</span></p>
+<p><code>dscores</code> = <span class="arithmatex">\( \displaystyle{ \begin{bmatrix} \Delta_{1,1} &amp; \Delta_{1,2} &amp; \Delta_{1,3} \\ \Delta_{2,1} &amp; \Delta_{2,2} &amp; \Delta_{2,3} \end{bmatrix} } \)</span></p>
+<p>입니다.</p>
+<p>현편, Op.[25], [26]으로부터,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{d L_D}{d b_{1}^{(2)}} = \frac{\partial L_D}{\partial \sigma_{1,1}^{(2)}} \frac{\partial \sigma_{1,1}^{(2)}}{\partial b_{1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{1,2}^{(2)}} \frac{\partial \sigma_{1,2}^{(2)}}{\partial b_{1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{1,3}^{(2)}} \frac{\partial \sigma_{1,3}^{(2)}}{\partial b_{1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2,1}^{(2)}} \frac{\partial \sigma_{2,1}^{(2)}}{\partial b_{1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2,2}^{(2)}} \frac{\partial \sigma_{2,2}^{(2)}}{\partial b_{1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2,3}^{(2)}} \frac{\partial \sigma_{21,3}^{(2)}}{\partial b_{1}^{(2)}} } \)</span></p>
+<p><span class="arithmatex">\( \displaystyle{ = \frac{\partial L_D}{\partial \sigma_{1,1}^{(2)}} (1) + \frac{\partial L_D}{\partial \sigma_{1,2}^{(2)}} (0) + \frac{\partial L_D}{\partial \sigma_{1,3}^{(2)}} (0) + \frac{\partial L_D}{\partial \sigma_{2,1}^{(2)}} (1) + \frac{\partial L_D}{\partial \sigma_{2,2}^{(2)}} (0) + \frac{\partial L_D}{\partial \sigma_{2,3}^{(2)}} (0) } \)</span></p>
+<p><span class="arithmatex">\( \displaystyle{ = \frac{\partial L_D}{\partial \sigma_{1,1}^{(2)}} + \frac{\partial L_D}{\partial \sigma_{2,1}^{(2)}} } \)</span></p>
+<p><span class="arithmatex">\( = \Delta_{1,1} + \Delta_{2,1} \)</span></p>
+<p>를 구할 수 있으며, 동일한 방식으로,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{d L_D}{d b_{2}^{(2)}} = \Delta_{1,2} + \Delta_{2,2}} \)</span></p>
+<p>및</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{d L_D}{d b_{3}^{(2)}} = \Delta_{1,3} + \Delta_{2,3}} \)</span></p>
+<p>를 얻을 수 있습니다. 즉, Data Loss <span class="arithmatex">\(L_D\)</span>의 <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>에 대한 미분은 행렬 dscores의 열(Column)을 각각 더한 것임을 알 수 있으며,</p>
+<p>Op.[27] : <span class="arithmatex">\( \displaystyle{ \frac{d L_D}{d b_{i}^{(2)}} } = \sum_{j=1}^{N}{\Delta_{j,i}} \)</span></p>
+<p>과 같이 일반적인 식으로 표현할 수 있습니다. 물론 <span class="arithmatex">\(N\)</span>은 입력 데이터의 개수를 의미합니다.</p>
+<p>이제 일반적인 식을 얻기 위해 입력 데이터의 개수가 <span class="arithmatex">\(N\)</span>개로 확장하면,</p>
+<p>Op.[28] : <br>
+<code>dW</code><span class="arithmatex">\(^{(2)}\)</span> = <code>hidden.layer</code><span class="arithmatex">\(^{T}\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dscores</code></p>
+<p><code>db</code><span class="arithmatex">\(^{(2)}\)</span> = <code>ColumnSums(dscores)</code></p>
+<p>where</p>
+<p><code>hidden.layer</code> = <span class="arithmatex">\(h_{i,k}\)</span>, <span class="arithmatex">\(i=1,...,N\)</span>, <span class="arithmatex">\(k=1,...,H\)</span></p>
+<p><code>dscores</code> = <span class="arithmatex">\(\Delta_{k,j}\)</span>, <span class="arithmatex">\(k=1,...,N\)</span>, <span class="arithmatex">\(j=1,...,K\)</span></p>
+<p><span class="arithmatex">\( \Delta_{k,j} = \displaystyle{ \frac{d L_D}{d \sigma_{k,j}^{(2)}} } \)</span></p>
+<p>로 정리할 수 있습니다.</p>
+<p>다음으로 구할 식은 Hidden Layer <span class="arithmatex">\(\mathbf{h}\)</span>에 대한 Data Loss <span class="arithmatex">\(L_D\)</span>의 미분식, 즉, 이며, 이 식 역시 Chain Rule에 의해,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial q_y} \frac{\partial q_y}{\partial e_k} \frac{\partial e_k}{\partial \sigma_{i}^{(2)}} \frac{\partial \sigma_{i}^{(2)}}{\partial h_j} } \)</span></p>
+<p>인데,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial q_y} \frac{\partial q_y}{\partial e_k} \frac{\partial e_k}{\partial \sigma_{i}^{(2)}} } \)</span> = dscores</p>
+<p>이며, Op.[21]의 식을 참고하여 유도해 보면,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{\partial \sigma_{i}^{(2)}}{\partial h_j} = w_{ji}^{(2)} = \mathbf{W}^{(2)T} } \)</span></p>
+<p>임을 알 수 있습니다. 즉, <span class="arithmatex">\(N\)</span>개의 데이터에 대한 일반적인 식으로 표현하면,</p>
+<p>Op.[29] :</p>
+<p><code>dhidden</code> = <code>dscores</code> <span class="arithmatex">\(\cdot\)</span> <span class="arithmatex">\(\mathbf{W}^{(2)T}\)</span> = <span class="arithmatex">\( \displaystyle{ \begin{bmatrix} d_{1,1} &amp; d_{1,2} &amp; \cdots &amp; d_{1,K} \\ d_{2,1} &amp; d_{2,2} &amp; \cdots &amp; d_{2,K} \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\ d_{N,1} &amp; d_{N,2} &amp; \cdots &amp; d_{N,K} \end{bmatrix} \begin{bmatrix} w_{1,1}^{(2)} &amp; w_{2,1}^{(2)} &amp; \cdots &amp; w_{K,1}^{(2)} \\ w_{1,2}^{(2)} &amp; w_{2,2}^{(2)} &amp; \cdots &amp; w_{K,2}^{(2)} \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\ w_{1,H}^{(2)} &amp; w_{2,H}^{(2)} &amp; \cdots &amp; w_{K,H}^{(2)} \end{bmatrix} } \)</span></p>
+<p>과 같습니다.</p>
+<p>이제 Input에서 Hidden Layer까지 이르는 전반부를 살펴보겠습니다.</p>
+<p></br>
+<figure>
+  <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/04.png" width="80%" />
+  <figcaption></figcaption>
+</figure></p>
+<p>아시는 바와 같이, <span class="arithmatex">\(\mathrm{ReLU}(x) = \mathrm{max}(0,x)\)</span>는 <span class="arithmatex">\(x \le 0\)</span>에 대해서는 0을, <span class="arithmatex">\(x &gt; 0\)</span>에 대해서는 입력값을 그대로 출력합니다. 따라서, ReLU의 미분값은,</p>
+<p><span class="arithmatex">\( \displaystyle{ \frac{d ReLU(x)}{dx} = \begin{cases} 1, &amp; x &gt; 0 \\ 0, &amp; x \le 0  \end{cases} } \)</span></p>
+<p>과 같습니다.</p>
+<p><span class="arithmatex">\( h_i = \mathrm{ReLU}(\sigma_{i}^{(1)}) \)</span></p>
+<p>이므로, 이를 <span class="arithmatex">\(\sigma_{i}^{(1)}\)</span>에 대하여 편미분하면,</p>
+<p>Op.[30] : <span class="arithmatex">\( \displaystyle{\frac{\partial h_i}{\partial \sigma_{l}^{(1)}}} = \begin{cases} 1, &amp; h_i &gt; 0 \\ 0, &amp; h_i \le 0 \end{cases} \)</span></p>
+<p>과 같습니다. Op.[29]과 [30]으로부터 Chain Rule을 적용하여,</p>
+<p>Op.[31] : <span class="arithmatex">\( \displaystyle{ \frac{dL_D}{d \sigma_{l}^{(1)}} = \underbrace{ \frac{\partial L_D}{\partial q_y} \frac{\partial q_y}{\partial e_k} \frac{\partial e_k}{\partial \sigma_{i}^{(2)}} \frac{\partial \sigma_{i}^{(2)}}{\partial h_j}  }_{\mathrm{= dhidden}} \underbrace{ \frac{\partial h_j}{\partial \sigma_{l}^{(1)}} }_{ = \begin{cases} 1 &amp; \mathrm{if} \; h_j &gt; 0 \\ 0 &amp; \mathrm{otherwise} \end{cases} } } = \begin{cases} \mathrm{dhidden} &amp; \mathrm{if} \; h_j &gt; 0 \\ 0 &amp; \mathrm{if} \; h_j \le 0 \end{cases} \)</span></p>
+<p>를 얻을 수 있는데, <strong>5. Implementation</strong>에서 다시 설명드리겠지만 Op.[29]~[31]은 다음과 같이 간략하게 코드로 표현이 가능합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="n">dhidden</span> <span class="o">&lt;-</span> <span class="n">dscores</span> <span class="o">%*%</span> <span class="n">base</span><span class="o">::</span><span class="nf">t</span><span class="p">(</span><span class="n">W2</span><span class="p">)</span>
+<span class="n">dhidden</span><span class="p">[</span><span class="n">hidden.layer</span> <span class="o">&lt;=</span> <span class="m">0</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="m">0</span>
+</code></pre></div>
+
+<p>위의 코드의 Line 2는 <code>hidden.layer</code>의 Element가 0과 같거나 0 보다 작을 때 동일한 행과 열에 해당하는 <code>dhidden</code>의 Element를 0으로 변경한다는 의미입니다.</p>
+<p>Op.[28]을 얻는 방식과 동일한 방식으로,</p>
+<p>Op.[32] : <code>dW</code><span class="arithmatex">\(^{(1)}\)</span> = X<span class="arithmatex">\(^{T}\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dhidden</code>, db<span class="arithmatex">\(^{(1)}\)</span> = <code>ColumnSums(dhidden)</code></p>
+<p>을 얻을 수 있습니다.</p>
+<p>이제 <span class="arithmatex">\(\mathbf{W}^{(1)}\)</span>, <span class="arithmatex">\(\mathbf{b}^{(1)}\)</span>, <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>, <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>에 대한 <span class="arithmatex">\(L_D\)</span>의 미분식을 모두 얻었으니, 이들에 대한 업데이트 식 <span class="arithmatex">\(\theta \leftarrow  \theta - \alpha \nabla_{\theta}{L}\)</span> (여기서, <span class="arithmatex">\(\theta\)</span>는 모델 파라미터이며 <span class="arithmatex">\(\alpha\)</span>는 학습률(Learning Rate)를 의미함)을 이용하여 얻을 수 있습니다.</p>
+<p>그런데, 한 가지를 빠뜨렸습니다. 그것은 Op.[9]에서 언급하였던 Regularization Loss(<span class="arithmatex">\(L_R\)</span>)에 대한 각 모델 파라미터의 미분값들입니다. <span class="arithmatex">\(L_D\)</span>은 Weights 값들의 제곱의 합으로 구성되어 있으므로 두말할 것도 없이 Bias에 대한 미분값은 모두 0일 것입니다.</p>
+<p>가령, <span class="arithmatex">\(\displaystyle{ \frac{\partial L_R}{\partial w_{i,j}} }\)</span>을 구한다고 하면, <span class="arithmatex">\(L_R\)</span>은 각 Weight의 제곱을 합한 것이므로(물론 <span class="arithmatex">\(\frac{1}{2}\lambda\)</span>가 곱해졌습니다) 미분하고자 하는 대상 외에는 모두 0이 될 것입니다. 즉, <span class="arithmatex">\(\displaystyle{ \frac{\partial L_R}{\partial w_{i,j}} } = w_{i,j}\)</span>입니다.</p>
+<p>따라서, 앞서 구했던 <span class="arithmatex">\(\mathbf{dW}^{(1)}\)</span>과 <span class="arithmatex">\(\mathbf{dW}^{(2)}\)</span>에 Regularization Loss의 미분값을 반영하면,</p>
+<p>Op.[33] :
+<br><br>
+<code>dW</code><span class="arithmatex">\(^{(1)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>dW</code><span class="arithmatex">\(^{(1)}\)</span> + <span class="arithmatex">\(\lambda\)</span> * <code>W</code><span class="arithmatex">\(^{(1)}\)</span>
+</br>
+<code>dW</code><span class="arithmatex">\(^{(2)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>dW</code><span class="arithmatex">\(^{(2)}\)</span> + <span class="arithmatex">\(\lambda\)</span> * <code>W</code><span class="arithmatex">\(^{(2)}\)</span></p>
+<p>와 같이 얻을 수 있으며, 최종적으로 모델 파라미터들의 업데이트 식은,</p>
+<p>Op.[34]
+<br><br>
+<code>W</code><span class="arithmatex">\(^{(1)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>W</code><span class="arithmatex">\(^{(1)}\)</span> - <span class="arithmatex">\(\alpha\)</span> * <code>dW</code><span class="arithmatex">\(^{(1)}\)</span>, <code>b</code><span class="arithmatex">\(^{(1)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>b</code><span class="arithmatex">\(^{(1)}\)</span> - <span class="arithmatex">\(\alpha\)</span> * <code>db</code><span class="arithmatex">\(^{(1)}\)</span></p>
+<p><code>W</code><span class="arithmatex">\(^{(2)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>W</code><span class="arithmatex">\(^{(2)}\)</span> - <span class="arithmatex">\(\alpha\)</span> * <code>dW</code><span class="arithmatex">\(^{(2)}\)</span>, <code>b</code><span class="arithmatex">\(^{(2)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>b</code><span class="arithmatex">\(^{(2)}\)</span> - <span class="arithmatex">\(\alpha\)</span> * <code>db</code><span class="arithmatex">\(^{(2)}\)</span></p>
+<p>과 같습니다.</p>
+<p>이로써 Backprogation에 대한 식을 모두 구하였고, 이들을 이용하여 일정 조건이 만족될 때까지 반복하여 모델 파라미터들을 업데이트 합니다.</p>
+<p>지금까지의 과정을 간단하게 수식으로 정리하면 다음과 같습니다(첨자 표현은 앞의 과정과 일치하지 않을 수 있습니다):</p>
+<p>Op.[BackwardPass] :
+<br><br>
+<span class="arithmatex">\(N\)</span>개의 Dataset, <span class="arithmatex">\(D\)</span>개의 Input Dimensionality, <span class="arithmatex">\(H\)</span>개의 뉴런을 갖는 1개의 Hidden Layer, <span class="arithmatex">\(K\)</span>개의 Output Class를 갖는 Multi-layer Perceptron에 대하여,
+<br><br>
+<span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial w_{kj}^{(i)}} = w_{kj}^{(i)} } \)</span>, <span class="arithmatex">\( i \in \begin{Bmatrix} 1,2 \end{Bmatrix} \)</span>, <span class="arithmatex">\( \begin{cases} \mathrm{for} \; i=1, \; k=1,...,D, \; j=1,...,H \\ \mathrm{for} \; i=2, \; k=1,...,H, \; j=1,...,K \end{cases} \)</span>
+<br><br>
+<span class="arithmatex">\( \displaystyle{ \frac{\partial L_R}{\partial w_{kj}^{(i)}} = w_{kj}^{(i)} } \)</span>, <span class="arithmatex">\( \begin{cases} \mathrm{for} \; i=1, \; k=1,...,D, \; j=1,...,H \\ \mathrm{for} \; i=2, \; k=1,...,H, \; j=1,...,K \end{cases} \)</span>
+<br><br>
+<code>dscores[N×K]</code> = <span class="arithmatex">\( q_{i,j} - \delta_{jy_{i}} \)</span>, <span class="arithmatex">\( i=1,...,N, \; j=1,...,K \)</span>
+<br><br>
+<code>hidden.layer[N×H]</code> = <span class="arithmatex">\(h_{i,j}\)</span>, <span class="arithmatex">\(i=1,...,N, \; j=1,...,H\)</span>
+<br><br>
+dW<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \displaystyle{ h_{j,i} \frac{\partial L_D}{\partial \sigma_{i,k}^{(2)}} } \)</span> + <span class="arithmatex">\(\lambda\)</span> <span class="arithmatex">\(w_{jk}^{(2)}\)</span>
+      = <code>hidden.layer</code><span class="arithmatex">\(^{T}\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dscores</code> + <span class="arithmatex">\(\lambda\)</span> <span class="arithmatex">\(\cdot\)</span> W<span class="arithmatex">\(^{(2)}\)</span>, (<span class="arithmatex">\( i=1,...,N, \; j=1,...,H, \; k=1,...,K \)</span>)
+<br><br>
+db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \displaystyle{ \sum_{i=1}^{N}{(q_{i,j} - \delta_{jy_{i}} )} } \)</span> = <code>ColumnSums(dscores)</code>
+<br><br>
+<code>dhidden[N×H]</code> = <span class="arithmatex">\( \displaystyle{ \frac{\partial L_D}{\partial \sigma_{i,j}^{(2)} } \frac{\partial \sigma_{i,j}^{(2)} }{\partial h_{i,k} } \frac{\partial h_{i,k} }{\partial \sigma_{i,l}^{(1)} } } \)</span></p>
+<p>= <span class="arithmatex">\( \displaystyle{ \begin{cases} \frac{\partial L_D}{\partial \sigma_{i,j}^{(2)} } \frac{\partial \sigma_{i,j}^{(2)} }{\partial h_{i,k} } &amp; \mathrm{if} \; h_{i,k} &gt; 0 \\ 0 &amp; \mathrm{if} \; h_{i,k} \le 0 \end{cases} } \)</span>
+<br><br>
+<code>dW</code><span class="arithmatex">\(^{(1)}\)</span> = X<span class="arithmatex">\(^{T}\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dhidden</code> + <span class="arithmatex">\(\lambda\)</span> <span class="arithmatex">\(\cdot\)</span> W<span class="arithmatex">\(^{(1)}\)</span>
+<br><br>
+<code>db</code><span class="arithmatex">\(^{(1)}\)</span> = <code>ColumnSums(dhidden)</code>
+<br><br>
+[UPDATE of MODEL PARAMETERS]
+<br><br>
+<code>W</code><span class="arithmatex">\(^{(2)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>W</code><span class="arithmatex">\(^{(2)}\)</span> - <span class="arithmatex">\(\alpha\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dW</code><span class="arithmatex">\(^{(2)}\)</span>
+<br><br>
+<code>b</code><span class="arithmatex">\(^{(2)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>b</code><span class="arithmatex">\(^{(2)}\)</span> - <span class="arithmatex">\(\alpha\)</span> <span class="arithmatex">\(\cdot\)</span> <code>db</code><span class="arithmatex">\(^{(2)}\)</span>
+<br><br>
+<code>W</code><span class="arithmatex">\(^{(1)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>W</code><span class="arithmatex">\(^{(1)}\)</span> - <span class="arithmatex">\(\alpha\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dW</code><span class="arithmatex">\(^{(1)}\)</span>
+<br><br>
+<code>b</code><span class="arithmatex">\(^{(1)}\)</span> <span class="arithmatex">\(\leftarrow\)</span> <code>b</code><span class="arithmatex">\(^{(1)}\)</span> - <span class="arithmatex">\(\alpha\)</span> <span class="arithmatex">\(\cdot\)</span> <code>db</code><span class="arithmatex">\(^{(1)}\)</span></p>
+<p><br></p>
+<h2 id="5-implementation">5. Implementation</h2>
+<hr />
+<p>이제 구현된 코드를 분석하면셔 앞서 유도한 식이 코드 상에서 어떻게 구현되어 있는지 살펴보도록 하겠습니다.</p>
+<p>우선, 전체 코드는 다음과 같이 3개의 소스파일로 구성되어 있습니다 (소스파일의 Author는 Peng Zhao(<a href="mailto:patric.zhao@gmail.com">patric.zhao@gmail.com</a>)이며, 원래 1개의 소스였으나, 기능을 분리하여 제가 3개로 나눈 것입니다):</p>
+<ul>
+<li><a href="https://cinema4dr12.tistory.com/attachment/cfile30.uf@9939183359E193EA442977.R">main.R</a></li>
+<li><a href="https://cinema4dr12.tistory.com/attachment/cfile25.uf@9954203359E193EA164179.R">train.dnn.R</a></li>
+<li><a href="https://cinema4dr12.tistory.com/attachment/cfile6.uf@999E1A3359E193EA128620.R">predict.dnn.R</a></li>
+</ul>
+<p><br></p>
+<h3 id="51-traindnn">5.1. <code>train.dnn()</code> 프로토타입</h3>
+<p>소스 파일들 중 가장 핵심이 되는 <code>train.dnn.R</code>을 살펴보도록 하겠습니다. <code>train.dnn.R</code>은 단 하나의 함수 <code>train.dnn()</code>을 갖는 소스파일입니다. 파일의 프로토타입을 보면,</p>
+<div class="highlight"><pre><span></span><code><span class="n">train.dnn</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>
+                      <span class="n">y</span><span class="p">,</span>
+                      <span class="n">traindata</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span>
+                      <span class="n">testdata</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+                      <span class="n">model</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span>
+                      <span class="c1"># set hidden layers and neurons</span>
+                      <span class="c1"># currently, only support 1 hidden layer</span>
+                      <span class="n">hidden</span> <span class="o">=</span> <span class="n">base</span><span class="o">::</span><span class="nf">c</span><span class="p">(</span><span class="m">6</span><span class="p">),</span>
+                      <span class="c1"># max iteration steps</span>
+                      <span class="n">maxit</span> <span class="o">=</span> <span class="m">2000</span><span class="p">,</span>
+                      <span class="c1"># delta loss</span>
+                      <span class="n">abstol</span> <span class="o">=</span> <span class="m">1e-2</span><span class="p">,</span>
+                      <span class="c1"># learning rate</span>
+                      <span class="n">lr</span> <span class="o">=</span> <span class="m">1e-2</span><span class="p">,</span>
+                      <span class="c1"># regularization rate</span>
+                      <span class="n">reg</span> <span class="o">=</span> <span class="m">1e-3</span><span class="p">,</span>
+                      <span class="c1"># show results every &#39;display&#39; step</span>
+                      <span class="n">display</span> <span class="o">=</span> <span class="m">100</span><span class="p">,</span>
+                      <span class="n">random.seed</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+</code></pre></div>
+
+<p>인데, 각각의 파라미터에 대한 설명은 다음과 같습니다:</p>
+<ul>
+<li><code>x</code> : 입력 데이터(Input Features)의 Column Index입니다. <code>main.R</code>을 보면 <code>x = 1:4</code>를 파라미터로 전달하는데, 이는 첫번째부터 네번째까지의 Column(Sepal.Length ~ Petal.Width)을 Input Features로 정한다는 뜻입니다.</li>
+<li><code>y</code> : 출력 데이터(Output Classes)의 Column Index입니다. <code>main.R</code>을 보면 <code>y = 5</code>를 파라미터로 전달하는데, 이는 다섯번째 Column(Species)을 Output Class로 정한다는 뜻입니다.</li>
+<li><code>traindata</code> : 학습을 시킬 데이터셋입니다.</li>
+<li><code>testdata</code> : 학습을 통해 생성한 예측 모델을 테스트하기 위한 데이터셋입니다.</li>
+<li><code>model</code> : 학습을 통해 생성한 예측 모델이며, 학습 시에는 사용되지 않으며, 예측 시에 사용됩니다. 즉, <code>predict.dnn()</code> 함수에서 사용하는 파라미터입니다.</li>
+<li><code>hidden</code> : Hidden Layer 내 노드의 개수이며, 6개로 설정하였습니다.</li>
+<li><code>maxit</code> : 학습을 시키는 최대 반복 계산 횟수이며, 기본값은 2000으로, <code>main.R</code>에서 전달하는 값은 3000입니다.</li>
+<li><code>abstol</code> : <code>maxit</code> 외에 학습을 종료시키는 조건으로, 계산된 Loss가 이 값보다 같거나 작으면 학습을 종료시킵니다. 기본값은 <span class="arithmatex">\(10^{-2}\)</span>입니다.</li>
+<li><code>lr</code> : 학습률(Learning Rate)입니다. 기본값은 <span class="arithmatex">\(10^{-2}\)</span>입니다.</li>
+<li><code>reg</code> : Regularization의 Hyperparameter(<span class="arithmatex">\(\lambda\)</span>)이며, 기본값은 <span class="arithmatex">\(10^{-3}\)</span>입니다.</li>
+<li><code>display</code> : 학습하는 과정 중 중간 결과를 출력하는 Step입니다.</li>
+<li><code>random.seed</code> : Weights와 Biases 초기화 시 난수를 사용하기 위한 Random Seed입니다.</li>
+</ul>
+<p><br></p>
+<h3 id="52">5.2. 부가 변수 설정</h3>
+<p>난수를 이용한 Weights 및 Biases 초기화를 위해 파라미터로 전달받은 <code>random.seed</code>로 Random Seed를 설정합니다.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># to make the case reproducible.</span>
+<span class="n">base</span><span class="o">::</span><span class="nf">set.seed</span><span class="p">(</span><span class="n">random.seed</span><span class="p">)</span>
+</code></pre></div>
+
+<p>학습시킬 데이터(traindata)의 전체 개수를 변수 <code>N</code>에 저장합니다(데이터 개수는 75개입니다).</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># total number of training set</span>
+<span class="n">N</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">nrow</span><span class="p">(</span><span class="n">traindata</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Data Frame 형식으로 입력받은 파라미터 <code>traindata</code>에서 Input Features에 해당하는 Columns(1~4)를 취하되 Features의 이름은 필요없으므로 이를 제거합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># extract the data and label</span>
+<span class="c1"># don&#39;t need atribute</span>
+<span class="n">X</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">unname</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">data.matrix</span><span class="p">(</span><span class="n">traindata</span><span class="p">[,</span><span class="n">x</span><span class="p">]))</span>
+</code></pre></div>
+
+<p>Output Class에 해당하는 Column(5)을 취하여 변수 Y에 저</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># correct categories represented by integer</span>
+<span class="n">Y</span> <span class="o">&lt;-</span> <span class="n">traindata</span><span class="p">[,</span><span class="n">y</span><span class="p">]</span>
+</code></pre></div>
+
+<p><code>Y</code>에 저장된 형태는 nominal value인 경우, 이를 정수 형태로 변환합니다. 즉, Y에는 다음과 같이 세 개의 클래스 이름이 저장되어 있습니다.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">Y</span>
+ <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>
+<span class="p">[</span><span class="m">14</span><span class="p">]</span> <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">versicolor</span>
+<span class="p">[</span><span class="m">27</span><span class="p">]</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span>
+<span class="p">[</span><span class="m">40</span><span class="p">]</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">versicolor</span> <span class="n">virginica</span>  <span class="n">virginica</span>
+<span class="p">[</span><span class="m">53</span><span class="p">]</span> <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>
+<span class="p">[</span><span class="m">66</span><span class="p">]</span> <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>
+<span class="n">Levels</span><span class="o">:</span> <span class="n">setosa</span> <span class="n">versicolor</span> <span class="n">virginica</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="nf">if</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">is.factor</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span> <span class="p">{</span> <span class="n">Y</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">as.integer</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="p">}</span>
+</code></pre></div>
+
+<p>다음 코드를 살펴보시면,</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># create index for both row and col</span>
+<span class="n">Y.len</span>   <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">length</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+<span class="n">Y.set</span>   <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sort</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+<span class="n">Y.index</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">cbind</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">N</span><span class="p">,</span> <span class="n">base</span><span class="o">::</span><span class="nf">match</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">Y.set</span><span class="p">))</span>
+</code></pre></div>
+
+<p><strong>Line 2</strong>에서 <code>base::unique()</code> 함수를 이용하여 중복되지 않은 엘리먼트들(Elements)을 뽑아내고 이들의 개수를 구하여 <code>Y.len</code>에 저장합니다.</p>
+<p><strong>Line 3</strong>에서는 이 엘리먼트들을 오름차순(Ascending Order)으로 정렬한 결과를 <code>Y.set</code>에 저장합니다.</p>
+<p><strong>Line 4</strong>에서 <code>base::match()</code> 함수를 이용하여 Y의 각 엘리먼트가 <code>Y.set</code>의 엘리먼트와 일치하는 위치를 찾습니다. 다음 예를 통해 <code>base::match()</code> 함수를 설명하도록 하겠습니다.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">base</span><span class="o">::</span><span class="nf">match</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">c</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">base</span><span class="o">::</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+ <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="kc">NA</span>  <span class="m">2</span> <span class="kc">NA</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">2</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">2</span> <span class="kc">NA</span> <span class="kc">NA</span>
+</code></pre></div>
+
+<p>위의 코드에서 <code>base::match()</code> 함수의 첫번째 파라미터의 첫번째 엘리먼트 4는 두번째 파라미터의 일치하는 엘리먼트가 없으므로 결과는 <code>NA</code>입니다. 첫번째 파라미터의 두번째 엘리먼트 3은 두번째 파라미터에 일치하는 엘리먼트가 존재하며 인덱스는 2입니다. 첫번째 파라미터의 아홉번째 엘리먼트 1은 두번째 파라미터에 일치하는 엘리먼트가 존재하면 인덱스는 1입니다. 이와 같이 첫번째 파라미터의 각 엘리먼트가 두번째 파라미터의 일치하는 엘리먼트의 인덱스를 넘겨주는 함수가 <code>base::match()</code>입니다.</p>
+<p><code>1:N</code> 벡터와 <code>base::match(Y, Y.set)</code> 벡터를 <code>base::cbind()</code> 함수를 이용하여 Column Binding한 결과를 <code>Y.index</code>에 저장합니다.</p>
+<p><br></p>
+<h3 id="53-training">5.3. Training</h3>
+<p>이제 다음 코드를 살펴보도록 하겠습니다.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># number of input features</span>
+<span class="n">D</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">ncol</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># number of categories for classification</span>
+<span class="n">K</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">length</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+<span class="n">H</span> <span class="o">&lt;-</span> <span class="n">hidden</span>
+
+<span class="c1"># create and initialize weights and bias</span>
+<span class="n">W1</span> <span class="o">&lt;-</span> <span class="m">0.01</span> <span class="o">*</span> <span class="n">base</span><span class="o">::</span><span class="nf">matrix</span><span class="p">(</span><span class="n">stats</span><span class="o">::</span><span class="nf">rnorm</span><span class="p">(</span><span class="n">D</span><span class="o">*</span><span class="n">H</span><span class="p">),</span> <span class="n">nrow</span> <span class="o">=</span> <span class="n">D</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="n">H</span><span class="p">)</span>
+<span class="n">b1</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">matrix</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="n">H</span><span class="p">)</span>
+
+<span class="n">W2</span> <span class="o">&lt;-</span> <span class="m">0.01</span> <span class="o">*</span> <span class="n">base</span><span class="o">::</span><span class="nf">matrix</span><span class="p">(</span><span class="n">stats</span><span class="o">::</span><span class="nf">rnorm</span><span class="p">(</span><span class="n">H</span><span class="o">*</span><span class="n">K</span><span class="p">),</span> <span class="n">nrow</span> <span class="o">=</span> <span class="n">H</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="n">K</span><span class="p">)</span>
+<span class="n">b2</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">matrix</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="n">K</span><span class="p">)</span>
+<span class="n">cs</span>
+</code></pre></div>
+
+<p>Line 1~6은 Input Dimensionality(D), Hidden Layer 내 Neuron개수(H), Class 개수(H)를 저장합니다.</p>
+<p>Line 8~13은 Model Parameters를 주어진 Dimension 크기의 행렬로 초기화합니다.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># use all train data to update weights since it&#39;s a small dataset</span>
+<span class="n">batchsize</span> <span class="o">&lt;-</span> <span class="n">N</span>
+<span class="c1"># initialize loss to a very big value</span>
+<span class="n">loss</span> <span class="o">&lt;-</span> <span class="m">100000</span>
+</code></pre></div>
+
+<p>위의 코드에서는 Batch Size와 Loss를 초기화합니다. Batch Size를 전체 데이터의 개수 N으로 설정한 것은 Full Batch를 의미하며 N이 매우 클 경우 Full Batch가 비효율적일 수 있으므로 Mini Batch(<span class="arithmatex">\(\mathrm{batchsize} &lt; N\)</span>)로 수행하며, Loss는 최소화의 대상이므로 충분히 큰 값으로 초기화합니다.</p>
+<p>자, 이제 본격적으로 학습을 진행합니다.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Training the network</span>
+<span class="n">i</span> <span class="o">&lt;-</span> <span class="m">0</span>
+<span class="nf">while</span><span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxit</span> <span class="o">&amp;&amp;</span> <span class="n">loss</span> <span class="o">&gt;</span> <span class="n">abstol</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1"># iteration index</span>
+    <span class="n">i</span> <span class="o">&lt;-</span> <span class="n">i</span> <span class="m">+1</span>
+
+    <span class="c1"># forward ....</span>
+    <span class="c1"># 1 indicate row, 2 indicate col</span>
+    <span class="n">hidden.layer</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sweep</span><span class="p">(</span><span class="n">X</span> <span class="o">%*%</span> <span class="n">W1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">)</span>
+
+    <span class="c1"># neurons : ReLU</span>
+    <span class="n">hidden.layer</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">pmax</span><span class="p">(</span><span class="n">hidden.layer</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sweep</span><span class="p">(</span><span class="n">hidden.layer</span> <span class="o">%*%</span> <span class="n">W2</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">)</span>
+
+    <span class="c1"># softmax</span>
+    <span class="n">score.exp</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">exp</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+    <span class="c1"># debug</span>
+    <span class="n">probs</span> <span class="o">&lt;-</span> <span class="n">score.exp</span> <span class="o">/</span> <span class="n">base</span><span class="o">::</span><span class="nf">rowSums</span><span class="p">(</span><span class="n">score.exp</span><span class="p">)</span>
+
+    <span class="c1"># compute the loss</span>
+    <span class="n">correct.logprobs</span> <span class="o">&lt;-</span> <span class="o">-</span><span class="nf">log</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="n">Y.index</span><span class="p">])</span>
+    <span class="n">data.loss</span>  <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sum</span><span class="p">(</span><span class="n">correct.logprobs</span><span class="p">)</span> <span class="o">/</span> <span class="n">batchsize</span>
+    <span class="n">reg.loss</span>   <span class="o">&lt;-</span> <span class="m">0.5</span> <span class="o">*</span> <span class="n">reg</span> <span class="o">*</span> <span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">sum</span><span class="p">(</span><span class="n">W1</span> <span class="o">*</span> <span class="n">W1</span><span class="p">)</span> <span class="o">+</span> <span class="n">base</span><span class="o">::</span><span class="nf">sum</span><span class="p">(</span><span class="n">W2</span> <span class="o">*</span> <span class="n">W2</span><span class="p">))</span>
+    <span class="n">loss</span> <span class="o">&lt;-</span> <span class="n">data.loss</span> <span class="o">+</span> <span class="n">reg.loss</span>
+
+    <span class="c1"># backward ....</span>
+    <span class="n">dscores</span> <span class="o">&lt;-</span> <span class="n">probs</span>
+    <span class="n">dscores</span><span class="p">[</span><span class="n">Y.index</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="n">dscores</span><span class="p">[</span><span class="n">Y.index</span><span class="p">]</span> <span class="o">-</span> <span class="m">1</span>
+    <span class="n">dscores</span> <span class="o">&lt;-</span> <span class="n">dscores</span> <span class="o">/</span> <span class="n">batchsize</span>
+
+    <span class="n">dW2</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">t</span><span class="p">(</span><span class="n">hidden.layer</span><span class="p">)</span> <span class="o">%*%</span> <span class="n">dscores</span>
+    <span class="n">db2</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">colSums</span><span class="p">(</span><span class="n">dscores</span><span class="p">)</span>
+
+    <span class="n">dhidden</span> <span class="o">&lt;-</span> <span class="n">dscores</span> <span class="o">%*%</span> <span class="n">base</span><span class="o">::</span><span class="nf">t</span><span class="p">(</span><span class="n">W2</span><span class="p">)</span>
+    <span class="n">dhidden</span><span class="p">[</span><span class="n">hidden.layer</span> <span class="o">&lt;=</span> <span class="m">0</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="m">0</span>
+
+    <span class="n">dW1</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">t</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">%*%</span> <span class="n">dhidden</span>
+    <span class="n">db1</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">colSums</span><span class="p">(</span><span class="n">dhidden</span><span class="p">)</span>
+
+    <span class="c1"># update ....</span>
+    <span class="n">dW2</span> <span class="o">&lt;-</span> <span class="n">dW2</span> <span class="o">+</span> <span class="n">reg</span> <span class="o">*</span> <span class="n">W2</span>
+    <span class="n">dW1</span> <span class="o">&lt;-</span> <span class="n">dW1</span> <span class="o">+</span> <span class="n">reg</span> <span class="o">*</span> <span class="n">W1</span>
+
+    <span class="n">W1</span> <span class="o">&lt;-</span> <span class="n">W1</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">dW1</span>
+    <span class="n">b1</span> <span class="o">&lt;-</span> <span class="n">b1</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">db1</span>
+
+    <span class="n">W2</span> <span class="o">&lt;-</span> <span class="n">W2</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">dW2</span>
+    <span class="n">b2</span> <span class="o">&lt;-</span> <span class="n">b2</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">db2</span>
+  <span class="p">}</span>
+</code></pre></div>
+
+<p>앞서 이론 부분에서 충분히 설명드렸다고 생각되는데, Op.[ForwardPass]와 Op.[BackwardPass]를 대응시켜 보시면 코드가 완벽하게 이해되리라 믿습니다.</p>
+<p>학습이 완료되면 아래의 코드와 같이 <code>model</code>이라는 list 변수에 모델 파라미터들을 저장하고 결과로 리턴해 줍니다.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># final results</span>
+<span class="c1"># creat list to store learned parameters</span>
+<span class="c1"># you can add more parameters for debug and visualization</span>
+<span class="c1"># such as residuals, fitted.values ...</span>
+<span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span> <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="p">,</span>
+                 <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="p">,</span>
+                 <span class="n">K</span> <span class="o">=</span> <span class="n">K</span><span class="p">,</span>
+                 <span class="c1"># weights and bias</span>
+                 <span class="n">W1</span> <span class="o">=</span> <span class="n">W1</span><span class="p">,</span>
+                 <span class="n">b1</span> <span class="o">=</span> <span class="n">b1</span><span class="p">,</span>
+                 <span class="n">W2</span> <span class="o">=</span> <span class="n">W2</span><span class="p">,</span>
+                 <span class="n">b2</span> <span class="o">=</span> <span class="n">b2</span><span class="p">)</span>
+
+<span class="c1"># plotting with Plotly</span>
+<span class="n">learning_val</span> <span class="o">&lt;-</span> <span class="n">learning_val</span><span class="p">[</span><span class="m">-1</span><span class="p">,]</span>
+<span class="n">p</span> <span class="o">&lt;-</span> <span class="n">plotly</span><span class="o">::</span><span class="nf">plot_ly</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">learning_val</span><span class="p">,</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="o">~</span><span class="n">Epoch</span><span class="p">,</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="o">~</span><span class="n">Loss</span><span class="p">,</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Loss&quot;</span><span class="p">,</span>
+                    <span class="n">type</span> <span class="o">=</span> <span class="s">&#39;scatter&#39;</span><span class="p">,</span>
+                    <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;lines+markers&#39;</span><span class="p">,</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#39;rgb(205, 12, 24)&#39;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="m">3</span><span class="p">))</span> <span class="o">%&gt;%</span>
+    <span class="nf">add_trace</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="o">~</span><span class="n">Accuracy</span><span class="p">,</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Accuracy&quot;</span><span class="p">,</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&#39;rgb(22, 96, 167)&#39;</span><span class="p">,</span>
+                        <span class="n">width</span> <span class="o">=</span> <span class="m">4</span><span class="p">))</span> <span class="o">%&gt;%</span>
+    <span class="nf">layout</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Loss &amp; Accuracy as Steps Proceed&quot;</span><span class="p">,</span>
+        <span class="n">xaxis</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;steps&quot;</span><span class="p">),</span>
+        <span class="n">yaxis</span> <span class="o">=</span> <span class="nf">list </span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Loss &amp; Acc.&quot;</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="nf">return</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+
+<p><br></p>
+<h3 id="54-predictdnn">5.4. predict.dnn( ) 프로토타입</h3>
+<p><code>predict.dnn()</code> 함수는 <code>predict.dnn.R</code> 소스 파일에 있습니다. 함수 선언은 다음과 같은데,</p>
+<div class="highlight"><pre><span></span><code><span class="n">predict.dnn</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">X.test</span><span class="p">)</span>
+</code></pre></div>
+
+<p>입력 변수에 대한 설명은 다음과 같습니다:</p>
+<ul>
+<li><code>model</code> : <code>train.dnn()</code>에서 학습시킨 모델 파라미터들.</li>
+<li><code>data</code> : 테스트 데이터.</li>
+</ul>
+<p>Predict 과정은 단순히 테스트 입력 데이터를 앞서 얻은 model을 이용하여 Forward Pass를 거쳐 Score가 가장 높은 Class를 얻는 과정이라고 보시면 되겠습니다.</p>
+<p>다음 코드를 참고하시기 바랍니다.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Prediction</span>
+<span class="n">predict.dnn</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">X.test</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1"># new data, transfer to matrix</span>
+  <span class="n">new.data</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">data.matrix</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="c1"># Feed Forwad</span>
+  <span class="n">hidden.layer</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sweep</span><span class="p">(</span><span class="n">new.data</span> <span class="o">%*%</span> <span class="n">model</span><span class="o">$</span><span class="n">W1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">model</span><span class="o">$</span><span class="n">b1</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">)</span>
+  <span class="c1"># neurons : Rectified Linear</span>
+  <span class="n">hidden.layer</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">pmax</span><span class="p">(</span><span class="n">hidden.layer</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+  <span class="n">score</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sweep</span><span class="p">(</span><span class="n">hidden.layer</span> <span class="o">%*%</span> <span class="n">model</span><span class="o">$</span><span class="n">W2</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">model</span><span class="o">$</span><span class="n">b2</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">)</span>
+
+  <span class="c1"># Loss Function: softmax</span>
+  <span class="n">score.exp</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">exp</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+  <span class="n">probs</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sweep</span><span class="p">(</span><span class="n">score.exp</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">base</span><span class="o">::</span><span class="nf">rowSums</span><span class="p">(</span><span class="n">score.exp</span><span class="p">),</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
+
+  <span class="c1"># select max possiblity</span>
+  <span class="n">labels.predicted</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">max.col</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+  <span class="nf">return</span><span class="p">(</span><span class="n">labels.predicted</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><br></p>
+<h3 id="55-mainr">5.5. <code>main.R</code></h3>
+<p><code>main.R</code>에서 하는 작업은 다음과 같습니다:</p>
+<ol>
+<li>주어진 데이터(<code>iris</code>)를 train data와 test data로 분류한다.</li>
+<li>train data를 <code>train.dnn()</code> 함수에 공급하여 학습 모델을 얻는다.</li>
+<li>test data를 <code>predict.dnn()</code> 함수에 공급하여 예측 결과를 얻는다.</li>
+<li>얻어진 예측 결과와 실제 데이터(Ground Truth Labels)와 일치도를 평가하여 Accuracy를 얻는다.</li>
+</ol>
+<p>다음은 <code>main.R</code> 코드입니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Copyright 2016: www.ParallelR.com</span>
+<span class="c1"># Parallel Blog : R For Deep Learning (I): Build Fully Connected Neural Network From Scratch</span>
+<span class="c1"># Classification by 2-layers DNN and tested by iris dataset</span>
+<span class="c1"># Author: Peng Zhao, patric.zhao@gmail.com</span>
+
+<span class="n">base</span><span class="o">::</span><span class="nf">rm</span><span class="p">(</span><span class="n">list</span> <span class="o">=</span> <span class="nf">ls</span><span class="p">())</span>
+<span class="n">base</span><span class="o">::</span><span class="nf">gc</span><span class="p">()</span>
+
+<span class="n">base</span><span class="o">::</span><span class="nf">source</span><span class="p">(</span><span class="s">&#39;./train.dnn.R&#39;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="n">base</span><span class="o">::</span><span class="nf">source</span><span class="p">(</span><span class="s">&#39;./predict.dnn.R&#39;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+
+<span class="c1">########################################################################</span>
+<span class="c1"># testing</span>
+<span class="c1">#######################################################################</span>
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+
+<span class="c1"># 0. EDA</span>
+<span class="n">base</span><span class="o">::</span><span class="nf">summary</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
+<span class="n">base</span><span class="o">::</span><span class="nf">names</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
+<span class="n">graphics</span><span class="o">::</span><span class="nf">plot</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
+
+<span class="c1"># 1. split data into test/train</span>
+<span class="n">samp</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">c</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">50</span><span class="p">,</span><span class="m">25</span><span class="p">),</span>
+                <span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">51</span><span class="o">:</span><span class="m">100</span><span class="p">,</span><span class="m">25</span><span class="p">),</span>
+                <span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">150</span><span class="p">,</span><span class="m">25</span><span class="p">))</span>
+
+<span class="c1"># 2. train model</span>
+<span class="n">ir.model</span> <span class="o">&lt;-</span> <span class="nf">train.dnn</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">,</span>
+                      <span class="n">y</span> <span class="o">=</span> <span class="m">5</span><span class="p">,</span>
+                      <span class="n">traindata</span> <span class="o">=</span> <span class="n">iris</span><span class="p">[</span><span class="n">samp</span><span class="p">,],</span>
+                      <span class="n">testdata</span> <span class="o">=</span> <span class="n">iris</span><span class="p">[</span><span class="o">-</span><span class="n">samp</span><span class="p">,],</span>
+                      <span class="n">hidden</span> <span class="o">=</span> <span class="m">6</span><span class="p">,</span>
+                      <span class="n">maxit</span> <span class="o">=</span> <span class="m">3000</span><span class="p">,</span>
+                      <span class="n">display</span> <span class="o">=</span> <span class="m">50</span><span class="p">)</span>
+<span class="c1"># ir.model &lt;- train.dnn(x=1:4, y=5, traindata=iris[samp,], hidden=6, maxit=2000, display=50)</span>
+
+<span class="c1"># 3. prediction</span>
+<span class="c1"># NOTE: if the predict is factor, we need to transfer the number into class manually.</span>
+<span class="c1">#       To make the code clear, I don&#39;t write this change into predict.dnn function.</span>
+<span class="n">labels.dnn</span> <span class="o">&lt;-</span> <span class="nf">predict.dnn</span><span class="p">(</span><span class="n">ir.model</span><span class="p">,</span> <span class="n">iris</span><span class="p">[</span><span class="o">-</span><span class="n">samp</span><span class="p">,</span> <span class="m">-5</span><span class="p">])</span>
+
+<span class="c1"># 4. verify the results</span>
+<span class="n">base</span><span class="o">::</span><span class="nf">table</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">iris</span><span class="p">[</span><span class="o">-</span><span class="n">samp</span><span class="p">,</span><span class="m">5</span><span class="p">],</span> <span class="n">data</span> <span class="o">=</span> <span class="n">labels.dnn</span><span class="p">)</span>
+<span class="c1">#          labels.dnn</span>
+<span class="c1">#            1  2  3</span>
+<span class="c1">#setosa     25  0  0</span>
+<span class="c1">#versicolor  0 24  1</span>
+<span class="c1">#virginica   0  0 25</span>
+
+<span class="c1">#accuracy</span>
+<span class="nf">print</span><span class="p">(</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;Accuracy: %f&quot;</span><span class="p">,</span> <span class="n">base</span><span class="o">::</span><span class="nf">mean</span><span class="p">(</span><span class="nf">as.integer</span><span class="p">(</span><span class="n">iris</span><span class="p">[</span><span class="o">-</span><span class="n">samp</span><span class="p">,</span> <span class="m">5</span><span class="p">])</span> <span class="o">==</span> <span class="n">labels.dnn</span><span class="p">))</span> <span class="p">)</span>
+<span class="c1"># 0.98</span>
+</code></pre></div>
+
+<p><br></p>
+<h3 id="56">5.6. 실행결과</h3>
+<p><code>main.R</code> 코드를 실행한 결과는 다음과 같습니다.</p>
+<div class="highlight"><pre><span></span><code><span class="m">50</span> <span class="m">1.09785</span> <span class="m">0.3333333</span>
+<span class="m">100</span> <span class="m">1.096281</span> <span class="m">0.3333333</span>
+<span class="m">150</span> <span class="m">1.091853</span> <span class="m">0.3333333</span>
+<span class="m">200</span> <span class="m">1.080326</span> <span class="m">0.3333333</span>
+<span class="m">250</span> <span class="m">1.056044</span> <span class="m">0.3333333</span>
+<span class="m">300</span> <span class="m">1.015552</span> <span class="m">0.3466667</span>
+<span class="m">350</span> <span class="m">0.952453</span> <span class="m">0.6666667</span>
+<span class="m">400</span> <span class="m">0.8789816</span> <span class="m">0.6666667</span>
+<span class="m">450</span> <span class="m">0.8070193</span> <span class="m">0.6666667</span>
+<span class="m">500</span> <span class="m">0.7290098</span> <span class="m">0.6666667</span>
+<span class="m">550</span> <span class="m">0.649967</span> <span class="m">0.6666667</span>
+<span class="m">600</span> <span class="m">0.5840677</span> <span class="m">0.68</span>
+<span class="m">650</span> <span class="m">0.5341543</span> <span class="m">0.7066667</span>
+<span class="m">700</span> <span class="m">0.4962127</span> <span class="m">0.8</span>
+<span class="m">750</span> <span class="m">0.4660278</span> <span class="m">0.88</span>
+<span class="m">800</span> <span class="m">0.4406975</span> <span class="m">0.92</span>
+<span class="m">850</span> <span class="m">0.4184247</span> <span class="m">0.9333333</span>
+<span class="m">900</span> <span class="m">0.3981292</span> <span class="m">0.96</span>
+<span class="m">950</span> <span class="m">0.379204</span> <span class="m">0.96</span>
+<span class="m">1000</span> <span class="m">0.361337</span> <span class="m">0.96</span>
+<span class="m">1050</span> <span class="m">0.344356</span> <span class="m">0.96</span>
+<span class="m">1100</span> <span class="m">0.3281951</span> <span class="m">0.9866667</span>
+<span class="m">1150</span> <span class="m">0.3128612</span> <span class="m">0.9866667</span>
+<span class="m">1200</span> <span class="m">0.2983606</span> <span class="m">0.9866667</span>
+<span class="m">1250</span> <span class="m">0.284711</span> <span class="m">0.9866667</span>
+<span class="m">1300</span> <span class="m">0.2719326</span> <span class="m">0.9866667</span>
+<span class="m">1350</span> <span class="m">0.2600172</span> <span class="m">0.9866667</span>
+<span class="m">1400</span> <span class="m">0.2489488</span> <span class="m">0.9866667</span>
+<span class="m">1450</span> <span class="m">0.2387016</span> <span class="m">0.9866667</span>
+<span class="m">1500</span> <span class="m">0.2292342</span> <span class="m">0.9866667</span>
+<span class="m">1550</span> <span class="m">0.2204989</span> <span class="m">0.9866667</span>
+<span class="m">1600</span> <span class="m">0.2124452</span> <span class="m">0.9866667</span>
+<span class="m">1650</span> <span class="m">0.205022</span> <span class="m">0.9866667</span>
+<span class="m">1700</span> <span class="m">0.1981784</span> <span class="m">0.9866667</span>
+<span class="m">1750</span> <span class="m">0.1918652</span> <span class="m">0.9866667</span>
+<span class="m">1800</span> <span class="m">0.1860356</span> <span class="m">0.9866667</span>
+<span class="m">1850</span> <span class="m">0.180646</span> <span class="m">0.9866667</span>
+<span class="m">1900</span> <span class="m">0.1756561</span> <span class="m">0.9866667</span>
+<span class="m">1950</span> <span class="m">0.171029</span> <span class="m">0.9866667</span>
+<span class="m">2000</span> <span class="m">0.1667312</span> <span class="m">0.9866667</span>
+<span class="m">2050</span> <span class="m">0.1627323</span> <span class="m">0.9866667</span>
+<span class="m">2100</span> <span class="m">0.1590047</span> <span class="m">0.9866667</span>
+<span class="m">2150</span> <span class="m">0.1555238</span> <span class="m">0.9866667</span>
+<span class="m">2200</span> <span class="m">0.1522674</span> <span class="m">0.9866667</span>
+<span class="m">2250</span> <span class="m">0.1492155</span> <span class="m">0.9866667</span>
+<span class="m">2300</span> <span class="m">0.1463502</span> <span class="m">0.9866667</span>
+<span class="m">2350</span> <span class="m">0.1436553</span> <span class="m">0.9866667</span>
+<span class="m">2400</span> <span class="m">0.1411165</span> <span class="m">0.9866667</span>
+<span class="m">2450</span> <span class="m">0.1387206</span> <span class="m">0.9866667</span>
+<span class="m">2500</span> <span class="m">0.136456</span> <span class="m">0.9866667</span>
+<span class="m">2550</span> <span class="m">0.1343122</span> <span class="m">0.9866667</span>
+<span class="m">2600</span> <span class="m">0.1322797</span> <span class="m">0.9866667</span>
+<span class="m">2650</span> <span class="m">0.1303498</span> <span class="m">0.9866667</span>
+<span class="m">2700</span> <span class="m">0.1285149</span> <span class="m">0.9866667</span>
+<span class="m">2750</span> <span class="m">0.1267679</span> <span class="m">0.9866667</span>
+<span class="m">2800</span> <span class="m">0.1251025</span> <span class="m">0.9866667</span>
+<span class="m">2850</span> <span class="m">0.1235127</span> <span class="m">0.9866667</span>
+<span class="m">2900</span> <span class="m">0.1219935</span> <span class="m">0.9866667</span>
+<span class="m">2950</span> <span class="m">0.1205399</span> <span class="m">0.9866667</span>
+<span class="m">3000</span> <span class="m">0.1191476</span> <span class="m">0.9866667</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&quot;Accuracy: 0.986667&quot;</span>
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Deep Learning from Scratch Part 1.
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Object Detection Using R-CNN
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
