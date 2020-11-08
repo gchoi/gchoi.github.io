@@ -52,7 +52,35 @@
      <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>https://gchoi.github.io/posts/mongodb/04-mongodb-update-modifiers-inc/</loc>
+     <loc>https://gchoi.github.io/posts/mongodb/04-mongodb-update-operators-inc/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/05-mongodb-update-operators-set-unset/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/06-mongodb-update-operators-push/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/07-mongodb-update-operators-addToSet/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/08-mongodb-update-operators-pop-pull/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/09-mongodb-update-operators-upsert/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/10-mongodb-update-operators-updating-multiple-documents/</loc>
+     <lastmod>2020-11-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/11-mongodb-update-operators-fidnAndModify/</loc>
      <lastmod>2020-11-08</lastmod>
      <changefreq>daily</changefreq>
     </url>

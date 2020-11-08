@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/02-mongodb-basic-queries/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/08-mongodb-update-operators-pop-pull/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>02. MongoDB 기본 Query 명령문 테스트 - Alex Choi's Blog</title>
+        <title>08. MongoDB Update Operators Part 5. - $pop, $pull - Alex Choi's Blog</title>
       
     
     
@@ -51,11 +51,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#db" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -80,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              02. MongoDB 기본 Query 명령문 테스트
+              08. MongoDB Update Operators Part 5. - $pop, $pull
             
           </span>
         </div>
@@ -382,20 +377,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
-    
   </li>
 
         
@@ -463,11 +449,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link md-nav__link--active">
       08. MongoDB Update Operators Part 5. - $pop, $pull
     </a>
+    
   </li>
 
         
@@ -524,21 +517,6 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -548,95 +526,265 @@
                   
                 
                 
-                <p>이번 포스팅에서는 MongoDB의 기본 Query 명령어에 대해 알아보도록 하겠습니다.</p>
-<p>우선 시작에 앞서 <a href="../../../posts/MongoDB/01-starting-mongodb/">01. MongoDB 시작하기</a>를 참고하여 DB를 시작하시고, Query 명령문을 입력할 수 있도록 준비하시기 발바니다.</p>
-<hr />
-<h1 id="db">DB 생성</h1>
-<p>Mongo 현재 DB의 리스트를 확인하는 명령줄은 다음과 같습니다:</p>
-<div class="highlight"><pre><span></span><code>show dbs
+                  <h1>08. MongoDB Update Operators Part 5. - $pop, $pull</h1>
+                
+                <p>이번 포스팅에서는 <code>$pop</code> operator와 <code>$pull</code> operator를 이용하여 DB로부터 아이템을 삭제하는 법에 대해 알아보겠습니다.</p>
+<p>우선 "$pop" operator는 특정 key의 아이템을 첫번째부터 또는 마지막부터 하나씩 삭제하는 명령어입니다.</p>
+<p><code>{$pop : {key : 1}}</code>는 array 아이템의 맨 마지막으로부터 하나씩 삭제하며, <code>{$pop : {key : -1}}</code>는 첫번째 아이템부터 하나씩 삭제합니다.</p>
+<p>다음 예를 통해 자세히 알아보겠습니다. 우선 다음 명령어를 통해 아이템을 준비하겠습니다:</p>
+<div class="highlight"><pre><span></span><code>var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
+db.users.insert(user);
+
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;aaa@gmail.com&quot;}});
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;bbb@gmail.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ccc@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;eee@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;fff@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ggg@yahoo.com&quot;}})
 </code></pre></div>
 
-<p>기본적은로, 세가지 DB가 미리 등록되어 있음을 확인할 수 있습니다:</p>
-<ul>
-<li><code>admin</code></li>
-<li><code>config</code></li>
-<li><code>local</code></li>
-</ul>
-<p>일단 이들이 어떤 역할을 하는지는 추후 포스팅에서 살펴보도록 하며, 지금은 DB를 하나 생성하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>use test
+<p>다음과 같이 아이템을 확인할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find()
+{ &quot;_id&quot; : ObjectId(&quot;52e496754f7969df59f1148c&quot;), &quot;age&quot; : 37, &quot;email&quot; : [     &quot;aaa@gmail.com&quot;,    &quot;bbb@gmail.com&quot;,    &quot;ccc@yahoo.com&quot;,    &quot;ddd@yahoo.com&quot;,    &quot;eee@yahoo.com&quot;,    &quot;fff@yahoo.com&quot;,    &quot;ggg@yahoo.com&quot; ], &quot;username&quot; : &quot;gchoi&quot; }
 </code></pre></div>
 
-<hr />
-<h1 id="create">Create</h1>
-<p>다음과 같이 "title", "content", "date" 키를 갖는 "post" 변수 생성해 보겠습니다.</p>
-<div class="highlight"><pre><span></span><code>post = {&quot;title&quot; : &quot;My first blog post&quot;, &quot;content&quot; : &quot;Getting started with MongDB&quot;, &quot;date&quot; : new Date()}
-</code></pre></div>
-
-<p>위의 명령에서 알 수 있듯이, MongoDB의 입출력 도큐먼트 단위는 JSON 형태를 갖습니다.</p>
-<p><code>insert</code> 명령을 통해 등록된 <code>post</code> 변수를 <code>blog</code>라는 콜렉션에 저장합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.insert(post)
-WriteResult({ &quot;nInserted&quot; : 1 })
-</code></pre></div>
-
-<p>이제 <code>test</code> db가 가지고 있는 콜렉션 리스트를 확인해 보도록 하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.getCollectionNames()
-[ &quot;blog&quot; ]
-</code></pre></div>
-
-<p>입력이 성공되면 <code>WriteResult({ "nInserted" : 1 })</code>라는 형태의 메시지가 출력될 것입니다.</p>
-<p><code>find</code> 명령을 입력하여 <code>blog</code> 콜렉션에 저장된 값 확인해 봅니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.find()
-{ &quot;_id&quot; : ObjectId(&quot;5fa5fef52bc718484524b2d2&quot;), &quot;title&quot; : &quot;My first blog post&quot;, &quot;content&quot; : &quot;Getting started with MongDB&quot;, &quot;date&quot; : ISODate(&quot;2020-11-07T01:53:32.663Z&quot;) }
-</code></pre></div>
-
-<p>한가지 팁으로 <code>.pretty()</code>를 추가로 붙이면, 좀 더 깔끔한 형태로 결과를 출력할 수 있습니다.</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.find().pretty()
-        &quot;_id&quot; : ObjectId(&quot;5fa5fef52bc718484524b2d2&quot;),
-        &quot;title&quot; : &quot;My first blog post&quot;,
-        &quot;content&quot; : &quot;Getting started with MongDB&quot;,
-        &quot;date&quot; : ISODate(&quot;2020-11-07T01:53:32.663Z&quot;)
-}
-</code></pre></div>
-
-<figure>
-  <img src="../../../assets/img/posts/mongodb/02-mongodb-basic-queries/01.jpg" width="100%" />
-  <figcaption>.pretty()를 이용한 깔끔한 출력 결과</figcaption>
-</figure>
-
-<hr />
-<h1 id="update">Update</h1>
-<p><code>post</code> 컬렉션에 <code>comments</code> 키 생성을 합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; post.comments = []
-[ ]
-
-&gt; post
+<p>다음 명령어를 반복적으로 입력하여 아이템이 맨 마지막부터 삭제되는 것을 확인힙니다:</p>
+<p>(<code>$pop</code>의 key 값이 "1"임에 주목합니다.)</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
+&gt; db.users.find().pretty()
 {
-    &quot;title&quot; : &quot;My first blog post&quot;,
-    &quot;content&quot; : &quot;Getting Started with MongoDB&quot;,
-    &quot;date&quot; : ISODate(&quot;2014-01-17T10:04:08.641Z&quot;),
-    &quot;comments&quot; : [ ]
+  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;aaa@gmail.com&quot;,
+    &quot;bbb@gmail.com&quot;,
+    &quot;ccc@yahoo.com&quot;,
+    &quot;ddd@yahoo.com&quot;,
+    &quot;eee@yahoo.com&quot;,
+    &quot;fff@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
 }
-</code></pre></div>
-
-<p><code>My first blog post</code>라는 타이틀을 가진 <code>post</code>로 도큐먼트 업데이트를 업데이트 합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.update({&quot;title&quot; : &quot;My first blog post&quot;}, post)
-
-&gt; db.blog.findOne().pretty()
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
+&gt; db.users.find().pretty()
 {
-    &quot;_id&quot; : ObjectId(&quot;52d900298d2a9dc822dd0eea&quot;),
-    &quot;title&quot; : &quot;My first blog post&quot;,
-    &quot;content&quot; : &quot;Getting Started with MongoDB&quot;,
-    &quot;date&quot; : ISODate(&quot;2014-01-17T10:04:08.641Z&quot;),
-    &quot;comments&quot; : [ ]
+  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;aaa@gmail.com&quot;,
+    &quot;bbb@gmail.com&quot;,
+    &quot;ccc@yahoo.com&quot;,
+    &quot;ddd@yahoo.com&quot;,
+    &quot;eee@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;aaa@gmail.com&quot;,
+    &quot;bbb@gmail.com&quot;,
+    &quot;ccc@yahoo.com&quot;,
+    &quot;ddd@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;aaa@gmail.com&quot;,
+    &quot;bbb@gmail.com&quot;,
+    &quot;ccc@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;aaa@gmail.com&quot;,
+    &quot;bbb@gmail.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [&quot;aaa@gmail.com&quot;],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [ ],
+  &quot;username&quot; : &quot;gchoi&quot;
 }
 </code></pre></div>
 
-<hr />
-<h1 id="delete">Delete</h1>
-<p><code>My first blog post</code>이라는 <code>title</code>의 컬렉션을 삭제해 보겠습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.remove({title : &quot;My first blog post&quot;})
-&gt; db.blog.findOne()
-null
+<p>위와 같이 "email" 아이템이 맨 마지막 아이템부터 하나씩 사라지는 것을 확인할 수 있을 것입니다.</p>
+<p>이번에는 <code>$pop</code> key 값을 "-1"로 테스트하여 아이템을 앞에서부터 하나씩 삭제해 보겠습니다.</p>
+<p>앞서 예와 마찬가지로 아이템을 준비하겠습니다 (<code>users</code> 컬렉션 중복을 막기위해 <code>drop()</code> 함수를 이용하여 <code>users</code> 컬렉션을 삭제하였습니다).</p>
+<div class="highlight"><pre><span></span><code>db.users.drop()
+
+var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
+db.users.insert(user);
+
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;aaa@gmail.com&quot;}});
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;bbb@gmail.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ccc@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;eee@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;fff@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ggg@yahoo.com&quot;}})
+</code></pre></div>
+
+<p><code>$pop</code> key 값을 "-1"로 하여 반복적으로 실행하여 첫번째 아이템부터 삭제되는 것을 확인해 봅니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;aaa@gmail.com&quot;,
+    &quot;bbb@gmail.com&quot;,
+    &quot;ccc@yahoo.com&quot;,
+    &quot;ddd@yahoo.com&quot;,
+    &quot;eee@yahoo.com&quot;,
+    &quot;fff@yahoo.com&quot;,
+    &quot;ggg@yahoo.com
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;bbb@gmail.com&quot;,
+    &quot;ccc@yahoo.com&quot;,
+    &quot;ddd@yahoo.com&quot;,
+    &quot;eee@yahoo.com&quot;,
+    &quot;fff@yahoo.com&quot;,
+    &quot;ggg@yahoo.com
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;ccc@yahoo.com&quot;,
+    &quot;ddd@yahoo.com&quot;,
+    &quot;eee@yahoo.com&quot;,
+    &quot;fff@yahoo.com&quot;,
+    &quot;ggg@yahoo.com
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;ddd@yahoo.com&quot;,
+    &quot;eee@yahoo.com&quot;,
+    &quot;fff@yahoo.com&quot;,
+    &quot;ggg@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;eee@yahoo.com&quot;,
+    &quot;fff@yahoo.com&quot;,
+    &quot;ggg@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;fff@yahoo.com&quot;,
+    &quot;ggg@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [  &quot;ggg@yahoo.com&quot; ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
+&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [ ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
+</code></pre></div>
+
+<p>이번에는 <code>$pull</code> operator를 이용하여 특정 아이템을 삭제해 보도록 합니다. 역시 마찬가지로 데이터를 먼저 준비하겠습니다:</p>
+<div class="highlight"><pre><span></span><code>db.users.drop()
+
+var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
+db.users.insert(user);
+
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;aaa@gmail.com&quot;}});
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;bbb@gmail.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ccc@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;eee@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;fff@yahoo.com&quot;}})
+db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ggg@yahoo.com&quot;}})
+</code></pre></div>
+
+<p><code>$pull</code> operator로부터 "email"의 "ddd@yahoo.com"을 삭제해 보겠습니다. 다음 명령어를 입력합니다:</p>
+<div class="highlight"><pre><span></span><code>db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pull : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
+</code></pre></div>
+
+<p>결과를 확인해 보면 "email" 중 "ddd@yahoo.com"이 삭제되었음을 확인할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;52e4be914d7acd666141a746&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [
+    &quot;aaa@gmail.com&quot;,
+    &quot;bbb@gmail.com&quot;,
+    &quot;ccc@yahoo.com&quot;,
+    &quot;ddd@yahoo.com&quot;,
+    &quot;eee@yahoo.com&quot;,
+    &quot;fff@yahoo.com&quot;,
+    &quot;ggg@yahoo.com&quot;
+  ],
+  &quot;username&quot; : &quot;gchoi&quot;
+}
 </code></pre></div>
                 
               
@@ -656,7 +804,7 @@ null
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -665,19 +813,19 @@ null
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                01. MongoDB 시작하기
+                07. MongoDB Update Operators Part 4. - $addToSet
               </div>
             </div>
           </a>
         
         
-          <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                03. MongoDB 라이프사이클
+                09. MongoDB Update Operators Part 6. - $upsert
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

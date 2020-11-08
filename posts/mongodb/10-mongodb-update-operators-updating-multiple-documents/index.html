@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/02-mongodb-basic-queries/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/10-mongodb-update-operators-updating-multiple-documents/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>02. MongoDB 기본 Query 명령문 테스트 - Alex Choi's Blog</title>
+        <title>10. MongoDB Update Operators Part 7. - Updating Multiple Documents - Alex Choi's Blog</title>
       
     
     
@@ -51,11 +51,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#db" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -80,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              02. MongoDB 기본 Query 명령문 테스트
+              10. MongoDB Update Operators Part 7. - Updating Multiple Documents
             
           </span>
         </div>
@@ -382,20 +377,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
-    
   </li>
 
         
@@ -487,11 +473,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link md-nav__link--active">
       10. MongoDB Update Operators Part 7. - Updating Multiple Documents
     </a>
+    
   </li>
 
         
@@ -524,21 +517,6 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -548,96 +526,64 @@
                   
                 
                 
-                <p>이번 포스팅에서는 MongoDB의 기본 Query 명령어에 대해 알아보도록 하겠습니다.</p>
-<p>우선 시작에 앞서 <a href="../../../posts/MongoDB/01-starting-mongodb/">01. MongoDB 시작하기</a>를 참고하여 DB를 시작하시고, Query 명령문을 입력할 수 있도록 준비하시기 발바니다.</p>
-<hr />
-<h1 id="db">DB 생성</h1>
-<p>Mongo 현재 DB의 리스트를 확인하는 명령줄은 다음과 같습니다:</p>
-<div class="highlight"><pre><span></span><code>show dbs
+                  <h1>10. MongoDB Update Operators Part 7. - Updating Multiple Documents</h1>
+                
+                <p>이번 포스팅에서는 다중의 도큐먼트를 업데이트 하는 방법에 대하여 알아보겠습니다.</p>
+<p><code>update</code> 쿼리는 기본적으로 기준에 부합하는 첫번째 도큐먼트만 업데이트 합니다.</p>
+<p>즉 기준에 부합하는 도큐먼트가 더 있을 경우 부합하는 첫번째 도큐먼트를 제외한 나머지 도큐먼트의 내용은 그대로 유지됩니다.</p>
+<p>만약 기준에 부합하는 모든 도큐먼트를 업데이트하려면 <code>update</code>의 네번째 파라미터를 "true"로 설정합니다.</p>
+<p>우선 테스트용 데이터를 다음과 같이 준비하는데 고객의 이름과 생일을 입력해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>db.customers.remove()
+db.customers.insert({name: &quot;gchoi&quot;, birthday:&quot;08/22&quot;})
+db.customers.insert({name: &quot;jmpark&quot;, birthday:&quot;04/02&quot;})
+db.customers.insert({name: &quot;tjkwak&quot;, birthday:&quot;11/11&quot;})
+db.customers.insert({name: &quot;hskim&quot;, birthday:&quot;12/08&quot;})
+db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
 </code></pre></div>
 
-<p>기본적은로, 세가지 DB가 미리 등록되어 있음을 확인할 수 있습니다:</p>
-<ul>
-<li><code>admin</code></li>
-<li><code>config</code></li>
-<li><code>local</code></li>
-</ul>
-<p>일단 이들이 어떤 역할을 하는지는 추후 포스팅에서 살펴보도록 하며, 지금은 DB를 하나 생성하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>use test
+<p>입력한 결과는 다음과 같습니다.</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find()
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325073&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;birthday&quot; : &quot;08/22&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325074&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325075&quot;), &quot;name&quot; : &quot;tjkwak&quot;, &quot;birthday&quot; : &quot;11/11&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325076&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;birthday&quot; : &quot;12/08&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325077&quot;), &quot;name&quot; : &quot;dsha&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
 </code></pre></div>
 
-<hr />
-<h1 id="create">Create</h1>
-<p>다음과 같이 "title", "content", "date" 키를 갖는 "post" 변수 생성해 보겠습니다.</p>
-<div class="highlight"><pre><span></span><code>post = {&quot;title&quot; : &quot;My first blog post&quot;, &quot;content&quot; : &quot;Getting started with MongDB&quot;, &quot;date&quot; : new Date()}
+<p>입력된 결과를 눈여겨 보면, "jmpark"과 "dsha"의 생일이 모두 "04/02"로 동일함을 알 수 있습니다.</p>
+<p>생일이 "04/02"인 고객을 기준으로 검색해 보면,</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({&quot;birthday&quot; : &quot;04/02&quot;})
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325074&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325077&quot;), &quot;name&quot; : &quot;dsha&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
 </code></pre></div>
 
-<p>위의 명령에서 알 수 있듯이, MongoDB의 입출력 도큐먼트 단위는 JSON 형태를 갖습니다.</p>
-<p><code>insert</code> 명령을 통해 등록된 <code>post</code> 변수를 <code>blog</code>라는 콜렉션에 저장합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.insert(post)
-WriteResult({ &quot;nInserted&quot; : 1 })
+<p>예상대로 "jmpark"과 "dsha"가 검색되었습니다.</p>
+<p>오늘이 4월2일이라고 하고 오늘이 생일인 두 명의 고객에 대해 "gift" key를 업데이트 해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>db.customers.update({birthday : &quot;04/02&quot;}, {$set : {gift : &quot;Happy Birthday!&quot;}}, false, true)
 </code></pre></div>
 
-<p>이제 <code>test</code> db가 가지고 있는 콜렉션 리스트를 확인해 보도록 하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.getCollectionNames()
-[ &quot;blog&quot; ]
-</code></pre></div>
-
-<p>입력이 성공되면 <code>WriteResult({ "nInserted" : 1 })</code>라는 형태의 메시지가 출력될 것입니다.</p>
-<p><code>find</code> 명령을 입력하여 <code>blog</code> 콜렉션에 저장된 값 확인해 봅니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.find()
-{ &quot;_id&quot; : ObjectId(&quot;5fa5fef52bc718484524b2d2&quot;), &quot;title&quot; : &quot;My first blog post&quot;, &quot;content&quot; : &quot;Getting started with MongDB&quot;, &quot;date&quot; : ISODate(&quot;2020-11-07T01:53:32.663Z&quot;) }
-</code></pre></div>
-
-<p>한가지 팁으로 <code>.pretty()</code>를 추가로 붙이면, 좀 더 깔끔한 형태로 결과를 출력할 수 있습니다.</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.find().pretty()
-        &quot;_id&quot; : ObjectId(&quot;5fa5fef52bc718484524b2d2&quot;),
-        &quot;title&quot; : &quot;My first blog post&quot;,
-        &quot;content&quot; : &quot;Getting started with MongDB&quot;,
-        &quot;date&quot; : ISODate(&quot;2020-11-07T01:53:32.663Z&quot;)
-}
-</code></pre></div>
-
-<figure>
-  <img src="../../../assets/img/posts/mongodb/02-mongodb-basic-queries/01.jpg" width="100%" />
-  <figcaption>.pretty()를 이용한 깔끔한 출력 결과</figcaption>
-</figure>
-
-<hr />
-<h1 id="update">Update</h1>
-<p><code>post</code> 컬렉션에 <code>comments</code> 키 생성을 합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; post.comments = []
-[ ]
-
-&gt; post
+<p>만약 업데이트 된 도큐먼트에 대한 정보를 얻고자 한다면 <code>getLastError</code> 명령어를 입력한다.</p>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({getLastError : 1})
 {
-    &quot;title&quot; : &quot;My first blog post&quot;,
-    &quot;content&quot; : &quot;Getting Started with MongoDB&quot;,
-    &quot;date&quot; : ISODate(&quot;2014-01-17T10:04:08.641Z&quot;),
-    &quot;comments&quot; : [ ]
+    &quot;updatedExisting&quot; : true,
+    &quot;n&quot; : 2,
+    &quot;connectionId&quot; : 1,
+    &quot;err&quot; : null,
+    &quot;ok&quot; : 1
 }
 </code></pre></div>
 
-<p><code>My first blog post</code>라는 타이틀을 가진 <code>post</code>로 도큐먼트 업데이트를 업데이트 합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.update({&quot;title&quot; : &quot;My first blog post&quot;}, post)
-
-&gt; db.blog.findOne().pretty()
-{
-    &quot;_id&quot; : ObjectId(&quot;52d900298d2a9dc822dd0eea&quot;),
-    &quot;title&quot; : &quot;My first blog post&quot;,
-    &quot;content&quot; : &quot;Getting Started with MongoDB&quot;,
-    &quot;date&quot; : ISODate(&quot;2014-01-17T10:04:08.641Z&quot;),
-    &quot;comments&quot; : [ ]
-}
+<p><code>updatedExisting</code> 값 true는 업데이트 된 도큐먼트가 존재함을 의미하며, <code>n</code> 값 2는 업데이트 된 도큐먼트의 수가 2개임을 의미합니다.</p>
+<p>현재 업데이트 된 결과를 출력해 보면 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find()
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325073&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;birthday&quot; : &quot;08/22&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325075&quot;), &quot;name&quot; : &quot;tjkwak&quot;, &quot;birthday&quot; : &quot;11/11&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325076&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;birthday&quot; : &quot;12/08&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325074&quot;), &quot;birthday&quot; : &quot;04/02&quot;, &quot;gift&quot; : &quot;Happy Birthday!&quot;, &quot;name&quot; : &quot;jmpark&quot; }{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325077&quot;), &quot;birthday&quot; : &quot;04/02&quot;, &quot;gift&quot; : &quot;Happy Birthday!&quot;, &quot;name&quot; : &quot;dsha&quot; }
 </code></pre></div>
 
-<hr />
-<h1 id="delete">Delete</h1>
-<p><code>My first blog post</code>이라는 <code>title</code>의 컬렉션을 삭제해 보겠습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.remove({title : &quot;My first blog post&quot;})
-&gt; db.blog.findOne()
-null
-</code></pre></div>
+<p><code>$set</code> update operator의 네번째 파라미터가 "true"로 설정했음을 주목합니다.</p>
+<p>예상대로 <code>birthday</code> key가 "04/02"로 되어있는 "jmpark"과 "dsha"에 <code>gift</code> key가 생성되었음을 확인할 수 있습니다.</p>
                 
               
               
@@ -656,7 +602,7 @@ null
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -665,19 +611,19 @@ null
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                01. MongoDB 시작하기
+                09. MongoDB Update Operators Part 6. - $upsert
               </div>
             </div>
           </a>
         
         
-          <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../11-mongodb-update-operators-fidnAndModify/" title="11. MongoDB Update Operators Part 8. - findAndModify" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                03. MongoDB 라이프사이클
+                11. MongoDB Update Operators Part 8. - findAndModify
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

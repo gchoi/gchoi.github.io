@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/02-mongodb-basic-queries/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/07-mongodb-update-operators-addToSet/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>02. MongoDB 기본 Query 명령문 테스트 - Alex Choi's Blog</title>
+        <title>07. MongoDB Update Operators Part 4. - $addToSet - Alex Choi's Blog</title>
       
     
     
@@ -51,11 +51,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#db" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -80,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              02. MongoDB 기본 Query 명령문 테스트
+              07. MongoDB Update Operators Part 4. - $addToSet
             
           </span>
         </div>
@@ -382,20 +377,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
-    
   </li>
 
         
@@ -451,11 +437,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link md-nav__link--active">
       07. MongoDB Update Operators Part 4. - $addToSet
     </a>
+    
   </li>
 
         
@@ -524,21 +517,6 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -548,95 +526,69 @@
                   
                 
                 
-                <p>이번 포스팅에서는 MongoDB의 기본 Query 명령어에 대해 알아보도록 하겠습니다.</p>
-<p>우선 시작에 앞서 <a href="../../../posts/MongoDB/01-starting-mongodb/">01. MongoDB 시작하기</a>를 참고하여 DB를 시작하시고, Query 명령문을 입력할 수 있도록 준비하시기 발바니다.</p>
-<hr />
-<h1 id="db">DB 생성</h1>
-<p>Mongo 현재 DB의 리스트를 확인하는 명령줄은 다음과 같습니다:</p>
-<div class="highlight"><pre><span></span><code>show dbs
+                  <h1>07. MongoDB Update Operators Part 4. - $addToSet</h1>
+                
+                <p>지난 포스팅에서 <code>$push</code> operator를 통해 동일한 아이템을 추가할 경우 중복적으로 추가됨을 살펴 보았습니다.</p>
+<p>만약 동일한 아이템을 추가할 때 중복적으로 추가하지 않도록 하려면 <code>$addToSet</code> operator를 사용하면 됩니다.</p>
+<p>우선 다음과 같이 데이터를 준비해 보겠습니다.</p>
+<div class="highlight"><pre><span></span><code>use foobar
+
+var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
+db.users.insert(user);
+
+db.users.update(
+  {&quot;username&quot; : &quot;gchoi&quot;},
+  {$push : {&quot;email&quot; : &quot;gchoi@gmail.com&quot;}}
+);
 </code></pre></div>
 
-<p>기본적은로, 세가지 DB가 미리 등록되어 있음을 확인할 수 있습니다:</p>
-<ul>
-<li><code>admin</code></li>
-<li><code>config</code></li>
-<li><code>local</code></li>
-</ul>
-<p>일단 이들이 어떤 역할을 하는지는 추후 포스팅에서 살펴보도록 하며, 지금은 DB를 하나 생성하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>use test
-</code></pre></div>
-
-<hr />
-<h1 id="create">Create</h1>
-<p>다음과 같이 "title", "content", "date" 키를 갖는 "post" 변수 생성해 보겠습니다.</p>
-<div class="highlight"><pre><span></span><code>post = {&quot;title&quot; : &quot;My first blog post&quot;, &quot;content&quot; : &quot;Getting started with MongDB&quot;, &quot;date&quot; : new Date()}
-</code></pre></div>
-
-<p>위의 명령에서 알 수 있듯이, MongoDB의 입출력 도큐먼트 단위는 JSON 형태를 갖습니다.</p>
-<p><code>insert</code> 명령을 통해 등록된 <code>post</code> 변수를 <code>blog</code>라는 콜렉션에 저장합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.insert(post)
-WriteResult({ &quot;nInserted&quot; : 1 })
-</code></pre></div>
-
-<p>이제 <code>test</code> db가 가지고 있는 콜렉션 리스트를 확인해 보도록 하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.getCollectionNames()
-[ &quot;blog&quot; ]
-</code></pre></div>
-
-<p>입력이 성공되면 <code>WriteResult({ "nInserted" : 1 })</code>라는 형태의 메시지가 출력될 것입니다.</p>
-<p><code>find</code> 명령을 입력하여 <code>blog</code> 콜렉션에 저장된 값 확인해 봅니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.find()
-{ &quot;_id&quot; : ObjectId(&quot;5fa5fef52bc718484524b2d2&quot;), &quot;title&quot; : &quot;My first blog post&quot;, &quot;content&quot; : &quot;Getting started with MongDB&quot;, &quot;date&quot; : ISODate(&quot;2020-11-07T01:53:32.663Z&quot;) }
-</code></pre></div>
-
-<p>한가지 팁으로 <code>.pretty()</code>를 추가로 붙이면, 좀 더 깔끔한 형태로 결과를 출력할 수 있습니다.</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.find().pretty()
-        &quot;_id&quot; : ObjectId(&quot;5fa5fef52bc718484524b2d2&quot;),
-        &quot;title&quot; : &quot;My first blog post&quot;,
-        &quot;content&quot; : &quot;Getting started with MongDB&quot;,
-        &quot;date&quot; : ISODate(&quot;2020-11-07T01:53:32.663Z&quot;)
-}
-</code></pre></div>
-
-<figure>
-  <img src="../../../assets/img/posts/mongodb/02-mongodb-basic-queries/01.jpg" width="100%" />
-  <figcaption>.pretty()를 이용한 깔끔한 출력 결과</figcaption>
-</figure>
-
-<hr />
-<h1 id="update">Update</h1>
-<p><code>post</code> 컬렉션에 <code>comments</code> 키 생성을 합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; post.comments = []
-[ ]
-
-&gt; post
+<p>결과를 확인해 보면 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
 {
-    &quot;title&quot; : &quot;My first blog post&quot;,
-    &quot;content&quot; : &quot;Getting Started with MongoDB&quot;,
-    &quot;date&quot; : ISODate(&quot;2014-01-17T10:04:08.641Z&quot;),
-    &quot;comments&quot; : [ ]
+  &quot;_id&quot; : ObjectId(&quot;52e3d4dd623bbd008840d671&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [  &quot;gchoi@gmail.com&quot; ],
+  &quot;username&quot; : &quot;gchoi&quot;
 }
 </code></pre></div>
 
-<p><code>My first blog post</code>라는 타이틀을 가진 <code>post</code>로 도큐먼트 업데이트를 업데이트 합니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.update({&quot;title&quot; : &quot;My first blog post&quot;}, post)
+<p>이제 다음과 같이 입력해 보겠습니다. <code>$push</code> 대신 <code>$addToSet</code> operator가 사용되었음을 유의하시기 바랍니다.</p>
+<div class="highlight"><pre><span></span><code>db.users.update(
+  {&quot;username&quot; : &quot;gchoi&quot;},
+  {$addToSet : {&quot;email&quot; : &quot;gchoi@gmail.com&quot;}}
+)
+</code></pre></div>
 
-&gt; db.blog.findOne().pretty()
+<p>결과를 확인해 보면 동일한 "email"이 한 번 더 추가되었음에도 결과에서는 중복적으로 추가되지 않았음을 확인할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
 {
-    &quot;_id&quot; : ObjectId(&quot;52d900298d2a9dc822dd0eea&quot;),
-    &quot;title&quot; : &quot;My first blog post&quot;,
-    &quot;content&quot; : &quot;Getting Started with MongoDB&quot;,
-    &quot;date&quot; : ISODate(&quot;2014-01-17T10:04:08.641Z&quot;),
-    &quot;comments&quot; : [ ]
+  &quot;_id&quot; : ObjectId(&quot;52e3d4dd623bbd008840d671&quot;),
+  &quot;age&quot; : 37,
+  &quot;email&quot; : [  &quot;gchoi@gmail.com&quot; ],
+  &quot;username&quot; : &quot;gchoi&quot;
 }
 </code></pre></div>
 
-<hr />
-<h1 id="delete">Delete</h1>
-<p><code>My first blog post</code>이라는 <code>title</code>의 컬렉션을 삭제해 보겠습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.blog.remove({title : &quot;My first blog post&quot;})
-&gt; db.blog.findOne()
-null
+<p><code>$addToSet</code>과 <code>$each</code>를 함께 사용하면 여러 개의 아이템을 한꺼번에 추가할 수 있습니다. 가령 여러 개의 "email"을 추가한다고 가정해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>db.users.update(
+  {&quot;username&quot; : &quot;gchoi&quot;},
+  {&quot;$addToSet&quot; : {&quot;email&quot; : {&quot;$each&quot; : [&quot;cinema4dr12@gmail.com&quot;, &quot;cinema4d@yahoo.com&quot;, &quot;cinema4d@aaa.com&quot;]}}}
+)
+</code></pre></div>
+
+<p>결과를 확인해 보겠습니다. 여러 개의 "email"이 한 번에 추가되었음을 확인할 수 있을 것입니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.findOne()
+{
+    &quot;_id&quot; : ObjectId(&quot;52e3d4dd623bbd008840d671&quot;),
+    &quot;age&quot; : 37,
+    &quot;email&quot; : [
+        &quot;gchoi@gmail.com&quot;,
+        &quot;cinema4dr12@gmail.com&quot;,
+        &quot;cinema4d@yahoo.com&quot;,
+        &quot;cinema4d@aaa.com&quot;
+    ],
+    &quot;username&quot; : &quot;gchoi&quot;
+}
 </code></pre></div>
                 
               
@@ -656,7 +608,7 @@ null
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -665,19 +617,19 @@ null
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                01. MongoDB 시작하기
+                06. MongoDB Update Operators Part 3. - $push
               </div>
             </div>
           </a>
         
         
-          <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                03. MongoDB 라이프사이클
+                08. MongoDB Update Operators Part 5. - $pop, $pull
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

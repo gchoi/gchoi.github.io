@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/04-mongodb-update-modifiers-inc/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/05-mongodb-update-operators-set-unset/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>04. MongoDB Update Operators Part 1. - $inc - Alex Choi's Blog</title>
+        <title>05. MongoDB Update Operators Part 2. - $set, $unset - Alex Choi's Blog</title>
       
     
     
@@ -51,6 +51,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#set" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -75,7 +80,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              04. MongoDB Update Operators Part 1. - $inc
+              05. MongoDB Update Operators Part 2. - $set, $unset
             
           </span>
         </div>
@@ -401,6 +406,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -408,11 +425,85 @@
     
     <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
+      
     
-    <a href="./" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link md-nav__link--active">
-      04. MongoDB Update Operators Part 1. - $inc
+    
+    <a href="./" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link md-nav__link--active">
+      05. MongoDB Update Operators Part 2. - $set, $unset
     </a>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+      06. MongoDB Update Operators Part 3. - $push
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+      07. MongoDB Update Operators Part 4. - $addToSet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+      08. MongoDB Update Operators Part 5. - $pop, $pull
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+      09. MongoDB Update Operators Part 6. - $upsert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+      10. MongoDB Update Operators Part 7. - Updating Multiple Documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../11-mongodb-update-operators-fidnAndModify/" title="11. MongoDB Update Operators Part 8. - findAndModify" class="md-nav__link">
+      11. MongoDB Update Operators Part 8. - findAndModify
+    </a>
   </li>
 
         
@@ -433,6 +524,21 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -442,36 +548,96 @@
                   
                 
                 
-                  <h1>04. MongoDB Update Operators Part 1. - $inc</h1>
-                
-                <p>이번 포스팅부터 몇차례에 걸쳐 MongoDB Update Operators에 대하여 알아보도록 하겠습니다.</p>
-<p>MongoDB Update Operators에 대하여 보다 자세한 내용은 MongoDB의 공식 웹사이트의 <a href="https://docs.mongodb.com/manual/reference/operator/update/">Update Operators 페이지</a>에서 확인하실 수 있습니다.</p>
-<p>DB 작업을 하다보면, 특정 도큐먼트의 일부분만 변경해야 할 상황에 처할 수 있습니다.</p>
-<p>Update Operators를 이용하여 도큐먼트의 변경, 추가, 삭제를 할 수 있으며, 임베디드 도큐먼트 및 어레이(array)에 대해서는 핸들링 할 수 있습니다.</p>
-<p>다음 상황을 가정해 보겠습니다:
-여러분이 세 개의 웹페이지를 관리해야 하고 있으며, 방문자가 방문 시 DB의 페이지 뷰 관련 내용을 1씩 증가시키는 작업을 해야한다고 가정합니다.</p>
-<p>우선 다음과 같이 데이터를 준비합니다:</p>
-<div class="highlight"><pre><span></span><code>// user DB &quot;foobar&quot;
-use foobar
+                <p>이번 포스팅에서는 <code>$set</code>과 <code>$unset</code> operator를 이용하여 도큐먼트를 업데이트 하는 방법에 대하여 알아보도록 하겠습니다.</p>
+<hr />
+<h1 id="set">$set</h1>
+<p><code>$set</code> operator는 해당 key가 존재할 경우 아이템을 새로 추가하거나 또는 해당 key가 존재하지 않는다면 새로 추가합니다.</p>
+<p>우선 아래와 같이 데이터 준비를 준비합니다:</p>
+<div class="highlight"><pre><span></span><code>// drop the current database
+db.dropDatabase()
 
 // define webpage1
-var page1 = {&quot;url&quot; : &quot;www.gchoi.net&quot;, &quot;pageviews&quot; : 100}
-// define webpage2
-var page2 = {&quot;url&quot; : &quot;www.google.com&quot;, &quot;pageviews&quot; : 1000}
-// define webpage3
-var page3 = {&quot;url&quot; : &quot;www.apple.com&quot;, &quot;pageviews&quot; : 500}
+var user1 = {
+  &quot;username&quot; : &quot;gchoi&quot;,
+  &quot;age&quot; : 37,
+  &quot;sex&quot; : &quot;male&quot;
+}
 
 // insert items into DB
-db.analytics.insert(page1)
-db.analytics.insert(page2)
-db.analytics.insert(page3)
-db.analytics.find()
+db.users.insert(user1)
+db.users.find()
 </code></pre></div>
 
-<p>"www.gchoi.net" URL의 페이지 뷰를 1씩 증가시킵니다:</p>
-<div class="highlight"><pre><span></span><code>// increase pageviews of url &quot;www.gchoi.net&quot; by 1
-db.analytics.update({&quot;url&quot; : &quot;www.gchoi.net&quot;}, {&quot;$inc&quot; : {&quot;pageviews&quot; : 1}})
-db.analytics.findOne({&quot;url&quot; : &quot;www.gchoi.net&quot;})
+<p><code>_id</code>를 제외하고는 다음과 같은 아이템들이 출력될 것입니다.</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
+{
+        &quot;_id&quot; : ObjectId(&quot;5fa7c4430a2aa59573a4d1a5&quot;),
+        &quot;username&quot; : &quot;gchoi&quot;,
+        &quot;age&quot; : 37,
+        &quot;sex&quot; : &quot;male&quot;
+}
+</code></pre></div>
+
+<p>이제 <code>favorite food</code> key 생성합니다:</p>
+<div class="highlight"><pre><span></span><code>// update(create &quot;favorite food&quot; key)
+db.users.update(
+  {&quot;username&quot; : &quot;gchoi&quot;},
+  {&quot;$set&quot; : {&quot;favorite food&quot; : &quot;김치볶음밥&quot;}}
+)
+</code></pre></div>
+
+<p>아래와 같이 <code>favorite food</code> 아이템이 추가되었음을 확인할 수 있을 것입니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find()
+&gt; db.users.find().pretty()
+{
+        &quot;_id&quot; : ObjectId(&quot;5fa7c4430a2aa59573a4d1a5&quot;),
+        &quot;username&quot; : &quot;gchoi&quot;,
+        &quot;age&quot; : 37,
+        &quot;sex&quot; : &quot;male&quot;,
+        &quot;favorite food&quot; : &quot;김치볶음밥&quot;
+}
+</code></pre></div>
+
+<p><code>favorite food</code> key를 array 형태로 입력할 수도 있습니다:</p>
+<div class="highlight"><pre><span></span><code>db.users.update(
+  {&quot;username&quot; : &quot;gchoi&quot;},
+  {&quot;$set&quot; : {&quot;favorite food&quot; : [&quot;돼지갈비&quot;, &quot;삼겹살&quot;, &quot;된장찌개&quot;]}}
+)
+</code></pre></div>
+
+<p>array 형태의 <code>favorite food</code> 아이템이 출력됩니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find()
+{
+  &quot;_id&quot; : ObjectId(&quot;5fa7c4430a2aa59573a4d1a5&quot;),
+  &quot;username&quot; : &quot;gchoi&quot;,
+  &quot;age&quot; : 37,
+  &quot;sex&quot; : &quot;male&quot;,
+  &quot;favorite food&quot; : [
+    &quot;돼지갈비&quot;,
+    &quot;삼겹살&quot;,
+    &quot;된장찌개&quot;
+  ]
+}
+</code></pre></div>
+
+<hr />
+<h1 id="unset">$unset</h1>
+<p>이제 <code>$unset</code> operator를 이용하여 <code>favorite food</code> key를 제거해 보겠습니다.</p>
+<div class="highlight"><pre><span></span><code>// remove &quot;favorite food&quot;
+db.users.update(
+  {&quot;username&quot; : &quot;gchoi&quot;},
+  {&quot;$unset&quot; : {&quot;favorite food&quot; : 1}}
+)
+</code></pre></div>
+
+<p>결과를 출력을 해보면 <code>favorite food</code> key가 제거되었음을 확인하실 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.find()
+{
+  &quot;_id&quot; : ObjectId(&quot;52dbdd7aa1c05d0be00a4b63&quot;),
+  &quot;age&quot; : 37,
+  &quot;sex&quot; : &quot;male&quot;,
+  &quot;username&quot; : &quot;gchoi&quot;
+}
 </code></pre></div>
                 
               
@@ -491,7 +657,7 @@ db.analytics.findOne({&quot;url&quot; : &quot;www.gchoi.net&quot;})
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -500,11 +666,25 @@ db.analytics.findOne({&quot;url&quot; : &quot;www.gchoi.net&quot;})
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                03. MongoDB 라이프사이클
+                04. MongoDB Update Operators Part 1. - $inc
               </div>
             </div>
           </a>
         
+        
+          <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                06. MongoDB Update Operators Part 3. - $push
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
         
       </nav>
     </div>
