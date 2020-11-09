@@ -87,5 +87,25 @@
      <loc>https://gchoi.github.io/posts/mongodb/12-mongodb-query-findAndModify/</loc>
      <lastmod>2020-11-09</lastmod>
      <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/13-mongodb-query-all/</loc>
+     <lastmod>2020-11-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/14-mongodb-query-size/</loc>
+     <lastmod>2020-11-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/15-mongodb-query-slice/</loc>
+     <lastmod>2020-11-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/16-mongodb-query-where/</loc>
+     <lastmod>2020-11-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://gchoi.github.io/posts/mongodb/17-mongodb-query-querying_embedded_documents/</loc>
+     <lastmod>2020-11-09</lastmod>
+     <changefreq>daily</changefreq>
     </url>
 </urlset>

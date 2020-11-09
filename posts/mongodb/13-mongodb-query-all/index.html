@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/08-mongodb-update-operators-pop-pull/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/13-mongodb-query-all/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>08. MongoDB Update Operators Part 5. - $pop, $pull - Alex Choi's Blog</title>
+        <title>13. MongoDB Query Part 3. - $all - Alex Choi's Blog</title>
       
     
     
@@ -75,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              08. MongoDB Update Operators Part 5. - $pop, $pull
+              13. MongoDB Query Part 3. - $all
             
           </span>
         </div>
@@ -449,18 +449,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-    
-    <a href="./" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
       08. MongoDB Update Operators Part 5. - $pop, $pull
     </a>
-    
   </li>
 
         
@@ -516,11 +509,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="13. MongoDB Query Part 3. - $all" class="md-nav__link md-nav__link--active">
       13. MongoDB Query Part 3. - $all
     </a>
+    
   </li>
 
         
@@ -598,266 +598,24 @@
                   
                 
                 
-                  <h1>08. MongoDB Update Operators Part 5. - $pop, $pull</h1>
+                  <h1>13. MongoDB Query Part 3. - $all</h1>
                 
-                <p>이번 포스팅에서는 <code>$pop</code> operator와 <code>$pull</code> operator를 이용하여 DB로부터 아이템을 삭제하는 법에 대해 알아보겠습니다.</p>
-<p>우선 "$pop" operator는 특정 key의 아이템을 첫번째부터 또는 마지막부터 하나씩 삭제하는 명령어입니다.</p>
-<p><code>{$pop : {key : 1}}</code>는 array 아이템의 맨 마지막으로부터 하나씩 삭제하며, <code>{$pop : {key : -1}}</code>는 첫번째 아이템부터 하나씩 삭제합니다.</p>
-<p>다음 예를 통해 자세히 알아보겠습니다. 우선 다음 명령어를 통해 아이템을 준비하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
-db.users.insert(user);
-
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;aaa@gmail.com&quot;}});
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;bbb@gmail.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ccc@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;eee@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;fff@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ggg@yahoo.com&quot;}})
+                <p>이번 포스팅에서는 <code>find</code> query의 <code>$all</code> key를 이용한 검색에 대하여 알아보도록 하겠습니다.</p>
+<p>우선 다음과 같이 <code>food</code> 컬렉션에 array 타입으로 도큐먼트를 추가합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.food.drop()
+&gt; db.food.insert({&quot;_id&quot; : 1, &quot;fruit&quot; : [&quot;apple&quot;, &quot;banana&quot;, &quot;peach&quot;]})
+&gt; db.food.insert({&quot;_id&quot; : 2, &quot;fruit&quot; : [&quot;apple&quot;, &quot;kumquat&quot;, &quot;orange&quot;]})
+&gt; db.food.insert({&quot;_id&quot; : 3, &quot;fruit&quot; : [&quot;cherry&quot;, &quot;banana&quot;, &quot;apple&quot;]})
 </code></pre></div>
 
-<p>다음과 같이 아이템을 확인할 수 있습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.users.find()
-{ &quot;_id&quot; : ObjectId(&quot;52e496754f7969df59f1148c&quot;), &quot;age&quot; : 37, &quot;email&quot; : [     &quot;aaa@gmail.com&quot;,    &quot;bbb@gmail.com&quot;,    &quot;ccc@yahoo.com&quot;,    &quot;ddd@yahoo.com&quot;,    &quot;eee@yahoo.com&quot;,    &quot;fff@yahoo.com&quot;,    &quot;ggg@yahoo.com&quot; ], &quot;username&quot; : &quot;gchoi&quot; }
+<p>"apple"과 "banana" 모두를 포함하는 도큐먼트는 ID 1과 ID 3입니다.</p>
+<p><code>$all</code> key를 통해 이 두 가지 모두를 포함하는 도큐먼트를 검색해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.food.find({fruit : {$all : [&quot;apple&quot;, &quot;banana&quot;]}})
+{ &quot;_id&quot; : 1, &quot;fruit&quot; : [  &quot;apple&quot;,  &quot;banana&quot;,  &quot;peach&quot; ] }
+{ &quot;_id&quot; : 3, &quot;fruit&quot; : [  &quot;cherry&quot;,  &quot;banana&quot;,  &quot;apple&quot; ] }
 </code></pre></div>
 
-<p>다음 명령어를 반복적으로 입력하여 아이템이 맨 마지막부터 삭제되는 것을 확인힙니다:</p>
-<p>(<code>$pop</code>의 key 값이 "1"임에 주목합니다.)</p>
-<div class="highlight"><pre><span></span><code>&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;aaa@gmail.com&quot;,
-    &quot;bbb@gmail.com&quot;,
-    &quot;ccc@yahoo.com&quot;,
-    &quot;ddd@yahoo.com&quot;,
-    &quot;eee@yahoo.com&quot;,
-    &quot;fff@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;aaa@gmail.com&quot;,
-    &quot;bbb@gmail.com&quot;,
-    &quot;ccc@yahoo.com&quot;,
-    &quot;ddd@yahoo.com&quot;,
-    &quot;eee@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;aaa@gmail.com&quot;,
-    &quot;bbb@gmail.com&quot;,
-    &quot;ccc@yahoo.com&quot;,
-    &quot;ddd@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;aaa@gmail.com&quot;,
-    &quot;bbb@gmail.com&quot;,
-    &quot;ccc@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;aaa@gmail.com&quot;,
-    &quot;bbb@gmail.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [&quot;aaa@gmail.com&quot;],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : 1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4976b91525ea329493cc2&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [ ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-</code></pre></div>
-
-<p>위와 같이 "email" 아이템이 맨 마지막 아이템부터 하나씩 사라지는 것을 확인할 수 있을 것입니다.</p>
-<p>이번에는 <code>$pop</code> key 값을 "-1"로 테스트하여 아이템을 앞에서부터 하나씩 삭제해 보겠습니다.</p>
-<p>앞서 예와 마찬가지로 아이템을 준비하겠습니다 (<code>users</code> 컬렉션 중복을 막기위해 <code>drop()</code> 함수를 이용하여 <code>users</code> 컬렉션을 삭제하였습니다).</p>
-<div class="highlight"><pre><span></span><code>db.users.drop()
-
-var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
-db.users.insert(user);
-
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;aaa@gmail.com&quot;}});
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;bbb@gmail.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ccc@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;eee@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;fff@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ggg@yahoo.com&quot;}})
-</code></pre></div>
-
-<p><code>$pop</code> key 값을 "-1"로 하여 반복적으로 실행하여 첫번째 아이템부터 삭제되는 것을 확인해 봅니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;aaa@gmail.com&quot;,
-    &quot;bbb@gmail.com&quot;,
-    &quot;ccc@yahoo.com&quot;,
-    &quot;ddd@yahoo.com&quot;,
-    &quot;eee@yahoo.com&quot;,
-    &quot;fff@yahoo.com&quot;,
-    &quot;ggg@yahoo.com
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;bbb@gmail.com&quot;,
-    &quot;ccc@yahoo.com&quot;,
-    &quot;ddd@yahoo.com&quot;,
-    &quot;eee@yahoo.com&quot;,
-    &quot;fff@yahoo.com&quot;,
-    &quot;ggg@yahoo.com
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;ccc@yahoo.com&quot;,
-    &quot;ddd@yahoo.com&quot;,
-    &quot;eee@yahoo.com&quot;,
-    &quot;fff@yahoo.com&quot;,
-    &quot;ggg@yahoo.com
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;ddd@yahoo.com&quot;,
-    &quot;eee@yahoo.com&quot;,
-    &quot;fff@yahoo.com&quot;,
-    &quot;ggg@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;eee@yahoo.com&quot;,
-    &quot;fff@yahoo.com&quot;,
-    &quot;ggg@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;fff@yahoo.com&quot;,
-    &quot;ggg@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [  &quot;ggg@yahoo.com&quot; ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-&gt; db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pop : {&quot;email&quot; : -1}})
-&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4b9274d7acd666141a744&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [ ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-</code></pre></div>
-
-<p>이번에는 <code>$pull</code> operator를 이용하여 특정 아이템을 삭제해 보도록 합니다. 역시 마찬가지로 데이터를 먼저 준비하겠습니다:</p>
-<div class="highlight"><pre><span></span><code>db.users.drop()
-
-var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
-db.users.insert(user);
-
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;aaa@gmail.com&quot;}});
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;bbb@gmail.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ccc@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;eee@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;fff@yahoo.com&quot;}})
-db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;email&quot; : &quot;ggg@yahoo.com&quot;}})
-</code></pre></div>
-
-<p><code>$pull</code> operator로부터 "email"의 "ddd@yahoo.com"을 삭제해 보겠습니다. 다음 명령어를 입력합니다:</p>
-<div class="highlight"><pre><span></span><code>db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$pull : {&quot;email&quot; : &quot;ddd@yahoo.com&quot;}})
-</code></pre></div>
-
-<p>결과를 확인해 보면 "email" 중 "ddd@yahoo.com"이 삭제되었음을 확인할 수 있습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e4be914d7acd666141a746&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [
-    &quot;aaa@gmail.com&quot;,
-    &quot;bbb@gmail.com&quot;,
-    &quot;ccc@yahoo.com&quot;,
-    &quot;ddd@yahoo.com&quot;,
-    &quot;eee@yahoo.com&quot;,
-    &quot;fff@yahoo.com&quot;,
-    &quot;ggg@yahoo.com&quot;
-  ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
-</code></pre></div>
+<p>예상대로 ID 1과 3이 검색 되었음을 알 수 있습니다.</p>
                 
               
               
@@ -876,7 +634,7 @@ db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -885,19 +643,19 @@ db.users.update({&quot;username&quot; : &quot;gchoi&quot;}, {$addToSet : {&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                07. MongoDB Update Operators Part 4. - $addToSet
+                12. MongoDB Query Part 2. - findAndModify
               </div>
             </div>
           </a>
         
         
-          <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $slice" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                09. MongoDB Update Operators Part 6. - $upsert
+                14. MongoDB Query Part 4. - $slice
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
