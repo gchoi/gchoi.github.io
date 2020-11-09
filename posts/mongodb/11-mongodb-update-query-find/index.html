@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/07-mongodb-update-operators-addToSet/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/11-mongodb-update-query-find/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>07. MongoDB Update Operators Part 4. - $addToSet - Alex Choi's Blog</title>
+        <title>11. MongoDB Update Operators Part 8. - find - Alex Choi's Blog</title>
       
     
     
@@ -51,6 +51,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#1-include" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -75,7 +80,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              07. MongoDB Update Operators Part 4. - $addToSet
+              11. MongoDB Update Operators Part 8. - find
             
           </span>
         </div>
@@ -437,18 +442,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-    
-    <a href="./" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
       07. MongoDB Update Operators Part 4. - $addToSet
     </a>
-    
   </li>
 
         
@@ -492,11 +490,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../11-mongodb-update-query-find/" title="11. MongoDB Update Operators Part 8. - find" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="11. MongoDB Update Operators Part 8. - find" class="md-nav__link md-nav__link--active">
       11. MongoDB Update Operators Part 8. - find
     </a>
+    
   </li>
 
         
@@ -529,6 +536,21 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -538,70 +560,110 @@
                   
                 
                 
-                  <h1>07. MongoDB Update Operators Part 4. - $addToSet</h1>
-                
-                <p>지난 포스팅에서 <code>$push</code> operator를 통해 동일한 아이템을 추가할 경우 중복적으로 추가됨을 살펴 보았습니다.</p>
-<p>만약 동일한 아이템을 추가할 때 중복적으로 추가하지 않도록 하려면 <code>$addToSet</code> operator를 사용하면 됩니다.</p>
-<p>우선 다음과 같이 데이터를 준비해 보겠습니다.</p>
-<div class="highlight"><pre><span></span><code>use foobar
-
-var user = {&quot;username&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37};
-db.users.insert(user);
-
-db.users.update(
-  {&quot;username&quot; : &quot;gchoi&quot;},
-  {$push : {&quot;email&quot; : &quot;gchoi@gmail.com&quot;}}
-);
+                <p><code>find</code> query는 지금까지 다룬 내용에서 가장 많이 사용된 query입니다.</p>
+<p>가장 기본적인 query 중 하나로서 검색 조건에 대해 좀 더 알아보도록 하겠습니다.</p>
+<p>우선 다음과 같이 데이터를 준비하도록 하겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.drop()
+&gt; db.customers.insert({name: &quot;gchoi&quot;, age: 37, birthday: &quot;08/22&quot;, email: &quot;cinema4dr12@gmail.com&quot;})
+&gt; db.customers.insert({name: &quot;jmpark&quot;, age: 25, birthday: &quot;04/02&quot;, email: &quot;raspberry@gmail.com&quot;})
+&gt; db.customers.insert({name: &quot;tjkwak&quot;, age: 32, birthday: &quot;11/11&quot;, email: &quot;ozerodie@gmail.com&quot;})
+&gt; db.customers.insert({name: &quot;hskim&quot;, age: 36, birthday: &quot;12/08&quot;, email: &quot;codeblender@gmail.com&quot;})
+&gt; db.customers.insert({name: &quot;jhlee&quot;, age: 34, birthday: &quot;07/12&quot;, email: &quot;ijabul@gmail.com&quot;})
+&gt; db.customers.insert({name: &quot;dwseo&quot;, age: 33, birthday: &quot;05/05&quot;, email: &quot;cram@gmail.com&quot;})
 </code></pre></div>
 
-<p>결과를 확인해 보면 다음과 같습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e3d4dd623bbd008840d671&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [  &quot;gchoi@gmail.com&quot; ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
+<hr />
+<h1 id="1-include">1. <code>include</code> 검색</h1>
+<p>만약 위와 같이 준비된 데이터 중 <code>name</code>과 <code>age</code>만을 검색 결과로 표시하고자 할 경우에는 각 해당 key값을 "1"로 입력합니다. 즉,</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({},{name: 1, age: 1})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d0&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37 }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d1&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;age&quot; : 25 }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d2&quot;), &quot;name&quot; : &quot;tjkwak&quot;, &quot;age&quot; : 32 }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d3&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;age&quot; : 36 }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d4&quot;), &quot;name&quot; : &quot;jhlee&quot;, &quot;age&quot; : 34 }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ff97299c19188c2d5&quot;), &quot;name&quot; : &quot;dwseo&quot;, &quot;age&quot; : 33 }
 </code></pre></div>
 
-<p>이제 다음과 같이 입력해 보겠습니다. <code>$push</code> 대신 <code>$addToSet</code> operator가 사용되었음을 유의하시기 바랍니다.</p>
-<div class="highlight"><pre><span></span><code>db.users.update(
-  {&quot;username&quot; : &quot;gchoi&quot;},
-  {$addToSet : {&quot;email&quot; : &quot;gchoi@gmail.com&quot;}}
-)
+<p>위의 검색결과를 보면 <code>name</code>과 <code>age</code>만으로 검색 결과를 얻을 수 있음을 확인할 수 있습니다.</p>
+<hr />
+<h1 id="2-exclude">2. <code>exclude</code> 검색</h1>
+<p><code>include</code> 검색과 반대로 어떤 key에 대해 제외하는 경우는 key값을 "0"로 입력하면 됩니다. 즉,</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({},{email: 0, age: 0})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d0&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;birthday&quot; : &quot;08/22&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d1&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d2&quot;), &quot;name&quot; : &quot;tjkwak&quot;, &quot;birthday&quot; : &quot;11/11&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d3&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;birthday&quot; : &quot;12/08&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d4&quot;), &quot;name&quot; : &quot;jhlee&quot;, &quot;birthday&quot; : &quot;07/12&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ff97299c19188c2d5&quot;), &quot;name&quot; : &quot;dwseo&quot;, &quot;birthday&quot; : &quot;05/05&quot; }
 </code></pre></div>
 
-<p>결과를 확인해 보면 동일한 "email"이 한 번 더 추가되었음에도 결과에서는 중복적으로 추가되지 않았음을 확인할 수 있습니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.users.find().pretty()
-{
-  &quot;_id&quot; : ObjectId(&quot;52e3d4dd623bbd008840d671&quot;),
-  &quot;age&quot; : 37,
-  &quot;email&quot; : [  &quot;gchoi@gmail.com&quot; ],
-  &quot;username&quot; : &quot;gchoi&quot;
-}
+<p><code>email</code>과 <code>age</code>가 검색 결과에서 제외되었음을 확인할 수 있을 것입니다.</p>
+<hr />
+<h1 id="3-query-query-conditionals">3. Query 조건(Query Conditionals)</h1>
+<p>가장 일반적으로 많이 사용되는 query 조건에는 <code>$lt</code>, <code>$lte</code>, <code>$gt</code>, <code>$gte</code> 등이 있습니다.</p>
+<p>각각은 부등호 "&lt;", "&lt;=", "&gt;", "&gt;="와 대응됩니다. 예를 들어 앞서 준비된 고객(customers) 데이터 중 나이(age)가 33 이상인 고객을 추출한다고 가정해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({&quot;age&quot; : {&quot;$gte&quot; : 33}})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d0&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37, &quot;birthday&quot; : &quot;08/22&quot;, &quot;email&quot; : &quot;cinema4dr12@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d3&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;age&quot; : 36, &quot;birthday&quot; : &quot;12/08&quot;, &quot;email&quot; : &quot;codeblender@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d4&quot;), &quot;name&quot; : &quot;jhlee&quot;, &quot;age&quot; : 34, &quot;birthday&quot; : &quot;07/12&quot;, &quot;email&quot; : &quot;ijabul@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ff97299c19188c2d5&quot;), &quot;name&quot; : &quot;dwseo&quot;, &quot;age&quot; : 33, &quot;birthday&quot; : &quot;05/05&quot;, &quot;email&quot; : &quot;cram@gmail.com&quot; }
 </code></pre></div>
 
-<p><code>$addToSet</code>과 <code>$each</code>를 함께 사용하면 여러 개의 아이템을 한꺼번에 추가할 수 있습니다. 가령 여러 개의 "email"을 추가한다고 가정해 보겠습니다:</p>
-<div class="highlight"><pre><span></span><code>db.users.update(
-  {&quot;username&quot; : &quot;gchoi&quot;},
-  {&quot;$addToSet&quot; : {&quot;email&quot; : {&quot;$each&quot; : [&quot;cinema4dr12@gmail.com&quot;, &quot;cinema4d@yahoo.com&quot;, &quot;cinema4d@aaa.com&quot;]}}}
-)
+<p>만약 나이가 33이상 36이하의 고객을 검색하고자 한다면 다음과 같이 <code>$lte</code> 키를 입력합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({&quot;age&quot; : {&quot;$gte&quot; : 33, &quot;$lte&quot;: 36}})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d3&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;age&quot; : 36, &quot;birthday&quot; : &quot;12/08&quot;, &quot;email&quot; : &quot;codeblender@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d4&quot;), &quot;name&quot; : &quot;jhlee&quot;, &quot;age&quot; : 34, &quot;birthday&quot; : &quot;07/12&quot;, &quot;email&quot; : &quot;ijabul@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ff97299c19188c2d5&quot;), &quot;name&quot; : &quot;dwseo&quot;, &quot;age&quot; : 33, &quot;birthday&quot; : &quot;05/05&quot;, &quot;email&quot; : &quot;cram@gmail.com&quot; }
 </code></pre></div>
 
-<p>결과를 확인해 보겠습니다. 여러 개의 "email"이 한 번에 추가되었음을 확인할 수 있을 것입니다:</p>
-<div class="highlight"><pre><span></span><code>&gt; db.users.findOne()
-{
-    &quot;_id&quot; : ObjectId(&quot;52e3d4dd623bbd008840d671&quot;),
-    &quot;age&quot; : 37,
-    &quot;email&quot; : [
-        &quot;gchoi@gmail.com&quot;,
-        &quot;cinema4dr12@gmail.com&quot;,
-        &quot;cinema4d@yahoo.com&quot;,
-        &quot;cinema4d@aaa.com&quot;
-    ],
-    &quot;username&quot; : &quot;gchoi&quot;
-}
+<p>어떤 조건과 일치하지 않는 그 외 검색 결과를 얻고한다면 <code>$ne</code> 키를 입력합니다. <code>name</code>에서 "gchoi"가 아닌 검색 결과를 얻어 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({name : {&quot;$ne&quot;: &quot;gchoi&quot;}})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d1&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;age&quot; : 25, &quot;birthday&quot; : &quot;04/02&quot;, &quot;email&quot; : &quot;raspberry@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d2&quot;), &quot;name&quot; : &quot;tjkwak&quot;, &quot;age&quot; : 32, &quot;birthday&quot; : &quot;11/11&quot;, &quot;email&quot; : &quot;ozerodie@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d3&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;age&quot; : 36, &quot;birthday&quot; : &quot;12/08&quot;, &quot;email&quot; : &quot;codeblender@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d4&quot;), &quot;name&quot; : &quot;jhlee&quot;, &quot;age&quot; : 34, &quot;birthday&quot; : &quot;07/12&quot;, &quot;email&quot; : &quot;ijabul@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ff97299c19188c2d5&quot;), &quot;name&quot; : &quot;dwseo&quot;, &quot;age&quot; : 33, &quot;birthday&quot; : &quot;05/05&quot;, &quot;email&quot; : &quot;cram@gmail.com&quot; }
 </code></pre></div>
+
+<p><code>$in</code>은 특정 조건이 포함된 도큐먼트들을 검색합니다.</p>
+<p>검색 조건은 반드시 array 형태로 입력되어야 하며 array 엘리먼트 수는 1개 이상이어야 합니다. 예를 들어 <code>name</code>이 "gchoi"와 "jmpark"을 포함하고 있는 도큐먼트들을 검색해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({name : {&quot;$in&quot;: [&quot;gchoi&quot;, &quot;jmpark&quot;]}})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d0&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37, &quot;birthday&quot; : &quot;08/22&quot;, &quot;email&quot; : &quot;cinema4dr12@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d1&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;age&quot; : 25, &quot;birthday&quot; : &quot;04/02&quot;, &quot;email&quot; : &quot;raspberry@gmail.com&quot; }
+</code></pre></div>
+
+<p>일반적으로 <code>$in</code>은 다음과 같은 상황에 유용하게 사용될 수 있습니다. 예를 들어, 각 고객의 당첨번호가 6개의 숫자라고 해보겠습니다. 6개의 숫자 중 2, 35, 42의 세 개의 숫자의 당첨번호를 가지고 있는 고객을 추첨한다고 하면 <code>$in</code>을 통해 이 숫자들을 가지고 있는 고객을 추출할 수 있습니다.</p>
+<p><code>$or</code>은 제시되는 조건을 모두 포함하는 도큐먼트들을 검색합니다. 예를 들어 <code>name</code>이 "ghcoi"이거나 <code>age</code>가 34인 고객을 검색한다고 하면,</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({&quot;$or&quot; : [{name: &quot;gchoi&quot;},{age: 34}]})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d0&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37, &quot;birthday&quot; : &quot;08/22&quot;, &quot;email&quot; : &quot;cinema4dr12@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d4&quot;), &quot;name&quot; : &quot;jhlee&quot;, &quot;age&quot; : 34, &quot;birthday&quot; : &quot;07/12&quot;, &quot;email&quot; : &quot;ijabul@gmail.com&quot; }
+</code></pre></div>
+
+<p>눈치빠른 분들은 예상하시겠지만 <code>$or</code>이 있으면 <code>$and</code>도 있습니다. 우선 이를 설명하기 위해 "jmpark"과 생일이 같은 고객 한 명을 추가하도록 하겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.insert({name: &quot;dsha&quot;, age: 47, birthday: &quot;04/02&quot;, email: &quot;hds66@gmail.com&quot;})
+&gt; db.customers.find()
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d0&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;age&quot; : 37, &quot;birthday&quot; : &quot;08/22&quot;, &quot;email&quot; : &quot;cinema4dr12@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d1&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;age&quot; : 25, &quot;birthday&quot; : &quot;04/02&quot;, &quot;email&quot; : &quot;raspberry@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d2&quot;), &quot;name&quot; : &quot;tjkwak&quot;, &quot;age&quot; : 32, &quot;birthday&quot; : &quot;11/11&quot;, &quot;email&quot; : &quot;ozerodie@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d3&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;age&quot; : 36, &quot;birthday&quot; : &quot;12/08&quot;, &quot;email&quot; : &quot;codeblender@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d4&quot;), &quot;name&quot; : &quot;jhlee&quot;, &quot;age&quot; : 34, &quot;birthday&quot; : &quot;07/12&quot;, &quot;email&quot; : &quot;ijabul@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ff97299c19188c2d5&quot;), &quot;name&quot; : &quot;dwseo&quot;, &quot;age&quot; : 33, &quot;birthday&quot; : &quot;05/05&quot;, &quot;email&quot; : &quot;cram@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec89a6f97299c19188c2d6&quot;), &quot;name&quot; : &quot;dsha&quot;, &quot;age&quot; : 47, &quot;birthday&quot; : &quot;04/02&quot;, &quot;email&quot; : &quot;hds66@gmail.com&quot; }
+</code></pre></div>
+
+<p>"jmpark"과 "dsha"는 다른 것은 모두 다르지만 생일은 같습니다. 만약 생일이 "04/02"를 기준으로 고객을 검색하면 "jmpark"과 "dsha"가 모두 검색될 것입니다.</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({birthday: &quot;04/02&quot;})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d1&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;age&quot; : 25, &quot;birthday&quot; : &quot;04/02&quot;, &quot;email&quot; : &quot;raspberry@gmail.com&quot; }
+{ &quot;_id&quot; : ObjectId(&quot;52ec89a6f97299c19188c2d6&quot;), &quot;name&quot; : &quot;dsha&quot;, &quot;age&quot; : 47, &quot;birthday&quot; : &quot;04/02&quot;, &quot;email&quot; : &quot;hds66@gmail.com&quot; }
+</code></pre></div>
+
+<p>이제 <code>$and</code> 생일이 "04/02"이고 나이가 25인 고객을 검색해 보겠습니다. <code>$and</code>는 제시되는 검색 기준을 모두 만족하는 도큐먼트를 검색합니다.</p>
+<div class="highlight"><pre><span></span><code>&gt; db.customers.find({&quot;$and&quot; : [{birthday: &quot;04/02&quot;},{age: 25}]})
+{ &quot;_id&quot; : ObjectId(&quot;52ec746ef97299c19188c2d1&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;age&quot; : 25, &quot;birthday&quot; : &quot;04/02&quot;, &quot;email&quot; : &quot;raspberry@gmail.com&quot; }
+</code></pre></div>
+
+<p>예상했던 바와 같이 상기 두 가지 조건을 모두 만족하는 "jmpark" 만이 검색 되었음을 확인할 수 있습니다.</p>
+<p><em><em>주의사항</em></em> : query에서 동일한 키를 두 번 변경하는 것을 허용치 않습니다. 예를 들어 <code>{"$inc" : {"age" : 1}, "$set" : {age : 40}}</code>은 허용되지 않습니다. 왜냐하면, <code>age</code>를 두 번 변경하려고 하였기 때문입니다.</p>
                 
               
               
@@ -620,7 +682,7 @@ db.users.update(
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -629,19 +691,19 @@ db.users.update(
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                06. MongoDB Update Operators Part 3. - $push
+                10. MongoDB Update Operators Part 7. - Updating Multiple Documents
               </div>
             </div>
           </a>
         
         
-          <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../12-mongodb-update-query-findAndModify/" title="12. MongoDB Update Operators Part 8. - findAndModify" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                08. MongoDB Update Operators Part 5. - $pop, $pull
+                12. MongoDB Update Operators Part 8. - findAndModify
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
