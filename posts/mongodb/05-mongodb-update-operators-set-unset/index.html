@@ -579,6 +579,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+      18. MongoDB Query Part 8. - cursors
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -652,7 +664,7 @@ db.users.find()
 
 <p>이제 <code>favorite food</code> key 생성합니다:</p>
 <div class="highlight"><pre><span></span><code>// update(create &quot;favorite food&quot; key)
-db.users.update(
+db.users.update_one(
   {&quot;username&quot; : &quot;gchoi&quot;},
   {&quot;$set&quot; : {&quot;favorite food&quot; : &quot;김치볶음밥&quot;}}
 )
@@ -671,7 +683,7 @@ db.users.update(
 </code></pre></div>
 
 <p><code>favorite food</code> key를 array 형태로 입력할 수도 있습니다:</p>
-<div class="highlight"><pre><span></span><code>db.users.update(
+<div class="highlight"><pre><span></span><code>db.users.update_one(
   {&quot;username&quot; : &quot;gchoi&quot;},
   {&quot;$set&quot; : {&quot;favorite food&quot; : [&quot;돼지갈비&quot;, &quot;삼겹살&quot;, &quot;된장찌개&quot;]}}
 )
@@ -696,7 +708,7 @@ db.users.update(
 <h1 id="unset">$unset</h1>
 <p>이제 <code>$unset</code> operator를 이용하여 <code>favorite food</code> key를 제거해 보겠습니다.</p>
 <div class="highlight"><pre><span></span><code>// remove &quot;favorite food&quot;
-db.users.update(
+db.users.update_one(
   {&quot;username&quot; : &quot;gchoi&quot;},
   {&quot;$unset&quot; : {&quot;favorite food&quot; : 1}}
 )
