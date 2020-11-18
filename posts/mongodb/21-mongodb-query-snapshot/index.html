@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/01-starting-mongodb/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/21-mongodb-query-snapshot/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>01. MongoDB 시작하기 - Alex Choi's Blog</title>
+        <title>21. MongoDB Query Part 11. - $snap - Alex Choi's Blog</title>
       
     
     
@@ -51,11 +51,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#mongodb" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -80,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              01. MongoDB 시작하기
+              21. MongoDB Query Part 11. - $snap
             
           </span>
         </div>
@@ -370,20 +365,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="01. MongoDB 시작하기" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
-    
   </li>
 
         
@@ -619,11 +605,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link md-nav__link--active">
       21. MongoDB Query Part 11. - $snap
     </a>
+    
   </li>
 
         
@@ -680,21 +673,6 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -704,54 +682,71 @@
                   
                 
                 
-                <p>이번 포스팅에서는 MongoDB의 환경구축과 간단한 시작 방법에 대하여 알아보도록 하겠습니다.
-본 내용은, Windows 환경을 가정하고 설명드리고자 하므로, 다른 Mac 또는 Linux 환경에 대해서는 각각에 대한 환경설정 문서를 확인해 보시기 바랍니다.</p>
-<hr />
-<h1 id="mongodb">MongoDB 설치</h1>
-<p><a href="https://www.mongodb.com/try/download/community">MongoDB Community Server</a>를 설치 페이지에 방문하여 자신의 MongoDB 버전, OS 환경, Package 형태를 선택하여 다운로드 합니다.</p>
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/01.jpg" width="40%" />
-  <figcaption>MongoDB 설치파일 다운로드 옵션</figcaption>
-</figure>
-
-<hr />
-<h1 id="mongodb_1">MongoDB 환경설정</h1>
-<p>설치가 완료되면 (설치 옵션의 기본 경로에 설치되었다고 가정합니다), 시스템 환경 변수 설정에 아래 경로를 추가합니다.</p>
-<div class="highlight"><pre><span></span><code>C:\Program Files\MongoDB\Server\{Installation_Version}\bin
+                  <h1>21. MongoDB Query Part 11. - $snap</h1>
+                
+                <p><a href="../../../posts/mongodb/20-mongodb-query-other-operations">이전 포스팅</a>에서 약속하였듯이 이번 글에서는 <code>$snapshot</code> 쿼리 옵션에 대해서 자세히 알아보도록 하겠습니다.</p>
+<p>일반적인 데이터 처리 절차는 다음과 같습니다:</p>
+<p>MongoDB로부터 도큐먼트를 불러오고, 이에 대한 처리를 한 후, 처리에 대한 결과를 다시 저장합니다.</p>
+<p>예를 들어 다음 코드를 살펴보도록 하겠습니다.</p>
+<div class="highlight"><pre><span></span><code>cursor = db.myCollection.find();
+while (cursor.hasNext())
+{
+  var doc = cursor.next();
+  doc = process(doc);
+  db.myCollection.save(doc);
+}
 </code></pre></div>
 
+<p>위의 코드 내용을 살펴보면,</p>
+<ul>
+<li>변수 <code>cursor</code>에 <code>myCollection</code>으로부터 검색된 도큐먼트를 저장하였으며,</li>
+<li><code>cursor</code>에 저장된 내용을 변수 <code>doc</code>으로 얻은 후,</li>
+<li><code>doc</code>에 대한 처리를 한 후, 처리 결과를 다시 변수 <code>doc</code>으로 저장하고,</li>
+<li><code>doc</code>을 <code>myCollection</code>에 저장(save)하였습니다.</li>
+<li>그리고 <code>cursor</code>는 다음 도큐먼트로 이동하여 더이상 도큐먼트가 없을 때까지 이를 반복합니다.</li>
+</ul>
+<p>만약 처리된 도큐먼트의 사이즈가 처리되기 전보다 크면 어떤 일이 벌어질까요? 그림을 통해 이에 대한 설명을 하도록 하겠습니다.</p>
+<p>이해를 돕기 위해 다음 그림을 살펴보도록 하겠습니다.</p>
 <figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/02.jpg" width="80%" />
-  <figcaption>MongoDB 환경변수 추가</figcaption>
+  <img src="../../../assets/img/posts/mongodb/21-mongodb-query-snapshot/01.png" width="60%" />
+  <figcaption>[그림 1] 쿼리되는 컬렉션</figcaption>
 </figure>
 
-<hr />
-<h1 id="mongodb_2">MongoDB 실행 테스트</h1>
-<p>이제 MongoDB의 내용물이 저장될 폴더를 하나 만들고, Windows Command Line Tool을 실행하여 다음과 같이 명령줄을 입력하여 MongoDB가 실행되는지 테스트 해보겠습니다.</p>
-<div class="highlight"><pre><span></span><code>mongod --dpbpath {MongoDB_내용물_저장경로}
+<p>[그림 1]에서 각 도형을 각각 도큐먼트로 생각하겠습니다. <code>find</code> 명령이 실행될 때 결과는 컬렉션의 시작(가장 왼쪽 도큐먼트)부터 가져오게 되며 하나씩 처리할 때 <code>cursor</code>는 오른쪽으로 이동하게 됩니다.</p>
+<p>만약 [그림 2]와 같이 두번째 도큐먼트(녹색 둥근사각형)를 처리한 결과 원래의 사이즈보다 커지면,</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/21-mongodb-query-snapshot/02.png" width="60%" />
+  <figcaption>[그림 2] 처리된 도큐먼트의 사이즈 변화</figcaption>
+</figure>
+
+<p>처리된 후의 두번째 도큐먼트는 원래의 위치였던 첫번째와 세번째 도큐먼트 사이에 저장 가능한 충분한 크기가 확보되지 않았으므로 새로운 위치로 이동하여야 합니다.</p>
+<p>일반적으로 가장 마지막(맨 오른쪽)으로 위치를 옮깁니다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/21-mongodb-query-snapshot/03.png" width="60%" />
+  <figcaption>[그림 3] 처리된 도큐먼트의 위치 이동</figcaption>
+</figure>
+
+<p>이 후, <code>cursor</code>는 다음 도큐먼트로 이동하여 처리를 계속 진행하게 되는데, 이와 같은 식으로 진행하게 되면 [그림 4]와 같이 이미 처리된 도큐먼트를 마지막에 다시 만나게 됩니다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/21-mongodb-query-snapshot/04.png" width="60%" />
+  <figcaption>[그림 4] 처리된 도큐먼트의 위치 이동 후 cursor 배치</figcaption>
+</figure>
+
+<p>이를 해결하고자 하는 것이 바로 <code>snapshot</code> 쿼리 옵션입니다.</p>
+<p><code>$snapshot</code> 쿼리 옵션이 추가되면 쿼리는 도큐먼트 배치를 도큐먼트의 원래 위치로 인식하고 처리하게 됩니다.</p>
+<p>쿼리 용법은 다음과 같이 세가지 중 하나를 선택하여 사용할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>db.myCollection.find().snapshot()
+db.myCollection.find()._addSpecial( &quot;$snapshot&quot;, true )
+db.myCollection.find( { $query: {}, $snapshot: true } )
 </code></pre></div>
 
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/03.jpg" width="100%" />
-  <figcaption>MongoDB 실행 테스트</figcaption>
-</figure>
-
-<p>Windows Command Line Tool을 하나 더 열거나 탭을 지원하는 경우 탭을 하나 더 열어서 아래와 같이 MongoDB의 Query를 입력할 수 있는 명령줄을 입력해 봅니다.</p>
-<div class="highlight"><pre><span></span><code>mongo
-</code></pre></div>
-
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/04.jpg" width="100%" />
-  <figcaption>MongoDB 실행 테스트</figcaption>
-</figure>
-
-<hr />
-<h1 id="mongodb-compass">MongoDB Compass 다운로드</h1>
-<p><a href="https://www.mongodb.com/try/download/compass">MongoDB Compass</a>는 MongoDB의 GUI 도구입니다. MongoDB를 사용함에 있어 반드시 있어야 하는 것은 아니지만 데이터를 확인하고 가공하는 등의 작업에 대한 GUI 도구를 제공하기 때문에 MongoDB를 통한 DB 운영 시 매우 편리한 도구이므로 강력하게 설치를 권장 드립니다.</p>
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/05.jpg" width="100%" />
-  <figcaption>MongoDB Compass</figcaption>
-</figure>
+<ul>
+<li>주의사항<ul>
+<li>sharded collection과 <code>$snapshot</code>을 함께 사용해서는 안 됩니다.</li>
+<li><code>$hint</code> 혹은 <code>$orderby</code>와 함께 사용해서도 안 됩니다.</li>
+</ul>
+</li>
+</ul>
                 
               
               
@@ -770,7 +765,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -779,19 +774,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Realtime Fluid Simulation Using CUDA
+                20. MongoDB Query Part 10. - 기타 쿼리 연산자들
               </div>
             </div>
           </a>
         
         
-          <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../22-mongodb-aggregation-basic/" title="22. MongoDB Query Part 12. - Aggregation/Basic" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                02. MongoDB 기본 Query 명령문 테스트
+                22. MongoDB Query Part 12. - Aggregation/Basic
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

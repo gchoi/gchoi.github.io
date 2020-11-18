@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/01-starting-mongodb/">
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/20-mongodb-query-other-operations/">
       
       
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
@@ -18,7 +18,7 @@
     
     
       
-        <title>01. MongoDB 시작하기 - Alex Choi's Blog</title>
+        <title>20. MongoDB Query Part 10. - 기타 쿼리 연산자들 - Alex Choi's Blog</title>
       
     
     
@@ -51,11 +51,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#mongodb" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -80,7 +75,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              01. MongoDB 시작하기
+              20. MongoDB Query Part 10. - 기타 쿼리 연산자들
             
           </span>
         </div>
@@ -370,20 +365,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="01. MongoDB 시작하기" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
-    
   </li>
 
         
@@ -607,11 +593,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link md-nav__link--active">
       20. MongoDB Query Part 10. - 기타 쿼리 연산자들
     </a>
+    
   </li>
 
         
@@ -680,21 +673,6 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -704,54 +682,191 @@
                   
                 
                 
-                <p>이번 포스팅에서는 MongoDB의 환경구축과 간단한 시작 방법에 대하여 알아보도록 하겠습니다.
-본 내용은, Windows 환경을 가정하고 설명드리고자 하므로, 다른 Mac 또는 Linux 환경에 대해서는 각각에 대한 환경설정 문서를 확인해 보시기 바랍니다.</p>
-<hr />
-<h1 id="mongodb">MongoDB 설치</h1>
-<p><a href="https://www.mongodb.com/try/download/community">MongoDB Community Server</a>를 설치 페이지에 방문하여 자신의 MongoDB 버전, OS 환경, Package 형태를 선택하여 다운로드 합니다.</p>
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/01.jpg" width="40%" />
-  <figcaption>MongoDB 설치파일 다운로드 옵션</figcaption>
-</figure>
+                  <h1>20. MongoDB Query Part 10. - 기타 쿼리 연산자들</h1>
+                
+                <p>이번 포스팅에서는 기타 쿼리(Query) 연산자들에 대해 알아 보도록 하겠습니다.</p>
+<p>다음과 같은 도큐먼트를 생성합니다:</p>
+<div class="highlight"><pre><span></span><code>for(i = 1; i &lt; 101; i++) {
+    var myRandom = Math.floor(100 * Math.random());
 
-<hr />
-<h1 id="mongodb_1">MongoDB 환경설정</h1>
-<p>설치가 완료되면 (설치 옵션의 기본 경로에 설치되었다고 가정합니다), 시스템 환경 변수 설정에 아래 경로를 추가합니다.</p>
-<div class="highlight"><pre><span></span><code>C:\Program Files\MongoDB\Server\{Installation_Version}\bin
+    if(myRandom &lt; 21)
+        db.myCollection.insert({name: &quot;dog&quot;, random: Math.floor(Math.random()*100)})
+    else if(myRandom &lt; 41)
+        db.myCollection.insert({name: &quot;cat&quot;, random: Math.floor(Math.random()*100)})
+    else if(myRandom &lt; 61)
+        db.myCollection.insert({name: &quot;pig&quot;, random: Math.floor(Math.random()*100)})
+    else if(myRandom &lt; 81)
+        db.myCollection.insert({name: &quot;horse&quot;, random: Math.floor(Math.random()*100)})
+    else if(myRandom &lt; 101)
+        db.myCollection.insert({name: &quot;cow&quot;, random: Math.floor(Math.random()*100)})
+}
 </code></pre></div>
 
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/02.jpg" width="80%" />
-  <figcaption>MongoDB 환경변수 추가</figcaption>
-</figure>
-
-<hr />
-<h1 id="mongodb_2">MongoDB 실행 테스트</h1>
-<p>이제 MongoDB의 내용물이 저장될 폴더를 하나 만들고, Windows Command Line Tool을 실행하여 다음과 같이 명령줄을 입력하여 MongoDB가 실행되는지 테스트 해보겠습니다.</p>
-<div class="highlight"><pre><span></span><code>mongod --dpbpath {MongoDB_내용물_저장경로}
+<p>위의 JavaScript 코드내용은 다음과 같습니다:</p>
+<p>(1) 100개의 도큐먼트를 생성하고 <code>myCollection</code> 컬렉션에 저장합니다.</p>
+<p>(2) 루프를 반복할 때마다 랜덤수(0과 1사이 임의의 수)를 하나 발생하고 100을 곱한 후 소수이하를 제거하여,</p>
+<ul>
+<li>1에서 20사이인 경우: name을 "dog"로 지정하고 랜덤수를 하나 더 발생하여 random 키 값으로 저장,</li>
+<li>21에서 40사이인 경우: name을 "cat"로 지정하고 랜덤수를 하나 더 발생하여 random 키 값으로 저장,</li>
+<li>41에서 60사이인 경우: name을 "pig"로 지정하고 랜덤수를 하나 더 발생하여 random 키 값으로 저장,</li>
+<li>61에서 80사이인 경우: name을 "horse"로 지정하고 랜덤수를 하나 더 발생하여 random 키 값으로 저장,</li>
+<li>81에서 100사이인 경우: name을 "cow"로 지정하고 랜덤수를 하나 더 발생하여 random 키 값으로 저장합니다.</li>
+</ul>
+<p><code>myCollection</code> 내용을 살펴보면,</p>
+<div class="highlight"><pre><span></span><code>&gt; db.myCollection.find()
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07ac&quot;), &quot;name&quot; : &quot;cat&quot;, &quot;random&quot; : 42 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07ad&quot;), &quot;name&quot; : &quot;cow&quot;, &quot;random&quot; : 29 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07ae&quot;), &quot;name&quot; : &quot;cow&quot;, &quot;random&quot; : 48 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07af&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 38 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b0&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 49 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b1&quot;), &quot;name&quot; : &quot;horse&quot;, &quot;random&quot; : 54 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b2&quot;), &quot;name&quot; : &quot;horse&quot;, &quot;random&quot; : 81 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b3&quot;), &quot;name&quot; : &quot;dog&quot;, &quot;random&quot; : 87 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b4&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 69 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b5&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 19 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b6&quot;), &quot;name&quot; : &quot;horse&quot;, &quot;random&quot; : 45 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b7&quot;), &quot;name&quot; : &quot;cow&quot;, &quot;random&quot; : 45 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b8&quot;), &quot;name&quot; : &quot;dog&quot;, &quot;random&quot; : 8 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b9&quot;), &quot;name&quot; : &quot;cow&quot;, &quot;random&quot; : 5 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07ba&quot;), &quot;name&quot; : &quot;horse&quot;, &quot;random&quot; : 14 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07bb&quot;), &quot;name&quot; : &quot;horse&quot;, &quot;random&quot; : 44 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07bc&quot;), &quot;name&quot; : &quot;cat&quot;, &quot;random&quot; : 99 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07bd&quot;), &quot;name&quot; : &quot;horse&quot;, &quot;random&quot; : 72 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07be&quot;), &quot;name&quot; : &quot;cow&quot;, &quot;random&quot; : 57 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07bf&quot;), &quot;name&quot; : &quot;dog&quot;, &quot;random&quot; : 99 }
+Type &quot;it&quot; for more
 </code></pre></div>
 
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/03.jpg" width="100%" />
-  <figcaption>MongoDB 실행 테스트</figcaption>
-</figure>
-
-<p>Windows Command Line Tool을 하나 더 열거나 탭을 지원하는 경우 탭을 하나 더 열어서 아래와 같이 MongoDB의 Query를 입력할 수 있는 명령줄을 입력해 봅니다.</p>
-<div class="highlight"><pre><span></span><code>mongo
+<p>도큐먼트들은 <code>name</code>의 키 값이 "dog", "cat", "horse", "pig", "cat"로 섞여있음을 볼 수 있습니다.</p>
+<p><code>name</code>의 키 값이 "pig"인 도큐먼트들을 추출하여 random 키 값을 오름차순 또는 내림차순 정렬해 보도록 하겠습니다.</p>
+<p>우선 오름차순에 대한 명령은 다음과 같이 <code>sort({key: 1})</code>를 이용합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; var cursor = db.myCollection.find({name : &quot;pig&quot;}).sort({random : 1})
+&gt; cursor
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07c7&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 5 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07ef&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 9 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad080a&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 12 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b5&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 19 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07db&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 19 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07c4&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 34 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07af&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 38 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07c0&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 41 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad0805&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 42 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b0&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 49 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad080f&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 50 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07e6&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 53 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07de&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 59 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07cb&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 65 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07d7&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 65 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b4&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 69 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07fe&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 69 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07fd&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 76 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07d1&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 81 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07fb&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 90 }
 </code></pre></div>
 
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/04.jpg" width="100%" />
-  <figcaption>MongoDB 실행 테스트</figcaption>
-</figure>
+<p>내림차순에 대한 명령은 <code>sort({key: -1})</code>를 이용합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; var cursor = db.myCollection.find({name : &quot;pig&quot;}).sort({random : -1})
+&gt; cursor
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07fb&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 90 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07d1&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 81 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07fd&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 76 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b4&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 69 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07fe&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 69 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07cb&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 65 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07d7&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 65 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07de&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 59 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07e6&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 53 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad080f&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 50 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b0&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 49 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad0805&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 42 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07c0&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 41 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07af&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 38 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07c4&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 34 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07b5&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 19 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07db&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 19 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad080a&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 12 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07ef&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 9 }
+{ &quot;_id&quot; : ObjectId(&quot;52f55a3cf96da4a35bad07c7&quot;), &quot;name&quot; : &quot;pig&quot;, &quot;random&quot; : 5 }
+</code></pre></div>
 
-<hr />
-<h1 id="mongodb-compass">MongoDB Compass 다운로드</h1>
-<p><a href="https://www.mongodb.com/try/download/compass">MongoDB Compass</a>는 MongoDB의 GUI 도구입니다. MongoDB를 사용함에 있어 반드시 있어야 하는 것은 아니지만 데이터를 확인하고 가공하는 등의 작업에 대한 GUI 도구를 제공하기 때문에 MongoDB를 통한 DB 운영 시 매우 편리한 도구이므로 강력하게 설치를 권장 드립니다.</p>
-<figure>
-  <img src="../../../assets/img/posts/mongodb/01-starting-mongodb/05.jpg" width="100%" />
-  <figcaption>MongoDB Compass</figcaption>
-</figure>
+<p>다음은 기타 유용한 쿼리 옵션에 대하여 정리한 것입니다:</p>
+<ul>
+<li>
+<p><code>$maxScan : integer</code></p>
+<ul>
+<li>쿼리에 대해 스캔할 최대 도큐먼트 수 명시</li>
+<li>예: <code>db.collection.find( {  } )._addSpecial( "$maxScan" ,  )</code></li>
+</ul>
+</li>
+<li>
+<p><code>$min : document</code></p>
+<ul>
+<li>쿼리에 대한 시작 조건 - min의 키 값보다 크거나 같은 값 검색</li>
+<li>예: <code>db.collection.find( {  } ).min( { field1: , ... fieldN: } )</code></li>
+</ul>
+</li>
+<li>
+<p><code>$max : document</code></p>
+<ul>
+<li>쿼리에 대한 끝 조건 - max의 키 값보다 작거나 같은 값 검색</li>
+<li>예: <code>db.collection.find( {  } ).max( { field1: , ... fieldN:  } )</code></li>
+</ul>
+</li>
+<li>
+<p><code>$hint : document</code></p>
+<ul>
+<li>쿼리에 대해 어느 인덱스를 사용할 지 서버에 알려줌</li>
+<li>예: <code>db.users.find( { $query: {}, $hint: { key : keyValue } } )</code></li>
+</ul>
+</li>
+<li>
+<p><code>$explain : boolean</code></p>
+<ul>
+<li>실제 쿼리를 수행하는 대신 쿼가 수행될 내용(사용 인덱스, 결과 개수, 소요 시간 등) 명시</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.myCollection.find( { $query: {}, $explain: 1 } ).pretty()
+{
+    &quot;cursor&quot; : &quot;BasicCursor&quot;,
+    &quot;isMultiKey&quot; : false,
+    &quot;n&quot; : 100,
+    &quot;nscannedObjects&quot; : 100,
+    &quot;nscanned&quot; : 100,
+    &quot;nscannedObjectsAllPlans&quot; : 100,
+    &quot;nscannedAllPlans&quot; : 100,
+    &quot;scanAndOrder&quot; : false,
+    &quot;indexOnly&quot; : false,
+    &quot;nYields&quot; : 0,
+    &quot;nChunkSkips&quot; : 0,
+    &quot;millis&quot; : 0,
+    &quot;indexBounds&quot; : {
+
+    },
+    &quot;allPlans&quot; : [
+        {
+            &quot;cursor&quot; : &quot;BasicCursor&quot;,
+            &quot;n&quot; : 100,
+            &quot;nscannedObjects&quot; : 100,
+            &quot;nscanned&quot; : 100,
+            &quot;indexBounds&quot; : {
+
+            }
+        }
+    ],
+    &quot;server&quot; : &quot;h002259.mongolab.com:30827&quot;
+}
+</code></pre></div>
+
+<ul>
+<li><code>$snapshot : boolean</code><ul>
+<li>쿼리가 시행되는 시점으로부터 쿼리의 결과가 일정정한 스냅샷이 되도록 함.</li>
+<li>이에 대한 자세한 설명은 다음 글에 별도로 다루도록 하겠습니다.</li>
+<li><code>db.collection.find().snapshot()</code> 또는 다음 용법도 사용가능.</li>
+<li><code>db.collection.find( { $query: {}, $snapshot: true } )</code></li>
+</ul>
+</li>
+</ul>
                 
               
               
@@ -770,7 +885,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -779,19 +894,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Realtime Fluid Simulation Using CUDA
+                19. MongoDB Query Part 9. - skip 속도 높이기
               </div>
             </div>
           </a>
         
         
-          <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                02. MongoDB 기본 Query 명령문 테스트
+                21. MongoDB Query Part 11. - $snap
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

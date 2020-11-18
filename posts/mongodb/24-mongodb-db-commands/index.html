@@ -1,0 +1,2064 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/24-mongodb-db-commands/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>24. MongoDB Query Part 14. - DB Commands - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#buildinfo" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              24. MongoDB Query Part 14. - DB Commands
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+      Deep Learning from Scratch Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+      Deep Learning from Scratch Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+      05. MongoDB Update Operators Part 2. - $set, $unset
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+      06. MongoDB Update Operators Part 3. - $push
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+      07. MongoDB Update Operators Part 4. - $addToSet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+      08. MongoDB Update Operators Part 5. - $pop, $pull
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+      09. MongoDB Update Operators Part 6. - $upsert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+      10. MongoDB Update Operators Part 7. - Updating Multiple Documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+      11. MongoDB Query Part 1. - find
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+      12. MongoDB Query Part 2. - findAndModify
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+      13. MongoDB Query Part 3. - $all
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+      14. MongoDB Query Part 4. - $size
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+      15. MongoDB Query Part 5. - $slice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+      16. MongoDB Query Part 6. - $where
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+      17. MongoDB Query Part 7. - querying_embedded_documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+      18. MongoDB Query Part 8. - cursors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+      19. MongoDB Query Part 9. - skip 속도 높이기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+      20. MongoDB Query Part 10. - 기타 쿼리 연산자들
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+      21. MongoDB Query Part 11. - $snap
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../22-mongodb-aggregation-basic/" title="22. MongoDB Query Part 12. - Aggregation/Basic" class="md-nav__link">
+      22. MongoDB Query Part 12. - Aggregation/Basic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../23-mongodb-aggregation-mapreduce/" title="23. MongoDB Query Part 13. - Aggregation/MapReduce" class="md-nav__link">
+      23. MongoDB Query Part 13. - Aggregation/MapReduce
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        24. MongoDB Query Part 14. - DB Commands
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="24. MongoDB Query Part 14. - DB Commands" class="md-nav__link md-nav__link--active">
+      24. MongoDB Query Part 14. - DB Commands
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#buildinfo" class="md-nav__link">
+    buildInfo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collstats" class="md-nav__link">
+    collStats
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distinct" class="md-nav__link">
+    distinct
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drop" class="md-nav__link">
+    drop
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dropdatabase" class="md-nav__link">
+    dropDatabase
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dropindexes" class="md-nav__link">
+    dropIndexes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#findandmodify" class="md-nav__link">
+    findAndModify
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getlasterror" class="md-nav__link">
+    getLastError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ismaster" class="md-nav__link">
+    isMaster
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#listdatabases" class="md-nav__link">
+    listDatabases
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ping" class="md-nav__link">
+    ping
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#renamecollection" class="md-nav__link">
+    renameCollection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repairdatabase" class="md-nav__link">
+    repairDatabase
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serverstatus" class="md-nav__link">
+    serverStatus
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#buildinfo" class="md-nav__link">
+    buildInfo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collstats" class="md-nav__link">
+    collStats
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distinct" class="md-nav__link">
+    distinct
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drop" class="md-nav__link">
+    drop
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dropdatabase" class="md-nav__link">
+    dropDatabase
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dropindexes" class="md-nav__link">
+    dropIndexes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#findandmodify" class="md-nav__link">
+    findAndModify
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getlasterror" class="md-nav__link">
+    getLastError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ismaster" class="md-nav__link">
+    isMaster
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#listdatabases" class="md-nav__link">
+    listDatabases
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ping" class="md-nav__link">
+    ping
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#renamecollection" class="md-nav__link">
+    renameCollection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repairdatabase" class="md-nav__link">
+    repairDatabase
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serverstatus" class="md-nav__link">
+    serverStatus
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                  <h1>24. MongoDB Query Part 14. - DB Commands</h1>
+                
+                <p>이번 포스팅에서는 DB 명령어에 대해 알아보도록 하겠습니다.</p>
+<p>그 동안 앞선 글에서 다루지 않았던 수많은 MongoDB의 명령어에는 어떤 것들이 있는지 훑어볼 수 있는 기회가 될 것입니다 (물론 하나하나 다루지는 않습니다. 여기서 다루지 않은 명령어들은 MongoDB의 공식 도큐먼트 페이지를 통해 알아보기 바랍니다).</p>
+<p>우선 <code>db.listCommands()</code> 명령을 통해 DB 명령어의 리스트를 살펴보도록 하겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.listCommands()
+_isSelf: no-lock
+  { _isSelf : 1 } INTERNAL ONLY
+
+_migrateClone: no-lock adminOnly  slaveOk
+  internal - should not be called directly
+
+_recvChunkAbort: no-lock adminOnly  slaveOk
+  internal - should not be called directly
+
+_recvChunkCommit: no-lock adminOnly  slaveOk
+  internal - should not be called directly
+
+_recvChunkStart: write-lock adminOnly  slaveOk
+  internal - should not be called directly
+
+_recvChunkStatus: no-lock adminOnly  slaveOk
+  internal - should not be called directly
+
+_transferMods: no-lock adminOnly  slaveOk
+  internal - should not be called directly
+
+aggregate: no-lock
+  { pipeline : [ { &lt;data-pipe-op&gt;: {...}}, ... ] }
+
+applyOps: write-lock
+  internal (sharding)
+  { applyOps : [ ] , preCondition : [ { ns : ... , q : ... , res : ... } ] }
+
+authenticate: no-lock
+  internal
+
+availableQueryOptions: no-lock
+  no help defined
+
+buildInfo: no-lock
+  get version #, etc.
+  { buildinfo:1 }
+
+checkShardingIndex: no-lock
+  Internal command.
+
+
+clone: write-lock
+  clone this database from an instance of the db on another host
+  { clone : &quot;host13&quot; }
+
+cloneCollection: no-lock
+  { cloneCollection: &lt;collection&gt;, from: &lt;host&gt; [,query: &lt;query_filter&gt;] [,copyIndexes:&lt;bool&gt;] }
+  Copies a collection from one server to another. Do not use on a single server as the destination is placed at the same db.collection (namespace) as the source.
+
+
+cloneCollectionAsCapped: write-lock
+  { cloneCollectionAsCapped:&lt;fromName&gt;, toCollection:&lt;toName&gt;, size:&lt;sizeInBytes&gt; }
+
+closeAllDatabases: write-lock adminOnly  slaveOk
+  Close all database files.
+  A new request will cause an immediate reopening; thus, this is mostly for testing purposes.
+
+collMod: write-lock
+  Sets collection options.
+  Example: { collMod: &#39;foo&#39;, usePowerOf2Sizes:true }
+  Example: { collMod: &#39;foo&#39;, index: {keyPattern: {a: 1}, expireAfterSeconds: 600} }
+
+collStats: read-lock
+  { collStats:&quot;blog.posts&quot; , scale : 1 } scale divides sizes e.g. for KB use 1024
+      avgObjSize - in bytes
+
+compact: no-lock
+  compact collection
+  warning: this operation blocks the server and is slow. you can cancel with cancelOp()
+  { compact : &lt;collection_name&gt;, [force:&lt;bool&gt;], [validate:&lt;bool&gt;],
+    [paddingFactor:&lt;num&gt;], [paddingBytes:&lt;num&gt;] }
+    force - allows to run on a replica set primary
+    validate - check records are noncorrupt before adding to newly compacting extents. slower but safer (defaults to true in this version)
+
+
+connPoolStats: no-lock
+  stats about connection pool
+
+connPoolSync: no-lock
+  internal
+
+connectionStatus: no-lock
+  Returns connection-specific information such as logged-in users
+
+convertToCapped: write-lock
+  { convertToCapped:&lt;fromCollectionName&gt;, size:&lt;sizeInBytes&gt; }
+
+copydb: no-lock adminOnly  slaveOk
+  copy a database from another host to this host
+  usage: {copydb: 1, fromhost: &lt;hostname&gt;, fromdb: &lt;db&gt;, todb: &lt;db&gt;[, slaveOk: &lt;bool&gt;, username: &lt;username&gt;, nonce: &lt;nonce&gt;, key: &lt;key&gt;]}
+
+copydbgetnonce: write-lock adminOnly  slaveOk
+  get a nonce for subsequent copy db request from secure server
+  usage: {copydbgetnonce: 1, fromhost: &lt;hostname&gt;}
+
+count: read-lock
+  count objects in collection
+
+create: write-lock
+  create a collection explicitly
+  { create: &lt;ns&gt;[, capped: &lt;bool&gt;, size: &lt;collSizeInBytes&gt;, max: &lt;nDocs&gt;] }
+
+cursorInfo: no-lock
+   example: { cursorInfo : 1 }
+
+dataSize: read-lock
+  determine data size for a set of data in a certain range
+  example: { dataSize:&quot;blog.posts&quot;, keyPattern:{x:1}, min:{x:10}, max:{x:55} }
+  min and max parameters are optional. They must either both be included or both omitted
+  keyPattern is an optional parameter indicating an index pattern that would be usefulfor iterating over the min/max bounds. If keyPattern is omitted, it is inferred from the structure of min.
+  note: This command may take a while to run
+
+dbHash: read-lock
+  no help defined
+
+dbStats: read-lock
+  Get stats on a database. Not instantaneous. Slower for databases with large .ns files.
+  Example: { dbStats:1, scale:1 }
+
+diagLogging: write-lock adminOnly  slaveOk
+  http://dochub.mongodb.org/core/monitoring#MonitoringandDiagnostics-DatabaseRecord%2FReplay%28diagLoggingcommand%29
+
+distinct: read-lock
+  { distinct : &#39;collection name&#39; , key : &#39;a.b&#39; , query : {} }
+
+driverOIDTest: no-lock
+  no help defined
+
+drop: write-lock
+  drop a collection
+  {drop : &lt;collectionName&gt;}
+
+dropDatabase: write-lock
+  drop (delete) this database
+
+dropIndexes: write-lock
+  drop indexes for a collection
+
+eval: no-lock
+  Evaluate javascript at the server.
+  http://dochub.mongodb.org/core/serversidecodeexecution
+
+features: no-lock
+  return build level feature settings
+
+filemd5: read-lock
+   example: { filemd5 : ObjectId(aaaaaaa) , root : &quot;fs&quot; }
+
+findAndModify: write-lock
+  { findAndModify: &quot;collection&quot;, query: {processed:false}, update: {$set: {processed:true}}, new: true}
+  { findAndModify: &quot;collection&quot;, query: {processed:false}, remove: true, sort: {priority:-1}}
+  Either update or remove is required, all other fields have default values.
+  Output is in the &quot;value&quot; field
+
+
+forceerror: no-lock
+  for testing purposes only.  forces a user assertion exception
+
+fsync: no-lock adminOnly  slaveOk
+  http://dochub.mongodb.org/core/fsynccommand
+
+geoNear: read-lock
+  http://dochub.mongodb.org/core/geo#GeospatialIndexing-geoNearCommand
+
+geoSearch: read-lock
+  no help defined
+
+geoWalk: read-lock
+  no help defined
+
+getCmdLineOpts: no-lock adminOnly  slaveOk
+  get argv
+
+getLastError: no-lock
+  return error status of the last operation on this connection
+  options:
+    { fsync:true } - fsync before returning, or wait for journal commit if running with --journal
+    { j:true } - wait for journal commit if running with --journal
+    { w:n } - await replication to n servers (including self) before returning
+    { wtimeout:m} - timeout for w in m milliseconds
+
+getLog: no-lock adminOnly  slaveOk
+  { getLog : &#39;*&#39; }  OR { getLog : &#39;global&#39; }
+
+getParameter: no-lock adminOnly  slaveOk
+  get administrative option(s)
+  example:
+  { getParameter:1, notablescan:1 }
+  supported:
+    enableLocalhostAuthBypass
+    enableTestCommands
+    logLevel
+    logUserIds
+    notablescan
+    quiet
+    releaseConnectionsAfterResponse
+    replApplyBatchSize
+    replIndexPrefetch
+    supportCompatibilityFormPrivilegeDocuments
+    syncdelay
+    textSearchEnabled
+    ttlMonitorEnabled
+  { getParameter:&#39;*&#39; } to get everything
+
+
+getPrevError: no-lock
+  check for errors since last reseterror commandcal
+
+getShardMap: no-lock adminOnly  slaveOk
+  internal
+
+getShardVersion: no-lock adminOnly  slaveOk
+   example: { getShardVersion : &#39;alleyinsider.foo&#39;  }
+
+getnonce: no-lock
+  internal
+
+getoptime: no-lock
+  internal
+
+group: read-lock
+  http://dochub.mongodb.org/core/aggregation
+
+handshake: no-lock
+  internal
+
+hostInfo: no-lock
+  returns information about the daemon&#39;s host
+
+isMaster: no-lock
+  Check if this server is primary for a replica pair/set; also if it is --master or --slave in simple master/slave setups.
+  { isMaster : 1 }
+
+listCommands: no-lock
+  get a list of all db commands
+
+listDatabases: no-lock adminOnly  slaveOk
+  list databases on this server
+
+logRotate: no-lock adminOnly  slaveOk
+  no help defined
+
+logout: no-lock
+  de-authenticate
+
+mapReduce: no-lock
+  Run a map/reduce operation on the server.
+  Note this is used for aggregation, not querying, in MongoDB.
+  http://dochub.mongodb.org/core/mapreduce
+
+mapreduce.shardedfinish: no-lock
+  no help defined
+
+medianKey: no-lock
+  Deprecated internal command. Use splitVector command instead.
+
+
+moveChunk: no-lock adminOnly  slaveOk
+  should not be calling this directly
+
+ping: no-lock
+  a way to check that the server is alive. responds immediately even if server is in a db lock.
+
+profile: write-lock
+  enable or disable performance profiling
+  { profile : &lt;n&gt; }
+  0=off 1=log slow ops 2=log all
+  -1 to get current values
+  http://dochub.mongodb.org/core/databaseprofiler
+
+reIndex: write-lock
+  re-index a collection
+
+renameCollection: write-lock adminOnly  slaveOk
+   example: { renameCollection: foo.a, to: bar.b }
+
+repairDatabase: write-lock
+  repair database.  also compacts. note: slow.
+
+replSetElect: no-lock adminOnly  slaveOk
+  internal
+
+replSetFreeze: no-lock adminOnly  slaveOk
+  { replSetFreeze : &lt;seconds&gt; }&#39;freeze&#39; state of member to the extent we can do that.  What this really means is that
+  this node will not attempt to become primary until the time period specified expires.
+  You can call again with {replSetFreeze:0} to unfreeze sooner.
+  A process restart unfreezes the member also.
+
+  http://dochub.mongodb.org/core/replicasetcommands
+
+replSetFresh: no-lock adminOnly  slaveOk
+  internal
+
+replSetGetRBID: no-lock adminOnly  slaveOk
+  internal
+
+replSetGetStatus: no-lock adminOnly  slaveOk
+  Report status of a replica set from the POV of this server
+  { replSetGetStatus : 1 }
+  http://dochub.mongodb.org/core/replicasetcommands
+
+replSetHeartbeat: no-lock adminOnly  slaveOk
+  internal
+
+replSetInitiate: no-lock adminOnly  slaveOk
+  Initiate/christen a replica set.
+  http://dochub.mongodb.org/core/replicasetcommands
+
+replSetMaintenance: no-lock adminOnly  slaveOk
+  { replSetMaintenance : bool }
+  Enable or disable maintenance mode.
+
+replSetReconfig: no-lock adminOnly  slaveOk
+  Adjust configuration of a replica set
+  { replSetReconfig : config_object }
+  http://dochub.mongodb.org/core/replicasetcommands
+
+replSetStepDown: no-lock adminOnly  slaveOk
+  { replSetStepDown : &lt;seconds&gt; }
+  Step down as primary.  Will not try to reelect self for the specified time period (1 minute if no numeric secs value specified).
+  (If another member with same priority takes over in the meantime, it will stay primary.)
+  http://dochub.mongodb.org/core/replicasetcommands
+
+replSetSyncFrom: no-lock adminOnly  slaveOk
+  { replSetSyncFrom : &quot;host:port&quot; }
+  Change who this member is syncing from.
+
+resetError: no-lock
+  reset error state (used with getpreverror)
+
+resync: write-lock adminOnly  slaveOk
+  resync (from scratch) an out of date replica slave.
+  http://dochub.mongodb.org/core/masterslave
+
+serverStatus: no-lock
+  returns lots of administrative server statistics
+
+setParameter: no-lock adminOnly  slaveOk
+  set administrative option(s)
+  { setParameter:1, &lt;param&gt;:&lt;value&gt; }
+  supported:
+    enableLocalhostAuthBypass
+    enableTestCommands
+    logLevel
+    logUserIds
+    notablescan
+    quiet
+    releaseConnectionsAfterResponse
+    replApplyBatchSize
+    replIndexPrefetch
+    supportCompatibilityFormPrivilegeDocuments
+    syncdelay
+    textSearchEnabled
+    ttlMonitorEnabled
+
+
+setShardVersion: no-lock adminOnly  slaveOk
+   example: { setShardVersion : &#39;alleyinsider.foo&#39; , version : 1 , configdb : &#39;&#39; }
+
+shardConnPoolStats: no-lock
+  stats about the shard connection pool
+
+shardingState: write-lock adminOnly  slaveOk
+  no help defined
+
+shutdown: no-lock adminOnly  slaveOk
+  shutdown the database.  must be ran against admin db and either (1) ran from localhost or (2) authenticated. If this is a primary in a replica set and there is no member within 10 seconds of its optime, it will not shutdown without force : true.  You can also specify timeoutSecs : N to wait N seconds for other members to catch up.
+
+splitChunk: no-lock adminOnly  slaveOk
+  internal command usage only
+  example:
+   { splitChunk:&quot;db.foo&quot; , keyPattern: {a:1} , min : {a:100} , max: {a:200} { splitKeys : [ {a:150} , ... ]}
+
+splitVector: no-lock
+  Internal command.
+  examples:
+    { splitVector : &quot;blog.post&quot; , keyPattern:{x:1} , min:{x:10} , max:{x:20}, maxChunkSize:200 }
+    maxChunkSize unit in MBs
+    May optionally specify &#39;maxSplitPoints&#39; and &#39;maxChunkObjects&#39; to avoid traversing the whole chunk
+
+    { splitVector : &quot;blog.post&quot; , keyPattern:{x:1} , min:{x:10} , max:{x:20}, force: true }
+    &#39;force&#39; will produce one split point even if data is small; defaults to false
+  NOTE: This command may take a while to run
+
+text: read-lock
+  no help defined
+
+top: no-lock adminOnly  slaveOk
+  usage by collection, in micros
+
+touch: no-lock
+  touch collection
+  Page in all pages of memory containing every extent for the given collection
+  { touch : &lt;collection_name&gt;, [data : true] , [index : true] }
+   at least one of data or index must be true; default is both are false
+
+
+unsetSharding: no-lock adminOnly  slaveOk
+   example: { unsetSharding : 1 }
+
+validate: read-lock
+  Validate contents of a namespace by scanning its data structures for correctness.  Slow.
+  Add full:true option to do a more thorough check
+
+whatsmyuri: no-lock
+  {whatsmyuri:1}
+
+writeBacksQueued: no-lock adminOnly  slaveOk
+  Returns whether there are operations in the writeback queue at the time the command was called. This is an internal command
+
+writebacklisten: no-lock adminOnly  slaveOk
+  internal
+</code></pre></div>
+
+<p>어마어마한 명령어 집단을 발견하게 될 것이다. 이 중 몇가지 명령어들에 대해 간략히 알아보도록 하겠습니다.</p>
+<hr />
+<h3 id="buildinfo">buildInfo</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({{buildInfo : 1}})</code></li>
+<li>설명: MongoDB 서버의 버전과 호스트 OS에 대한 정보를 출력합니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({buildInfo:1})
+{
+  &quot;version&quot; : &quot;2.4.8&quot;,
+  &quot;gitVersion&quot; : &quot;a350fc38922fbda2cec8d5dd842237b904eafc14&quot;,
+  &quot;sysInfo&quot; : &quot;Linux ip-10-2-29-40 2.6.21.7-2.ec2.v1.2.fc8xen #1 SMP Fri Nov 20 17:48:28 EST 2009 x86_64 BOOST_LIB_VERSION=1_49&quot;,
+  &quot;loaderFlags&quot; : &quot;-fPIC -pthread -rdynamic&quot;,
+  &quot;compilerFlags&quot; : &quot;-Wnon-virtual-dtor -Woverloaded-virtual -fPIC -fno-strict-aliasing -ggdb -pthread -Wall -Wsign-compare -Wno-unknown-pragmas -Winvalid-pch -Werror -pipe -fno-builtin-memcmp -O3&quot;,
+  &quot;allocator&quot; : &quot;tcmalloc&quot;,
+  &quot;versionArray&quot; : [
+    2,
+    4,
+    8,
+    0
+  ],
+  &quot;javascriptEngine&quot; : &quot;V8&quot;,
+  &quot;bits&quot; : 64,
+  &quot;debug&quot; : false,
+  &quot;maxBsonObjectSize&quot; : 16777216,
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<hr />
+<h3 id="collstats">collStats</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({collStats: collection})</code></li>
+<li>설명: 데이터 사이즈, 할당된 저장 공간 크기, 인덱스의 크기 등을 포함한 컬렉션에 대한 정보를 출력합니다.</li>
+<li>예: <code>orders</code> 컬렉션에 대한 정보를 알아보려면:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({collStats: &quot;orders&quot;})
+{
+  &quot;ns&quot; : &quot;amazon.orders&quot;,
+  &quot;count&quot; : 4,
+  &quot;size&quot; : 832,
+  &quot;avgObjSize&quot; : 208,
+  &quot;storageSize&quot; : 16384,
+  &quot;numExtents&quot; : 1,
+  &quot;nindexes&quot; : 1,
+  &quot;lastExtentSize&quot; : 16384,
+  &quot;paddingFactor&quot; : 1,
+  &quot;systemFlags&quot; : 1,
+  &quot;userFlags&quot; : 0,
+  &quot;totalIndexSize&quot; : 8176,
+  &quot;indexSizes&quot; : {
+    &quot;_id_&quot; : 8176
+  },
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<p>과 같이 입력합니다.</p>
+<hr />
+<h3 id="distinct">distinct</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({distinct : collection, key: key, query: query})</code> 또는 <code>db.collection.distinct({key: key, query: query})</code></li>
+<li>설명: 주어진 컬렉션에 있어 매칭되는 쿼리에 대해 키 값에 대해 구별되는 값들을 얻습니다.</li>
+<li>예: 우선 다음과 같이 도큐먼트를 준비합니다.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>db.orders.insert({cust_id: &quot;abc123&quot;, ord_date: new Date(&quot;Oct 04, 2012&quot;), status: &#39;A&#39;, price: 25, items: [ { sku: &quot;mmm&quot;, qty: 5, price: 2.5 }, { sku: &quot;nnn&quot;, qty: 4, price: 2.5 } ]})
+db.orders.insert({cust_id: &quot;abc123&quot;, ord_date: new Date(&quot;Nov 03, 2011&quot;), status: &#39;B&#39;, price: 40, items: [ { sku: &quot;mmm&quot;, qty: 7, price: 4.5 }, { sku: &quot;nnn&quot;, qty: 3, price: 3.5 } ]})
+db.orders.insert({cust_id: &quot;def123&quot;, ord_date: new Date(&quot;Feb 03, 2014&quot;), status: &#39;C&#39;, price: 15, items: [ { sku: &quot;mmm&quot;, qty: 5, price: 4.0 }, { sku: &quot;nnn&quot;, qty: 8, price: 3.0 } ]})
+db.orders.insert({cust_id: &quot;def123&quot;, ord_date: new Date(&quot;Mar 03, 2014&quot;), status: &#39;D&#39;, price: 17, items: [ { sku: &quot;mmm&quot;, qty: 6, price: 2.0 }, { sku: &quot;nnn&quot;, qty: 4, price: 1.7 } ]})
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>&gt; db.orders.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;5315ea0b4d478aa3741c0c26&quot;),
+  &quot;cust_id&quot; : &quot;abc123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2012-10-03T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;A&quot;,
+  &quot;price&quot; : 25,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 5,
+      &quot;price&quot; : 2.5
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 4,
+      &quot;price&quot; : 2.5
+    }
+  ]
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;5315ea0c4d478aa3741c0c27&quot;),
+  &quot;cust_id&quot; : &quot;abc123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2011-11-02T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;B&quot;,
+  &quot;price&quot; : 40,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 7,
+      &quot;price&quot; : 4.5
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 3,
+      &quot;price&quot; : 3.5
+    }
+  ]
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;5315ea0d4d478aa3741c0c28&quot;),
+  &quot;cust_id&quot; : &quot;def123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2014-02-02T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;C&quot;,
+  &quot;price&quot; : 15,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 5,
+      &quot;price&quot; : 4
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 8,
+      &quot;price&quot; : 3
+    }
+  ]
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;5315ea0e4d478aa3741c0c29&quot;),
+  &quot;cust_id&quot; : &quot;def123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2014-03-02T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;D&quot;,
+  &quot;price&quot; : 17,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 6,
+      &quot;price&quot; : 2
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 4,
+      &quot;price&quot; : 1.7
+    }
+  ]
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;53171bc266ff8f8cb78dc5e8&quot;),
+  &quot;cust_id&quot; : &quot;abc123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2012-10-03T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;A&quot;,
+  &quot;price&quot; : 25,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 5,
+      &quot;price&quot; : 2.5
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 4,
+      &quot;price&quot; : 2.5
+    }
+  ]
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;53171bc366ff8f8cb78dc5e9&quot;),
+  &quot;cust_id&quot; : &quot;abc123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2011-11-02T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;B&quot;,
+  &quot;price&quot; : 40,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 7,
+      &quot;price&quot; : 4.5
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 3,
+      &quot;price&quot; : 3.5
+    }
+  ]
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;53171bc466ff8f8cb78dc5ea&quot;),
+  &quot;cust_id&quot; : &quot;def123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2014-02-02T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;C&quot;,
+  &quot;price&quot; : 15,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 5,
+      &quot;price&quot; : 4
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 8,
+      &quot;price&quot; : 3
+    }
+  ]
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;53171bc666ff8f8cb78dc5eb&quot;),
+  &quot;cust_id&quot; : &quot;def123&quot;,
+  &quot;ord_date&quot; : ISODate(&quot;2014-03-02T15:00:00Z&quot;),
+  &quot;status&quot; : &quot;D&quot;,
+  &quot;price&quot; : 17,
+  &quot;items&quot; : [
+    {
+      &quot;sku&quot; : &quot;mmm&quot;,
+      &quot;qty&quot; : 6,
+      &quot;price&quot; : 2
+    },
+    {
+      &quot;sku&quot; : &quot;nnn&quot;,
+      &quot;qty&quot; : 4,
+      &quot;price&quot; : 1.7
+    }
+  ]
+}
+</code></pre></div>
+
+<p>그리고나서, 다음과 같이 입력해 봅니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.orders.distinct(&#39;cust_id&#39;)
+[ &quot;abc123&quot;, &quot;def123&quot; ]
+</code></pre></div>
+
+<p>위와 같이, 네 개의 도큐먼트에 대해 구별되는 고객 아이디(<code>cust_id</code>)가 "abc123" 및 "def123" 두 개임을 알 수 있습니다.</p>
+<hr />
+<h3 id="drop">drop</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({drop: collection})</code> 또는 <code>db.collection.drop()</code></li>
+<li>설명: 컬렉션의 모든 데이터를 삭제합니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.getCollectionNames()
+[ &quot;orders&quot; &quot;system.indexes&quot;, &quot;system.users&quot; ]
+&gt; db.runCommand({drop: &quot;orders&quot;})
+{
+  &quot;nIndexesWas&quot; : 1,
+  &quot;msg&quot; : &quot;indexes dropped for collection&quot;,
+  &quot;ns&quot; : &quot;amazon.orders&quot;,
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>&gt; db.getCollectionNames()
+[ &quot;system.indexes&quot;, &quot;system.users&quot; ]
+</code></pre></div>
+
+<hr />
+<h3 id="dropdatabase">dropDatabase</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({dropDatabase: 1})</code></li>
+<li>설명: 현재 데이터베이스("db") 내 모든 데이터를 삭제합니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({dropDatabase: 1})
+{ &quot;dropped&quot; : &quot;amazon&quot;, &quot;ok&quot; : 1 }
+
+&gt; db.getCollectionNames()
+[ ]
+</code></pre></div>
+
+<hr />
+<h3 id="dropindexes">dropIndexes</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({dropIndexes : collection, index : name})</code></li>
+<li>설명: 컬렉션으로부터 <code>name</code>이라는 이름의 인덱스를 삭제한다. 모든 인덱스를 삭제하려면 <code>name</code>을 <code>*</code>로 입력합니다.</li>
+</ul>
+<hr />
+<h3 id="findandmodify">findAndModify</h3>
+<p><a href="../../../posts/mongodb/12-mongodb-query-findAndModify/">이 곳</a>을 참고하기 바랍니다.</p>
+<hr />
+<h3 id="getlasterror">getLastError</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({getLastError : 1[, w : w[, wtimeout : timeout]]})</code></li>
+<li>설명: 마지막으로 수행한 오퍼레이션에 대한 에러를 체크하거나 상태 정보를 출력합니다. 이 명령은 현재 연결에서 w 슬레이브가 교쳬될 때까지(또는 timeout(milli 초) 시간이 흐를 때까지) 선택적으로 차단됩니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({getLastError: 1})
+{
+  &quot;n&quot; : 0,
+  &quot;lastOp&quot; : Timestamp(1394025626, 1),
+  &quot;connectionId&quot; : 235758,
+  &quot;err&quot; : null,
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<hr />
+<h3 id="ismaster">isMaster</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({isMaster: 1})</code></li>
+<li>설명: 서버가 마스터인지 슬레이브인지 판단합니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({isMaster: 1})
+{
+  &quot;setName&quot; : &quot;rs-ds027799&quot;,
+  &quot;ismaster&quot; : true,
+  &quot;secondary&quot; : false,
+  &quot;hosts&quot; : [
+    &quot;ds027799-a.mongolab.com:27799&quot;
+  ],
+  &quot;primary&quot; : &quot;ds027799-a.mongolab.com:27799&quot;,
+  &quot;me&quot; : &quot;ds027799-a.mongolab.com:27799&quot;,
+  &quot;maxBsonObjectSize&quot; : 16777216,
+  &quot;maxMessageSizeBytes&quot; : 48000000,
+  &quot;localTime&quot; : ISODate(&quot;2014-03-05T13:42:21.998Z&quot;),
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<hr />
+<h3 id="listdatabases">listDatabases</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({listDatabases: 1})</code></li>
+<li>설명: 서버 상의 모든 데이터베이스를 목록화합니다. <code>admin</code> 계정에서만 실행되는 명령어입니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; use admin
+switched to db admin
+&gt; db.runCommand({listDatabases: 1})
+{
+  &quot;databases&quot; : [
+    {
+      &quot;name&quot; : &quot;local&quot;,
+      &quot;sizeOnDisk&quot; : 83886080,
+      &quot;empty&quot; : false
+    },
+    {
+      &quot;name&quot; : &quot;test&quot;,
+      &quot;sizeOnDisk&quot; : 218103808,
+      &quot;empty&quot; : false
+    }
+  ],
+  &quot;totalSize&quot; : 301989888,
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<p>만약 MongoLab을 사용할 경우, <code>use admin</code> 명령을 통해 db admin으로 계정을 변경하여도 "권한이 없다"는 메시지가 출력될 것입니다.</p>
+<p>즉, 클라우드(MongoDB-as-a-Service) 서비스를 통해 DB를 사용할 경우 admin 계정에 접근할 수 없습니다.</p>
+<hr />
+<h3 id="ping">ping</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({ping: 1})</code></li>
+<li>설명: 서버가 살아있는지 확인한다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({ping: 1})
+{ &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<hr />
+<h3 id="renamecollection">renameCollection</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({renameCollection: "a", to: "b"})</code> 또는 <code>db.collection.renameCollection("targetCollectionName")</code></li>
+<li>설명: 컬렉션 <code>a</code>를 <code>b</code>로 이름을 변경합니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.getCollectionNames()
+[ &quot;orders&quot;, &quot;system.indexes&quot; ]
+&gt; db.orders.renameCollection(&quot;test&quot;)
+{ &quot;ok&quot; : 1 }
+&gt; db.getCollectionNames()
+[ &quot;system.indexes&quot;, &quot;test&quot; ]
+</code></pre></div>
+
+<hr />
+<h3 id="repairdatabase">repairDatabase</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({repairDatabase: 1})</code></li>
+<li>설명: 현재 데이터베이스를 수리하고 컴팩트하게 만든다. 명령을 수행하는데 다소 시간이 소요될 수 있습니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; db.runCommand({repairDatabase: 1})
+{ &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<hr />
+<h3 id="serverstatus">serverStatus</h3>
+<ul>
+<li>프로토타입: <code>db.runCommand({serverStatus: 1})</code></li>
+<li>설명: 서버에 대한 admin 통계를 얻습니다. admin 계정을 사용해야 합니다 ("use admin"). 따라서, MongLab과 같은 MongLab-as-a-Service 클라우드 플랫폼에서는 사용할 수 없습니다.</li>
+<li>예:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; use admin
+switched to db admin
+&gt; db.runCommand({serverStatus: 1})
+{
+  &quot;host&quot; : &quot;gchoi-ui-MacBook-Pro.local&quot;,
+  &quot;version&quot; : &quot;2.4.9&quot;,
+  &quot;process&quot; : &quot;mongod&quot;,
+  &quot;pid&quot; : 1183,
+  &quot;uptime&quot; : 402,
+  &quot;uptimeMillis&quot; : NumberLong(402845),
+  &quot;uptimeEstimate&quot; : 370,
+  &quot;localTime&quot; : ISODate(&quot;2014-03-05T15:24:37.903Z&quot;),
+  &quot;asserts&quot; : {
+    &quot;regular&quot; : 0,
+    &quot;warning&quot; : 0,
+    &quot;msg&quot; : 0,
+    &quot;user&quot; : 5,
+    &quot;rollovers&quot; : 0
+  },
+  &quot;backgroundFlushing&quot; : {
+    &quot;flushes&quot; : 6,
+    &quot;total_ms&quot; : 37,
+    &quot;average_ms&quot; : 6.166666666666667,
+    &quot;last_ms&quot; : 1,
+    &quot;last_finished&quot; : ISODate(&quot;2014-03-05T15:23:55.111Z&quot;)
+  },
+  &quot;connections&quot; : {
+    &quot;current&quot; : 1,
+    &quot;available&quot; : 203,
+    &quot;totalCreated&quot; : NumberLong(1)
+  },
+  &quot;cursors&quot; : {
+    &quot;totalOpen&quot; : 0,
+    &quot;clientCursors_size&quot; : 0,
+    &quot;timedOut&quot; : 0
+  },
+  &quot;dur&quot; : {
+    &quot;commits&quot; : 29,
+    &quot;journaledMB&quot; : 0,
+    &quot;writeToDataFilesMB&quot; : 0,
+    &quot;compression&quot; : 0,
+    &quot;commitsInWriteLock&quot; : 0,
+    &quot;earlyCommits&quot; : 0,
+    &quot;timeMs&quot; : {
+      &quot;dt&quot; : 3038,
+      &quot;prepLogBuffer&quot; : 0,
+      &quot;writeToJournal&quot; : 0,
+      &quot;writeToDataFiles&quot; : 0,
+      &quot;remapPrivateView&quot; : 0
+    }
+  },
+  &quot;extra_info&quot; : {
+    &quot;note&quot; : &quot;fields vary by platform&quot;,
+    &quot;page_faults&quot; : 2030
+  },
+  &quot;globalLock&quot; : {
+    &quot;totalTime&quot; : NumberLong(402844000),
+    &quot;lockTime&quot; : NumberLong(589889),
+    &quot;currentQueue&quot; : {
+      &quot;total&quot; : 0,
+      &quot;readers&quot; : 0,
+      &quot;writers&quot; : 0
+    },
+    &quot;activeClients&quot; : {
+      &quot;total&quot; : 0,
+      &quot;readers&quot; : 0,
+      &quot;writers&quot; : 0
+    }
+  },
+  &quot;indexCounters&quot; : {
+    &quot;accesses&quot; : 4,
+    &quot;hits&quot; : 4,
+    &quot;misses&quot; : 0,
+    &quot;resets&quot; : 0,
+    &quot;missRatio&quot; : 0
+  },
+  &quot;locks&quot; : {
+    &quot;.&quot; : {
+      &quot;timeLockedMicros&quot; : {
+        &quot;R&quot; : NumberLong(18220),
+        &quot;W&quot; : NumberLong(589889)
+      },
+      &quot;timeAcquiringMicros&quot; : {
+        &quot;R&quot; : NumberLong(698212),
+        &quot;W&quot; : NumberLong(1426)
+      }
+    },
+    &quot;admin&quot; : {
+      &quot;timeLockedMicros&quot; : {
+        &quot;r&quot; : NumberLong(2114),
+        &quot;w&quot; : NumberLong(0)
+      },
+      &quot;timeAcquiringMicros&quot; : {
+        &quot;r&quot; : NumberLong(34),
+        &quot;w&quot; : NumberLong(0)
+      }
+    },
+    &quot;local&quot; : {
+      &quot;timeLockedMicros&quot; : {
+        &quot;r&quot; : NumberLong(1038),
+        &quot;w&quot; : NumberLong(0)
+      },
+      &quot;timeAcquiringMicros&quot; : {
+        &quot;r&quot; : NumberLong(101),
+        &quot;w&quot; : NumberLong(0)
+      }
+    },
+    &quot;db&quot; : {
+      &quot;timeLockedMicros&quot; : {
+        &quot;r&quot; : NumberLong(332),
+        &quot;w&quot; : NumberLong(0)
+      },
+      &quot;timeAcquiringMicros&quot; : {
+        &quot;r&quot; : NumberLong(21),
+        &quot;w&quot; : NumberLong(0)
+      }
+    },
+    &quot;orders&quot; : {
+      &quot;timeLockedMicros&quot; : {
+        &quot;r&quot; : NumberLong(206),
+        &quot;w&quot; : NumberLong(0)
+      },
+      &quot;timeAcquiringMicros&quot; : {
+        &quot;r&quot; : NumberLong(13),
+        &quot;w&quot; : NumberLong(0)
+      }
+    }
+  },
+  &quot;network&quot; : {
+    &quot;bytesIn&quot; : 5133,
+    &quot;bytesOut&quot; : 4893,
+    &quot;numRequests&quot; : 54
+  },
+  &quot;opcounters&quot; : {
+    &quot;insert&quot; : 5,
+    &quot;query&quot; : 29,
+    &quot;update&quot; : 0,
+    &quot;delete&quot; : 0,
+    &quot;getmore&quot; : 0,
+    &quot;command&quot; : 47
+  },
+  &quot;opcountersRepl&quot; : {
+    &quot;insert&quot; : 0,
+    &quot;query&quot; : 0,
+    &quot;update&quot; : 0,
+    &quot;delete&quot; : 0,
+    &quot;getmore&quot; : 0,
+    &quot;command&quot; : 0
+  },
+  &quot;recordStats&quot; : {
+    &quot;accessesNotInMemory&quot; : 0,
+    &quot;pageFaultExceptionsThrown&quot; : 0,
+    &quot;db&quot; : {
+      &quot;accessesNotInMemory&quot; : 0,
+      &quot;pageFaultExceptionsThrown&quot; : 0
+    },
+    &quot;local&quot; : {
+      &quot;accessesNotInMemory&quot; : 0,
+      &quot;pageFaultExceptionsThrown&quot; : 0
+    },
+    &quot;orders&quot; : {
+      &quot;accessesNotInMemory&quot; : 0,
+      &quot;pageFaultExceptionsThrown&quot; : 0
+    }
+  },
+  &quot;writeBacksQueued&quot; : false,
+  &quot;mem&quot; : {
+    &quot;bits&quot; : 64,
+    &quot;resident&quot; : 35,
+    &quot;virtual&quot; : 2680,
+    &quot;supported&quot; : true,
+    &quot;mapped&quot; : 80,
+    &quot;mappedWithJournal&quot; : 160
+  },
+  &quot;metrics&quot; : {
+    &quot;document&quot; : {
+      &quot;deleted&quot; : NumberLong(0),
+      &quot;inserted&quot; : NumberLong(5),
+      &quot;returned&quot; : NumberLong(22),
+      &quot;updated&quot; : NumberLong(0)
+    },
+    &quot;getLastError&quot; : {
+      &quot;wtime&quot; : {
+        &quot;num&quot; : 4,
+        &quot;totalMillis&quot; : 0
+      },
+      &quot;wtimeouts&quot; : NumberLong(0)
+    },
+    &quot;operation&quot; : {
+      &quot;fastmod&quot; : NumberLong(0),
+      &quot;idhack&quot; : NumberLong(0),
+      &quot;scanAndOrder&quot; : NumberLong(0)
+    },
+    &quot;queryExecutor&quot; : {
+      &quot;scanned&quot; : NumberLong(28)
+    },
+    &quot;record&quot; : {
+      &quot;moves&quot; : NumberLong(0)
+    },
+    &quot;repl&quot; : {
+      &quot;apply&quot; : {
+        &quot;batches&quot; : {
+          &quot;num&quot; : 0,
+          &quot;totalMillis&quot; : 0
+        },
+        &quot;ops&quot; : NumberLong(0)
+      },
+      &quot;buffer&quot; : {
+        &quot;count&quot; : NumberLong(0),
+        &quot;maxSizeBytes&quot; : 268435456,
+        &quot;sizeBytes&quot; : NumberLong(0)
+      },
+      &quot;network&quot; : {
+        &quot;bytes&quot; : NumberLong(0),
+        &quot;getmores&quot; : {
+          &quot;num&quot; : 0,
+          &quot;totalMillis&quot; : 0
+        },
+        &quot;ops&quot; : NumberLong(0),
+        &quot;readersCreated&quot; : NumberLong(0)
+      },
+      &quot;oplog&quot; : {
+        &quot;insert&quot; : {
+          &quot;num&quot; : 0,
+          &quot;totalMillis&quot; : 0
+        },
+        &quot;insertBytes&quot; : NumberLong(0)
+      },
+      &quot;preload&quot; : {
+        &quot;docs&quot; : {
+          &quot;num&quot; : 0,
+          &quot;totalMillis&quot; : 0
+        },
+        &quot;indexes&quot; : {
+          &quot;num&quot; : 0,
+          &quot;totalMillis&quot; : 0
+        }
+      }
+    },
+    &quot;ttl&quot; : {
+      &quot;deletedDocuments&quot; : NumberLong(0),
+      &quot;passes&quot; : NumberLong(6)
+    }
+  },
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<p>이상으로 MongoDB의 주요 명령어들에 대해 살펴 보았습니다. 하지만, 앞서 언급한 바와 같이 이외에도 명령어는 매우 많습니다. 물론 이들 중에는 거의 사용할 일이 없는 명령어들도 있긴 합니다.</p>
+<p>다음 포스팅에서는 <code>Capped Collection</code>에 대해 알아보도록 하겠습니다.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../23-mongodb-aggregation-mapreduce/" title="23. MongoDB Query Part 13. - Aggregation/MapReduce" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                23. MongoDB Query Part 13. - Aggregation/MapReduce
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
