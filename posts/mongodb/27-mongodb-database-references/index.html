@@ -1,0 +1,1199 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/27-mongodb-database-references/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>27. MongoDB Database Refences - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              27. MongoDB Database Refences
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+      Deep Learning from Scratch Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+      Deep Learning from Scratch Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+      05. MongoDB Update Operators Part 2. - $set, $unset
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+      06. MongoDB Update Operators Part 3. - $push
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+      07. MongoDB Update Operators Part 4. - $addToSet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+      08. MongoDB Update Operators Part 5. - $pop, $pull
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+      09. MongoDB Update Operators Part 6. - $upsert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+      10. MongoDB Update Operators Part 7. - Updating Multiple Documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+      11. MongoDB Query Part 1. - find
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+      12. MongoDB Query Part 2. - findAndModify
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+      13. MongoDB Query Part 3. - $all
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+      14. MongoDB Query Part 4. - $size
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+      15. MongoDB Query Part 5. - $slice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+      16. MongoDB Query Part 6. - $where
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+      17. MongoDB Query Part 7. - querying_embedded_documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+      18. MongoDB Query Part 8. - cursors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+      19. MongoDB Query Part 9. - skip 속도 높이기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+      20. MongoDB Query Part 10. - 기타 쿼리 연산자들
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+      21. MongoDB Query Part 11. - $snap
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../22-mongodb-aggregation-basic/" title="22. MongoDB Aggregation Part 1. - Basic" class="md-nav__link">
+      22. MongoDB Aggregation Part 1. - Basic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../23-mongodb-aggregation-mapreduce/" title="23. MongoDB Aggregation Part 2. - MapReduce" class="md-nav__link">
+      23. MongoDB Aggregation Part 2. - MapReduce
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../24-mongodb-db-commands/" title="24. MongoDB DB Commands" class="md-nav__link">
+      24. MongoDB DB Commands
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../25-mongodb-capped-collections/" title="25. MongoDB Capped Collections" class="md-nav__link">
+      25. MongoDB Capped Collections
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-nav__link">
+      26. MongoDB GridFS
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="27. MongoDB Database Refences" class="md-nav__link md-nav__link--active">
+      27. MongoDB Database Refences
+    </a>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-nav__link">
+      28. MongoDB Administration Part 1. - Starting MongoDB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-nav__link">
+      29. MongoDB Administration Part 2. - Monitoring
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../30-mongodb-administration-security_and_authentication/" title="30. MongoDB Administration Part 3. - Security & Authentication" class="md-nav__link">
+      30. MongoDB Administration Part 3. - Security & Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-nav__link">
+      31. MongoDB Replication Part 1. - Master-Slave Replication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../32-mongodb-replication-replica_sets_part1/" title="32. MongoDB Replication Part 2. - Replica Sets Part 1" class="md-nav__link">
+      32. MongoDB Replication Part 2. - Replica Sets Part 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-nav__link">
+      33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../34-mongodb-replication-replica_sets_part2/" title="34. MongoDB Replication Part 4. - Replica Sets Part 2" class="md-nav__link">
+      34. MongoDB Replication Part 4. - Replica Sets Part 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../35-mongodb-replication-usage_of_slaves-data_processing/" title="35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing" class="md-nav__link">
+      35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../36-mongodb-replication-oplog/" title="36. MongoDB Replication Part 6. - oplog" class="md-nav__link">
+      36. MongoDB Replication Part 6. - oplog
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../37-mongodb-replication-sync/" title="37. MongoDB Replication Part 7. - sync" class="md-nav__link">
+      37. MongoDB Replication Part 7. - sync
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../38-mongodb-replication-replication_state_and_local_db/" title="38. MongoDB Replication Part 8. - Replication State and Local DB" class="md-nav__link">
+      38. MongoDB Replication Part 8. - Replication State and Local DB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../39-mongodb-replication-replication_with_authentication/" title="39. MongoDB Replication Part 9. - Replication with Authentication" class="md-nav__link">
+      39. MongoDB Replication Part 9. - Replication with Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../40-mongodb-sharding-introduction/" title="40. MongoDB Sharding Part 1. - Introduction" class="md-nav__link">
+      40. MongoDB Sharding Part 1. - Introduction
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../41-mongodb-sharding-shard_keys/" title="41. MongoDB Sharding Part 2. - Shard Keys" class="md-nav__link">
+      41. MongoDB Sharding Part 2. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-nav__link">
+      42. MongoDB Sharding Part 3. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../43-mongodb-sharding-product_configurations/" title="43. MongoDB Sharding Part 4. - Product Configurations" class="md-nav__link">
+      43. MongoDB Sharding Part 4. - Product Configurations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-nav__link">
+      44. MongoDB Sharding Part 5. - Sharding Administration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../45-mongodb-tips-db_collection_remove_commands/" title="45. MongoDB Tips Part 1. - DB & Collection Remove Commands" class="md-nav__link">
+      45. MongoDB Tips Part 1. - DB & Collection Remove Commands
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <p>이번 포스팅에서는 "데이터베이스 간 참조"에 대하여 알아보도록 하겠습니다.</p>
+<p>도큐먼트를 참조하는 방법은 크게 두 가지가 있는데, 하나는 수동 참조(Manual Reference)이며 다른 하나는 <code>DBRef</code>를 사용하는 것입니다.</p>
+<p>그러면 각각에 대하여 자세히 알아보도록 하겠습니다.</p>
+<hr />
+<h1 id="_1">수동 참조</h1>
+<p>수동 참조 방식은 참조할 다른 도큐먼트의 아이디(<code>ObjectID</code>)를 도큐먼트 내 하나의 키(<code>key</code>)로 저장하는 것입니다. 즉, 키 값인 아이디를 통해 참조할 도큐먼트를 얻어내어 해당 도큐먼트의 다른 데이터를 얻는 방식입니다.</p>
+<p>이 방법은 간단한 방식으로 대부분의 경우에서 사용됩니다.</p>
+<p>'백문이 불여일견'이므로 예제(예제는 <a href="http://docs.mongodb.org/manual/reference/database-references/">MongoDB의 공식문서</a>를 참조하여 작성하였습니다)를 통해 자세히 설명하도록 하겠습니다.</p>
+<p>우선 다음과 같은 도큐먼트를 준비합니다:</p>
+<div class="highlight"><pre><span></span><code>db.places.insert({
+    name: &quot;Broadway Center&quot;,
+    url: &quot;bc.example.net&quot;
+})
+
+db.people.insert({
+    name: &quot;Erin&quot;,
+    places_id: db.places.findOne({name: &quot;Broadway Center&quot;})._id,
+    url:  &quot;bc.example.net/Erin&quot;
+})
+</code></pre></div>
+
+<p><code>places</code>와 <code>people</code> 두 개의 컬렉션을 생성하였는데, <code>people</code> 컬렉션의 <code>places_id</code> 키의 값은(빨간색 하일라이트) <code>places</code> 컬렉션으로부터 <code>name</code> 키(key)가 <code>Broadway Center</code>인 도큐먼트를 찾고 그 도큐먼트의 아이디(<code>._id</code>)임을 알 수 있습니다.</p>
+<p>이제 <code>people</code> 컬렉션으로부터 <code>name</code>이 <code>Erin</code>인 도큐먼트의 <code>places_id</code>를 얻어오고, 그 아이디로부터 <code>places</code> 컬렉션의 아이디와 일치하는 도큐먼트를 찾아 <code>url</code>을 얻어오는 일련의 프로세스를 살펴보도록 하겠습니다.</p>
+<div class="highlight"><pre><span></span><code>&gt; var peopleDoc = db.people.findOne({name: &quot;Erin&quot;});
+&gt; var placeID = peopleDoc.places_id;
+&gt; var placesDoc = db.places.findOne({_id: placeID});
+&gt; placesDoc.url
+bc.example.net
+</code></pre></div>
+
+<p>만약 이 과정이 너무 길고 지루하다면 다음과 같이 한 줄로 표현할 수도 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.places.findOne({ _id: db.people.findOne({name: &quot;Erin&quot;}).places_id }).url
+bc.example.net
+</code></pre></div>
+
+<p>이 구조를 그림으로 표현하면 다음과 같습니다:</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/27-mongodb-database-references/01.png" width="80%" />
+  <figcaption></figcaption>
+</figure>
+
+<p>비교적 쉽고 간단하지 않나요?</p>
+<p>그럼 이번에는 DBRef를 사용하는 방법에 대해 알아보도록 하겠습니다.</p>
+<hr />
+<h1 id="dbref">DBRef</h1>
+<p><code>DBRef</code>는 참조할 도큐먼트의 <code>_id</code> 필드의 값과 옵션으로서의 데이터베이스 이름을 이용하여 어느 하나의 도큐먼트가 다른 도큐먼트를 참조하는 것입니다.</p>
+<p><code>DBRef</code>는 총 3개의 인자를 취하는데 처음 두 개는 필수 인자인 <code>$ref</code>, <code>$id</code>이며, 세번째 인자는 옵션 인자인 <code>$db</code>입니다.</p>
+<p>각각에 대한 설명은 다음과 같습니다:</p>
+<ul>
+<li>
+<p>$ref</p>
+<p>참조할 도큐먼트가 존재하는 컬렉션의 이름.</p>
+</li>
+<li>
+<p>$id</p>
+<p>참조된 도큐먼트 내 <code>_id</code> 필드의 값.</p>
+</li>
+<li>
+<p>$db</p>
+<p>참조할 도큐먼트가 존재하는 데이터베이스의 이름.</p>
+</li>
+</ul>
+<p>예제로 설명을 하겠습니다.</p>
+<p>우선 다음과 같이 컬렉션을 준비합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.users.insert({&quot;_id&quot; : &quot;mike&quot;, &quot;display_name&quot; : &quot;Mike D&quot;})
+&gt; db.users.insert({&quot;_id&quot; : &quot;kristina&quot;, &quot;display_name&quot; : &quot;Kristina C&quot;})
+
+&gt; db.notes.insert({&quot;_id&quot; : 5, &quot;author&quot; : &quot;mike&quot;, &quot;text&quot; : &quot;MongoDB is fun!&quot;})
+&gt; db.notes.insert({&quot;_id&quot; : 20, &quot;author&quot; : &quot;kristina&quot;, &quot;text&quot; : &quot;... and DBRefs are easy, too&quot;, &quot;references&quot;: [{&quot;$ref&quot; : &quot;users&quot;, &quot;$id&quot; : &quot;mike&quot;}, {&quot;$ref&quot; : &quot;notes&quot;, &quot;$id&quot; : 5}]})
+
+&gt; db.users.find().pretty()
+{ &quot;_id&quot; : &quot;mike&quot;, &quot;display_name&quot; : &quot;Mike D&quot; }
+{ &quot;_id&quot; : &quot;kristina&quot;, &quot;display_name&quot; : &quot;Kristina C&quot; }
+
+&gt; db.notes.find().pretty()
+{ &quot;_id&quot; : 5, &quot;author&quot; : &quot;mike&quot;, &quot;text&quot; : &quot;MongoDB is fun!&quot; }
+{
+    &quot;_id&quot; : 20,
+    &quot;author&quot; : &quot;kristina&quot;,
+    &quot;text&quot; : &quot;... and DBRefs are easy, too&quot;,
+    &quot;references&quot; : [
+        DBRef(&quot;users&quot;, &quot;mike&quot;),
+        DBRef(&quot;notes&quot;, 5)
+    ]
+}
+</code></pre></div>
+
+<p><code>notes</code> 컬렉션의 <code>_id</code>가 20인 도큐먼트의 <code>references</code> 필드를 보면 두 개의 <code>DBRef</code>가 있는 것을 볼 수 있습니다. 두 개의 인자를 취하고 있는 것을 볼 수 있는데, 첫번째 인자는 참조할 컬렉션의 이름이며 두번째 인자는 해당 컬렉션의 도큐먼트를 찾을 필드값이라고 보면 되겠습니다.</p>
+<p>예를 들어, <code>DBRef("users", "mike")</code>는 <code>users</code> 컬렉션의 <code>_id</code>가 <code>mike</code>인 도큐먼트를 참조할 목적으로, <code>DBRef("notes", 5)</code>는 <code>notes</code> 컬렉션의 <code>_id</code>가 5인 도큐먼트를 찾을 목적으로 참조할 목적으로 저장한 것입니다.</p>
+<p>우선, <code>note</code>라는 변수에 <code>notes</code> 컬렉션의 <code>_id</code>가 20인 도큐먼트를 저장합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; var note = db.notes.findOne({&quot;_id&quot; : 20});
+&gt; note
+{
+    &quot;_id&quot; : 20,
+    &quot;author&quot; : &quot;kristina&quot;,
+    &quot;text&quot; : &quot;... and DBRefs are easy, too&quot;,
+    &quot;references&quot; : [
+        DBRef(&quot;users&quot;, &quot;mike&quot;),
+        DBRef(&quot;notes&quot;, 5)
+    ]
+}
+</code></pre></div>
+
+<p>결과부터 출력 해보면 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; note.references.forEach(function(ref) {
+... printjson(db[ref.$ref].findOne({&quot;_id&quot; : ref.$id}));
+... });
+{ &quot;_id&quot; : &quot;mike&quot;, &quot;display_name&quot; : &quot;Mike D&quot; }
+{ &quot;_id&quot; : 5, &quot;author&quot; : &quot;mike&quot;, &quot;text&quot; : &quot;MongoDB is fun!&quot; }
+</code></pre></div>
+
+<p>먼저 주목해야 할 것이 <code>note.references</code>입니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; note.references
+[ DBRef(&quot;users&quot;, &quot;mike&quot;), DBRef(&quot;notes&quot;, 5) ]
+</code></pre></div>
+
+<p>위에서 보듯이 <code>note.references</code>는 두 개의 <code>DBRef</code> 요소입니다. 함수의 인자인 <code>ref</code>가 바로 이 두 개의 <code>DBRef</code> 요소입니다.</p>
+<p>이것은 다음을 통해 확인할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; note.references.forEach(function(ref) {
+... print(ref);
+... });
+DBRef(&quot;users&quot;, &quot;mike&quot;)
+DBRef(&quot;notes&quot;, 5)
+</code></pre></div>
+
+<p><code>note</code> 컬렉션을 정의된 내용을 참고해 보면, <code>users</code>와 <code>notes</code>는 <code>$ref</code>이며, <code>mike</code>와 <code>5</code>는 <code>$id</code>입니다.</p>
+<p>다음을 통해 이러한 사실을 확인할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; note.references.forEach(function(ref) {
+... print(ref.$ref);
+... });
+users
+notes
+&gt;
+&gt; note.references.forEach(function(ref) {
+... print(ref.$id);
+... });
+mike
+5
+</code></pre></div>
+
+<p>따라서, <code>db[ref.$ref].findOne({"_id" : ref.$id})</code>는, 첫번째 <code>DBRef</code> 요소에 대해</p>
+<div class="highlight"><pre><span></span><code>db[users].findOne({&quot;_id&quot;: &quot;mike&quot;});
+</code></pre></div>
+
+<p>와 같으며, 두번째 <code>DBRef</code> 요소에 대해,</p>
+<div class="highlight"><pre><span></span><code>db[notes].findOne({&quot;_id&quot;: 5});
+</code></pre></div>
+
+<p>와 같습니다. 따라서, 출력결과가 어떻게 나왔는지 이해할 수 있습니다.</p>
+<p>앞서 도큐먼트를 참조하는 방법은 <code>수동참조</code>와 <code>DBRef</code>를 사용하는 방법 두 가지에 대해 알아보았습니다.</p>
+<p><code>수동참조</code>는 <code>_id</code>만 저장하면 되지만 <code>DBRef</code>는 이보다 많은 정보를 저장해야 하므로 어떤 면에서는 비효율적으로 보입니다. 그렇다면 DBRef는 언제 사용하는 것이 좋을까요?</p>
+<p>간단히 말해, 다른 컬렉션 내의 도큐먼트에 이종의 참조를 저장할 경우에 가장 적합합니다. 이는 앞의 예제에서 보는 바와 같습니다.</p>
+<p>또 다른 경우는 driver나 tool에서 <code>DBRef</code>에 특정한 추가 기능을 사용할 때입니다. MongoDB의 driver 종류에 대해 알아보려면 <a href="http://docs.mongodb.org/manual/applications/drivers/">여기</a>를 클릭하시기 바랍니다.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                26. MongoDB GridFS
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                28. MongoDB Administration Part 1. - Starting MongoDB
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1485 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/32-mongodb-replication-replica_sets_part1/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>32. MongoDB Replication Part 2. - Replica Sets Part 1 - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-4" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              32. MongoDB Replication Part 2. - Replica Sets Part 1
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+      Deep Learning from Scratch Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+      Deep Learning from Scratch Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+      05. MongoDB Update Operators Part 2. - $set, $unset
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+      06. MongoDB Update Operators Part 3. - $push
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+      07. MongoDB Update Operators Part 4. - $addToSet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+      08. MongoDB Update Operators Part 5. - $pop, $pull
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+      09. MongoDB Update Operators Part 6. - $upsert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+      10. MongoDB Update Operators Part 7. - Updating Multiple Documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+      11. MongoDB Query Part 1. - find
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+      12. MongoDB Query Part 2. - findAndModify
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+      13. MongoDB Query Part 3. - $all
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+      14. MongoDB Query Part 4. - $size
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+      15. MongoDB Query Part 5. - $slice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+      16. MongoDB Query Part 6. - $where
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+      17. MongoDB Query Part 7. - querying_embedded_documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+      18. MongoDB Query Part 8. - cursors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+      19. MongoDB Query Part 9. - skip 속도 높이기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+      20. MongoDB Query Part 10. - 기타 쿼리 연산자들
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+      21. MongoDB Query Part 11. - $snap
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../22-mongodb-aggregation-basic/" title="22. MongoDB Aggregation Part 1. - Basic" class="md-nav__link">
+      22. MongoDB Aggregation Part 1. - Basic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../23-mongodb-aggregation-mapreduce/" title="23. MongoDB Aggregation Part 2. - MapReduce" class="md-nav__link">
+      23. MongoDB Aggregation Part 2. - MapReduce
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../24-mongodb-db-commands/" title="24. MongoDB DB Commands" class="md-nav__link">
+      24. MongoDB DB Commands
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../25-mongodb-capped-collections/" title="25. MongoDB Capped Collections" class="md-nav__link">
+      25. MongoDB Capped Collections
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-nav__link">
+      26. MongoDB GridFS
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../27-mongodb-database-references/" title="27. MongoDB Database Refences" class="md-nav__link">
+      27. MongoDB Database Refences
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-nav__link">
+      28. MongoDB Administration Part 1. - Starting MongoDB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-nav__link">
+      29. MongoDB Administration Part 2. - Monitoring
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../30-mongodb-administration-security_and_authentication/" title="30. MongoDB Administration Part 3. - Security & Authentication" class="md-nav__link">
+      30. MongoDB Administration Part 3. - Security & Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-nav__link">
+      31. MongoDB Replication Part 1. - Master-Slave Replication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        32. MongoDB Replication Part 2. - Replica Sets Part 1
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="32. MongoDB Replication Part 2. - Replica Sets Part 1" class="md-nav__link md-nav__link--active">
+      32. MongoDB Replication Part 2. - Replica Sets Part 1
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-4" class="md-nav__link">
+    1. 데이터 디렉터리에 4개의 노드에 대한 각각의 디렉터리를 만들기
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-mongod" class="md-nav__link">
+    2. 각각의 노드에 대한 mongod 인스턴스를 실행
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-mongo-mongod" class="md-nav__link">
+    3. mongo 쉘을 통해 앞서 실행한 mongod 인스턴스 중 하나에 연결
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-rsconf-replica-set" class="md-nav__link">
+    4. rsconf라는 변수에 Replica Set의 환경설정 정보를 저장
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-rsinitiate-replica-set" class="md-nav__link">
+    5. rs.initiate() 메써드를 통해 Replica Set을 초기화
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-27017-primary-mongo-resadd-secondary-27018-27019-27020-replica-set" class="md-nav__link">
+    6. 현재 포트번호 27017인 PRIMARY에 mongo 쉘이 연결되어 있으며, res.add() 메써드를 이용하여 나머지 SECONDARY(포트번호 27018, 27019, 27020)들을 Replica Set에 추가
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-secondary-mongo" class="md-nav__link">
+    7. Secondary 중 하나를 mongo 쉘로 연결
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-primary-secondary" class="md-nav__link">
+    8. 현재 primary로 지정된 멤버와 SECONDARY로 지정된 멤버를 확인
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-rsstatus" class="md-nav__link">
+    9. 마지막으로 rs.status() 메써드를 통해 현재 상태를 확인
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-nav__link">
+      33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../34-mongodb-replication-replica_sets_part2/" title="34. MongoDB Replication Part 4. - Replica Sets Part 2" class="md-nav__link">
+      34. MongoDB Replication Part 4. - Replica Sets Part 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../35-mongodb-replication-usage_of_slaves-data_processing/" title="35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing" class="md-nav__link">
+      35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../36-mongodb-replication-oplog/" title="36. MongoDB Replication Part 6. - oplog" class="md-nav__link">
+      36. MongoDB Replication Part 6. - oplog
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../37-mongodb-replication-sync/" title="37. MongoDB Replication Part 7. - sync" class="md-nav__link">
+      37. MongoDB Replication Part 7. - sync
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../38-mongodb-replication-replication_state_and_local_db/" title="38. MongoDB Replication Part 8. - Replication State and Local DB" class="md-nav__link">
+      38. MongoDB Replication Part 8. - Replication State and Local DB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../39-mongodb-replication-replication_with_authentication/" title="39. MongoDB Replication Part 9. - Replication with Authentication" class="md-nav__link">
+      39. MongoDB Replication Part 9. - Replication with Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../40-mongodb-sharding-introduction/" title="40. MongoDB Sharding Part 1. - Introduction" class="md-nav__link">
+      40. MongoDB Sharding Part 1. - Introduction
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../41-mongodb-sharding-shard_keys/" title="41. MongoDB Sharding Part 2. - Shard Keys" class="md-nav__link">
+      41. MongoDB Sharding Part 2. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-nav__link">
+      42. MongoDB Sharding Part 3. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../43-mongodb-sharding-product_configurations/" title="43. MongoDB Sharding Part 4. - Product Configurations" class="md-nav__link">
+      43. MongoDB Sharding Part 4. - Product Configurations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-nav__link">
+      44. MongoDB Sharding Part 5. - Sharding Administration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../45-mongodb-tips-db_collection_remove_commands/" title="45. MongoDB Tips Part 1. - DB & Collection Remove Commands" class="md-nav__link">
+      45. MongoDB Tips Part 1. - DB & Collection Remove Commands
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-4" class="md-nav__link">
+    1. 데이터 디렉터리에 4개의 노드에 대한 각각의 디렉터리를 만들기
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-mongod" class="md-nav__link">
+    2. 각각의 노드에 대한 mongod 인스턴스를 실행
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-mongo-mongod" class="md-nav__link">
+    3. mongo 쉘을 통해 앞서 실행한 mongod 인스턴스 중 하나에 연결
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-rsconf-replica-set" class="md-nav__link">
+    4. rsconf라는 변수에 Replica Set의 환경설정 정보를 저장
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-rsinitiate-replica-set" class="md-nav__link">
+    5. rs.initiate() 메써드를 통해 Replica Set을 초기화
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-27017-primary-mongo-resadd-secondary-27018-27019-27020-replica-set" class="md-nav__link">
+    6. 현재 포트번호 27017인 PRIMARY에 mongo 쉘이 연결되어 있으며, res.add() 메써드를 이용하여 나머지 SECONDARY(포트번호 27018, 27019, 27020)들을 Replica Set에 추가
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-secondary-mongo" class="md-nav__link">
+    7. Secondary 중 하나를 mongo 쉘로 연결
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-primary-secondary" class="md-nav__link">
+    8. 현재 primary로 지정된 멤버와 SECONDARY로 지정된 멤버를 확인
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-rsstatus" class="md-nav__link">
+    9. 마지막으로 rs.status() 메써드를 통해 현재 상태를 확인
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                  <h1>32. MongoDB Replication Part 2. - Replica Sets Part 1</h1>
+                
+                <p>이번 포스팅에서는 MongoDB의 가장 중요한 개념 중 하나인 <code>Replica Set</code>에 대해 알아보도록 하겠습니다.</p>
+<p><code>Replica Set</code>은 기본적으로 자동 패일오버 기능을 갖는 Master-Slave 클러스터이지만, Master-Slave 클러스터의 가장 큰 차이점은 master 노드가 가변적이라는 것입니다. 즉, 현재 master 노드로 지정된 인스턴스가 다운될 경우 다른 노드가 master 노드로 자동 지정된다는 점입니다.</p>
+<p>Master-Slave 클러스터와 <code>Replica Set</code>과의 공통점은, 단 하나의 master 노드(PRIMARY 노드라고도 함)와 여러 개의 slave 노드(SECONDARY 노드라고도 함)를 갖는다는 점입니다.</p>
+<p>개념적으로는 별 것 아니지만 실행에 있어서 어려움이 있을 것이란 예상이 들기도 합니다. 하지만, 한번 연습해 보면 그리 어려운 것은 아닐 것입니다. 단지, <code>mongod</code> 인스턴스 실행 시 공통의 <code>Replica Set</code> 이름을 지정해 주면 됩니다. 물론 이것이 다는 아니지만 비교적 간단한 절차에 의해 <code>Replica Set</code>을 구성할 수 있습니다. 그리고 작동 환경의 성능에 따라 SECONDARY 노드를 추가하는데에는 특별한 제한은 없습니다.</p>
+<p>[그림 1.]은 Replica Set에 따른 자동 패일오버에 대한 개념을 나타낸 것이다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/32-mongodb-replication-replica_sets/01.png" width="80%" />
+  <figcaption>[그림 1.] PRIMARY 노드의 패일오버 시 새로운 PRIMARY 자동 지정.</figcaption>
+</figure>
+
+<figure>
+  <img src="../../../assets/img/posts/mongodb/32-mongodb-replication-replica_sets/02.png" width="80%" />
+  <figcaption>[그림 2.] 하나의 PRIMARY 노드에 여러 개의 SECONDARY 노드가 연결된 모습.</figcaption>
+</figure>
+
+<figure>
+  <img src="../../../assets/img/posts/mongodb/32-mongodb-replication-replica_sets/03.png" width="80%" />
+  <figcaption>[그림 3.] 만약 기존의 PRIMARY 노드의 연결이 끊어지면 SECONDARY 노드 중 하나가 PRIMARY 노드로 전환.</figcaption>
+</figure>
+
+<figure>
+  <img src="../../../assets/img/posts/mongodb/32-mongodb-replication-replica_sets/04.png" width="80%" />
+  <figcaption>[그림 4.] 연결이 끊겼던 노드가 복귀되면 SECONDARY 노드로 전환되어 연결.</figcaption>
+</figure>
+
+<p>Replica Set을 구성하는 전체적인 절차는 다음과 같습니다:</p>
+<ol>
+<li><code>mongod</code> 인스턴스를 각각의 노드에 대해 실행.</li>
+<li><code>Replica Set</code>에 대한 환경설정.</li>
+<li>각 slave 노드에 대한 <code>mongod</code> 인스턴스 추가.</li>
+</ol>
+<p>그러면 위에 설명된 절차를 구체적으로 튜토리얼 형식으로 4개의 노드로 구성된 <code>Replica Set</code> 구성하는 방법에 대하여 알아보도록 하겠습니다.</p>
+<h2 id="1-4">1. 데이터 디렉터리에 4개의 노드에 대한 각각의 디렉터리를 만들기</h2>
+<p>예를 들어 [그림 2.]와 같이이 이름을 <code>node_1</code>, <code>node_2</code>, <code>node_3</code>, <code>node_4</code>로 하였습니다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/32-mongodb-replication-replica_sets/05.png" width="80%" />
+  <figcaption>[그림 5.] 각 노드에 대해 데이터 디렉터리를 생성한 예.</figcaption>
+</figure>
+
+<h2 id="2-mongod">2. 각각의 노드에 대한 mongod 인스턴스를 실행</h2>
+<ul>
+<li>
+<p>첫번째 노드에 대한 mongod 인스턴스 실행:</p>
+<p><code>$ mongod --port 27017 --dbpath [DATA_PATH]/node1/ --replSet rs0 --smallfiles --oplogSize 128</code></p>
+</li>
+<li>
+<p>두번째 노드에 대한 mongod 인스턴스 실행:</p>
+<p><code>$ mongod --port 27018 --dbpath [DATA_PATH]/node2/ --replSet rs0 --smallfiles --oplogSize 128</code></p>
+</li>
+<li>
+<p>세번째 노드에 대한 mongod 인스턴스 실행:</p>
+<p><code>$ mongod --port 27019 --dbpath [DATA_PATH]/node3/ --replSet rs0 --smallfiles --oplogSize 128</code></p>
+</li>
+<li>
+<p>네번째 노드에 대한 mongod 인스턴스 실행:</p>
+<p><code>$ mongod --port 27020 --dbpath [DATA_PATH]/node4/ --replSet rs0 --smallfiles --oplogSize 128</code></p>
+</li>
+</ul>
+<p><code>--port</code>는 node 별로 다르게 지정하였으며, <code>--dbpath</code>는 방금 생성한 노드 별 데이터 디렉터리로 지정합니다.</p>
+<p><code>Replica set</code>의 이름은 <code>rs0</code>으로 <code>--replSet</code> 옵션으로 지정됩니다. <code>--smallfiles</code>와 <code>--oplogSize</code> 옵션은 디스크 공간을 적게 차지하기 위한 것으로서 개발이나 테스트 단계에서 머쉰의 부담을 줄일 수 있는 유용한 옵션입니다.</p>
+<h2 id="3-mongo-mongod">3. mongo 쉘을 통해 앞서 실행한 mongod 인스턴스 중 하나에 연결</h2>
+<p>이 때 포트 번호를 명시해야 합니다. 예를 들어 포트번호 27017의 <code>mongod</code> 인스턴스에 연결합니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongo --port 27017
+</code></pre></div>
+
+<h2 id="4-rsconf-replica-set">4. rsconf라는 변수에 Replica Set의 환경설정 정보를 저장</h2>
+<p>이 때 <code>hostname</code>을 입력하는 부분이 있습니다. Mac OS의 경우에는 터미널을 실행할 때 프롬프트를 확인하면 됩니다:</p>
+<p>[그림 6.]에서 보듯 Mac OS의 경우 <code>시스템 환경설정 &gt; 공유 &gt; 컴퓨터 이름 &gt; 편집</code>에서 로컬 hostname을 확인할 수 있습니다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/32-mongodb-replication-replica_sets/06.png" width="80%" />
+  <figcaption>[그림 6.] Mac OS에서 터미널을 실행하여 hostname 확인. 그림의 예에서 로컬 hostname은 "gchoiui-MacBook-Pro"이다.</figcaption>
+</figure>
+
+<p>Windows의 경우에는 [그림 7.]과 같이 커맨드라인 명령 콘솔을 실행하여 <code>ipconfig -all</code>을 입력하여 <code>hostname</code>을 확인할 수 있습니다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/32-mongodb-replication-replica_sets/07.png" width="80%" />
+  <figcaption>[그림 7.] Windows에서 DOS 명령 콘솔을 실행하여 hostname 확인.</figcaption>
+</figure>
+
+<p><code>hostname</code>을 <code>gchoi</code>로 가정하고 <code>rsconf</code> 환경설정을 입력합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; rsconf = {_id: &quot;rs0&quot;, members: [{_id: 0, host: &quot;gchoi:27017&quot;}]}
+{
+        &quot;_id&quot; : &quot;rs0&quot;,
+        &quot;members&quot; : [
+                {
+                        &quot;_id&quot; : 0,
+                        &quot;host&quot; : &quot;gchoi:27017&quot;
+                }
+        ]
+}
+</code></pre></div>
+
+<ul>
+<li><strong>Tip</strong>: 로컬 작업 시 <code>hostname</code>인 <code>gchoi</code> 대신 <code>localhost</code>로 입력하여도 됩니다. 즉, 다음과 같이 입력할 수 있습니다. 만약 이 방식으로 작업한다면 이후 나오는 모든 <code>gchoi</code>는 <code>localhost</code>로 바꾸어 입력하도록 합니다.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>&gt; rsconf = {_id: &quot;rs0&quot;, members: [{_id: 0, host: &quot;localhost:27017&quot;}]}
+{
+        &quot;_id&quot; : &quot;rs0&quot;,
+        &quot;members&quot; : [
+                {
+                        &quot;_id&quot; : 0,
+                        &quot;host&quot; : &quot;localhost:27017&quot;
+                }
+        ]
+}
+</code></pre></div>
+
+<h2 id="5-rsinitiate-replica-set">5. rs.initiate() 메써드를 통해 Replica Set을 초기화</h2>
+<div class="highlight"><pre><span></span><code>&gt; rs.initiate( rsconf )
+{
+        &quot;info&quot; : &quot;Config now saved locally.  Should come online in about a minute.&quot;,
+        &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<p>초기화가 성공적으로 수행되면 위와 같이 <code>ok</code>가 1을 갖습니다.</p>
+<h2 id="6-27017-primary-mongo-resadd-secondary-27018-27019-27020-replica-set">6. 현재 포트번호 27017인 PRIMARY에 mongo 쉘이 연결되어 있으며, res.add() 메써드를 이용하여 나머지 SECONDARY(포트번호 27018, 27019, 27020)들을 Replica Set에 추가</h2>
+<p>추가 시, 자신의 시스템의 hostname 이름으로 변경하는 것을 잊지 말시기 바랍니다.</p>
+<div class="highlight"><pre><span></span><code>&gt; rs.add(&quot;gchoi:27018&quot;)
+{ &quot;ok&quot; : 1 }
+rs0:PRIMARY&gt; rs.add(&quot;gchoi:27019&quot;)
+{ &quot;ok&quot; : 1 }
+rs0:PRIMARY&gt; rs.add(&quot;gchoi:27020&quot;)
+{ &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<p>눈여겨 보아야 할 것은, 포트번호 27018의 SECONDARY를 추가한 후에는 프롬프트가 <code>&gt;</code>에서 <code>rs0:PRIMARY&gt;</code>로 변경되어 있는 것입니다.</p>
+<h2 id="7-secondary-mongo">7. Secondary 중 하나를 mongo 쉘로 연결</h2>
+<div class="highlight"><pre><span></span><code>$ mongo --port 27018
+MongoDB shell version: 2.4.9
+connecting to: 127.0.0.1:27018/test
+rs0:SECONDARY&gt;
+</code></pre></div>
+
+<p>예를 들어 위와 같이 포트번호 27018로 연결하면 프롬프트가 <code>rs0:SECONDARY&gt;</code>로 되어 있는 것을 확인할 수 있을 것입니다.</p>
+<h2 id="8-primary-secondary">8. 현재 primary로 지정된 멤버와 SECONDARY로 지정된 멤버를 확인</h2>
+<p><code>Replica Set</code>에 대한 정보는 <code>local.system.replset</code>에 저장되어 있으며, 다음과 같이 입력하면 확인할 수 있습니다 (mongo 쉘이 PRIMARY든 SECONDARY든 상관없습니다):</p>
+<div class="highlight"><pre><span></span><code>rs0:PRIMARY&gt; use local
+switched to db local
+</code></pre></div>
+
+<p>위와 같이 <code>db</code>를 <code>local</code>로 전환하고, <code>local</code>의 컬렉션 리스트를 확인해 보도록 합니다:</p>
+<div class="highlight"><pre><span></span><code>rs0:PRIMARY&gt; db.getCollectionNames()
+[
+        &quot;me&quot;,
+        &quot;oplog.rs&quot;,
+        &quot;replset.minvalid&quot;,
+        &quot;startup_log&quot;,
+        &quot;system.indexes&quot;,
+        &quot;system.replset&quot;
+]
+</code></pre></div>
+
+<p>컬렉션 중 <code>system.replset</code>이 있는 것을 확인할 수 있을 것입니다. 이제 <code>find()</code> 메써드를 통해 PRIMARY와 SECONDARY 멤버를 확인해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>rs0:PRIMARY&gt; db.system.replset.find().pretty()
+{
+        &quot;_id&quot; : &quot;rs0&quot;,
+        &quot;version&quot; : 4,
+        &quot;members&quot; : [
+                {
+                        &quot;_id&quot; : 0,
+                        &quot;host&quot; : &quot;gchoi:27017&quot;
+                },
+                {
+                        &quot;_id&quot; : 1,
+                        &quot;host&quot; : &quot;gchoi:27018&quot;
+                },
+                {
+                        &quot;_id&quot; : 2,
+                        &quot;host&quot; : &quot;gchoi:27019&quot;
+                },
+                {
+                        &quot;_id&quot; : 3,
+                        &quot;host&quot; : &quot;gchoi:27020&quot;
+                }
+        ]
+}
+</code></pre></div>
+
+<h2 id="9-rsstatus">9. 마지막으로 rs.status() 메써드를 통해 현재 상태를 확인</h2>
+<div class="highlight"><pre><span></span><code>rs0:PRIMARY&gt; rs.status()
+{
+        &quot;set&quot; : &quot;rs0&quot;,
+        &quot;date&quot; : ISODate(&quot;2014-03-28T11:15:57Z&quot;),
+        &quot;myState&quot; : 1,
+        &quot;members&quot; : [
+                {
+                        &quot;_id&quot; : 0,
+                        &quot;name&quot; : &quot;gchoi:27017&quot;,
+                        &quot;health&quot; : 1,
+                        &quot;state&quot; : 1,
+                        &quot;stateStr&quot; : &quot;PRIMARY&quot;,
+                        &quot;uptime&quot; : 819,
+                        &quot;optime&quot; : Timestamp(1396004648, 1),
+                        &quot;optimeDate&quot; : ISODate(&quot;2014-03-28T11:04:08Z&quot;),
+                        &quot;self&quot; : true
+                },
+                {
+                        &quot;_id&quot; : 1,
+                        &quot;name&quot; : &quot;gchoi:27018&quot;,
+                        &quot;health&quot; : 1,
+                        &quot;state&quot; : 2,
+                        &quot;stateStr&quot; : &quot;SECONDARY&quot;,
+                        &quot;uptime&quot; : 722,
+                        &quot;optime&quot; : Timestamp(1396004648, 1),
+                        &quot;optimeDate&quot; : ISODate(&quot;2014-03-28T11:04:08Z&quot;),
+                        &quot;lastHeartbeat&quot; : ISODate(&quot;2014-03-28T11:15:56Z&quot;),
+                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2014-03-28T11:15:55Z&quot;),
+                        &quot;pingMs&quot; : 0,
+                        &quot;syncingTo&quot; : &quot;gchoi:27017&quot;
+                },
+                {
+                        &quot;_id&quot; : 2,
+                        &quot;name&quot; : &quot;gchoi:27019&quot;,
+                        &quot;health&quot; : 1,
+                        &quot;state&quot; : 2,
+                        &quot;stateStr&quot; : &quot;SECONDARY&quot;,
+                        &quot;uptime&quot; : 714,
+                        &quot;optime&quot; : Timestamp(1396004648, 1),
+                        &quot;optimeDate&quot; : ISODate(&quot;2014-03-28T11:04:08Z&quot;),
+                        &quot;lastHeartbeat&quot; : ISODate(&quot;2014-03-28T11:15:57Z&quot;),
+                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2014-03-28T11:15:57Z&quot;),
+                        &quot;pingMs&quot; : 0,
+                        &quot;syncingTo&quot; : &quot;gchoi:27017&quot;
+                },
+                {
+                        &quot;_id&quot; : 3,
+                        &quot;name&quot; : &quot;gchoi:27020&quot;,
+                        &quot;health&quot; : 1,
+                        &quot;state&quot; : 2,
+                        &quot;stateStr&quot; : &quot;SECONDARY&quot;,
+                        &quot;uptime&quot; : 709,
+                        &quot;optime&quot; : Timestamp(1396004648, 1),
+                        &quot;optimeDate&quot; : ISODate(&quot;2014-03-28T11:04:08Z&quot;),
+                        &quot;lastHeartbeat&quot; : ISODate(&quot;2014-03-28T11:15:56Z&quot;),
+                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2014-03-28T11:15:55Z&quot;),
+                        &quot;pingMs&quot; : 0,
+                        &quot;syncingTo&quot; : &quot;gchoi:27017&quot;
+                }
+        ],
+        &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<p>현재 <code>gchoi:27017</code>이 PRIMARY로 지정된 것을 확인할 수 있으며, 나머지는 SECONDARY로 지정되어 있는 것을 확인할 수 있습니다. 그리고 SECONDARY는 모두 <code>gchoi:27017</code>으로 동기화되는 것과 마지막으로 동기화 된 시간을 확인할 수 있습니다.</p>
+<p>그 외 <code>Replica Set</code>에 관련된 메써드들은 <a href="http://docs.mongodb.org/manual/reference/replication/">MongoDB 도큐먼트</a>를 참고한다.</p>
+<p>이렇게 해서 <code>Replica Set</code>을 구성하는 방법을 튜토리얼 형식으로 설명하였습니다.</p>
+<p><code>Replica Set</code>에는 서로 다른 유형의 노드들이 존재하는데 각 노드들의 특징에 대해 간단하게 알아보도록 하겠습니다.</p>
+<ul>
+<li>
+<p>PRIMARY</p>
+<p>PRIMARY 노드는 <code>Replica Set</code>에서 유일하게 데이터를 기록할 수 있는 권한을 가지고 있는 멤버입니다. 즉, 쓰기에 대한 오퍼레이션을 가지고 있습니다. MongoDB는 PRIMARY 상에서 쓰기 오퍼레이션을 수행하고 이러한 오퍼레이션을 PRIMARY의 <code>oplog</code>에 기록합니다. SECONDARY는 이 로그를 복제하고 각자의 데이터 세트에 오퍼레이션을 동일하게 적용합니다.</p>
+</li>
+<li>
+<p>SECONDARY</p>
+<p>SECONDARY는 PRIMARY의 데이터 세트의 복제를 유지합니다. 데이터 복제를 위해 SECONDARY는 PRIMARY의 <code>oplog</code>로부터 오퍼레이션들을 비동기 방식으로 자신의 데이터 세트에 적용합니다.</p>
+</li>
+<li>
+<p>ARBITER</p>
+<p>ARBITER는 "결정권자"라는 뜻입니다. 이름이 의미하는 바와 같이 ARBITER는 PRIMARY의 패일(fail) 시, 새로운 PRIMARY 선출을 위해 "투표"에 참여할 수 있는 멤버입니다. 그러나, ARBITER는 데이터 PRIMARY의 데이터를 복제하지 않으며 PRIMARY가 될 수도 없습니다.</p>
+<p>ARBITER 멤버의 수는 홀수여야 합니다. 만약 짝수로 지정되면 PRIMARY 선출 시 동일 득표를 얻는 일이 발생할 수 있습니다.</p>
+<p>또한 주의할 사항은, <code>Replica Set</code>의 PRIMARY 또는 SECONDARY 멤버를 호스팅하는 동일한 시스템에서 ARBITER를 구동하면 절대 안 됩니다!</p>
+<p>ARBITER를 추가하는 방법은 비교적 간단합니다.</p>
+<p>다음과 같이 <code>mongod</code> 인스턴스를 실행합니다:</p>
+<p><code>$ mongod --port 30000 --dbpath [DATA_PATH] --replSet rs</code></p>
+<p><code>mongo</code> 쉘을 통해 PRIMARY에 연결하고 <code>Replica Set</code>에 ARBITER를 추가합니다:</p>
+<p><code>&gt; rs.addArb("gchoi-PC:30000")</code></p>
+<p>이제 PRIMARY가 어떻게 선출되는지 그 과정에 대해 알아보도록 하겠습니다. PRIMARY 선출은 <code>Replica Set</code>이 초기화 될 때와 PRIMARY가 연결이 끊기는 시기에 일어납니다. 그러면 PRIMARY 선출에 영향을 미치는 요소들은 무엇일까요?</p>
+</li>
+<li>
+<p><code>Hearbeats</code></p>
+<p><code>Replica Set</code>에 등록된 멤버들 간에는 매 2초마다 서로가 서로에게 <code>heartneat</code> (ping)을 주고 받습니다. 만약 어느 특정 멤버가 10초 이내에 응답이 없으면, 다른 멤버들은 이 멤버가 접근할 수 없는 죽은 멤버로 판단합니다. 만약 현재의 PRIMARY의 <code>heartbeats</code>가 대다수의 멤버들보다 떨어지면 자동으로 SECONDARY 상태로 전환됩니다.</p>
+</li>
+<li>
+<p>우선순위 비교</p>
+<p>우선순위 설정은 PRIMARY 선출에 영향을 미칩니다. 멤버들은 우선순위 값이 높은 멤버들에게 투표를 하는 경향이 있습니다. 우선순위 값이 0인 멤버들은 PRIMARY가 될 수 없습니다. <code>Replica Set</code>은 현재의 PRIMARY가 가장 높은 우선순위이며 이 멤버가 마지막 <code>oplog</code>에 대해 10초 이내에 응답하는 이상 절대 투표를 시행하지 않습니다. 만약 이 현재의 PRIMARY의 마지막 <code>oplog</code>의 10초 이내에 이 보다 높은 우선순위를 갖는 멤버가 나타나게 되면 이 멤버에게 PRIMARY가 될 수 있는 기회를 제공하기 위해 투표를 시행합니다.</p>
+</li>
+<li>
+<p><code>Optime</code></p>
+<p><code>optime</code>은 <code>oplog</code>에 적용된 마지막 오퍼레이션의 타임스탬프(Timestamp)입니다. <code>Replica Set</code> 내 멤버 중 가장 높은(가장 최근의) <code>optime</code>을 갖지 않는다면 그 멤버는 PRIMARY가 될 수 없습니다.</p>
+</li>
+<li>
+<p>연결상태</p>
+<p>너무도 당연한 얘기이겠지만, <code>Replica Set</code> 내 대다수의 멤버들에게 연결되지 않는 멤버는 PRIMARY가 될 수 없습니다. 여기서 "대다수"의 의미는 전체 멤버수가 아닌 전체 투표수입니다.</p>
+<p>새로운 PRIMARY 멤버가 선출되면 이 멤버의 데이터는 가장 최신의 데이터로 간주되며, 이전의 PRIMARY가 돌아온다하더라도 다른 멤버들의 데이터는 새로운 PRIMARY 멤버의 데이터에 맞추어 롤백(Rollback)됩니다. 데이터 롤백을 위해 모든 멤버들은 재동기화(Resync) 과정을 수행하게 되는데, <code>oplog</code>를 통해 PRIMARY 상에 아직 적용되지 않은 오퍼레이션들을 검토하고 새로운 PRIMARY에게 이러한 오퍼레이션들을 SECONDARY에 전달하게 됩니다. 이러한 재동기화 과정을 회복(Recovery) 과정이라고 하며 이 과정이 종료되기까지는 새로운 PRIMARY 선출을 하지 않습니다.</p>
+</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                31. MongoDB Replication Part 1. - Master-Slave Replication
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

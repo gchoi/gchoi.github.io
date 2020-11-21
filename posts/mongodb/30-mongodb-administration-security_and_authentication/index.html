@@ -1,0 +1,1339 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/30-mongodb-administration-security_and_authentication/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>30. MongoDB Administration Part 3. - Security & Authentication - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              30. MongoDB Administration Part 3. - Security & Authentication
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+      Deep Learning from Scratch Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+      Deep Learning from Scratch Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+      05. MongoDB Update Operators Part 2. - $set, $unset
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+      06. MongoDB Update Operators Part 3. - $push
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+      07. MongoDB Update Operators Part 4. - $addToSet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+      08. MongoDB Update Operators Part 5. - $pop, $pull
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+      09. MongoDB Update Operators Part 6. - $upsert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+      10. MongoDB Update Operators Part 7. - Updating Multiple Documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+      11. MongoDB Query Part 1. - find
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+      12. MongoDB Query Part 2. - findAndModify
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+      13. MongoDB Query Part 3. - $all
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+      14. MongoDB Query Part 4. - $size
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+      15. MongoDB Query Part 5. - $slice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+      16. MongoDB Query Part 6. - $where
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+      17. MongoDB Query Part 7. - querying_embedded_documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+      18. MongoDB Query Part 8. - cursors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+      19. MongoDB Query Part 9. - skip 속도 높이기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+      20. MongoDB Query Part 10. - 기타 쿼리 연산자들
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+      21. MongoDB Query Part 11. - $snap
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../22-mongodb-aggregation-basic/" title="22. MongoDB Aggregation Part 1. - Basic" class="md-nav__link">
+      22. MongoDB Aggregation Part 1. - Basic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../23-mongodb-aggregation-mapreduce/" title="23. MongoDB Aggregation Part 2. - MapReduce" class="md-nav__link">
+      23. MongoDB Aggregation Part 2. - MapReduce
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../24-mongodb-db-commands/" title="24. MongoDB DB Commands" class="md-nav__link">
+      24. MongoDB DB Commands
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../25-mongodb-capped-collections/" title="25. MongoDB Capped Collections" class="md-nav__link">
+      25. MongoDB Capped Collections
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-nav__link">
+      26. MongoDB GridFS
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../27-mongodb-database-references/" title="27. MongoDB Database Refences" class="md-nav__link">
+      27. MongoDB Database Refences
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-nav__link">
+      28. MongoDB Administration Part 1. - Starting MongoDB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-nav__link">
+      29. MongoDB Administration Part 2. - Monitoring
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="30. MongoDB Administration Part 3. - Security & Authentication" class="md-nav__link md-nav__link--active">
+      30. MongoDB Administration Part 3. - Security & Authentication
+    </a>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-nav__link">
+      31. MongoDB Replication Part 1. - Master-Slave Replication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../32-mongodb-replication-replica_sets_part1/" title="32. MongoDB Replication Part 2. - Replica Sets Part 1" class="md-nav__link">
+      32. MongoDB Replication Part 2. - Replica Sets Part 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-nav__link">
+      33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../34-mongodb-replication-replica_sets_part2/" title="34. MongoDB Replication Part 4. - Replica Sets Part 2" class="md-nav__link">
+      34. MongoDB Replication Part 4. - Replica Sets Part 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../35-mongodb-replication-usage_of_slaves-data_processing/" title="35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing" class="md-nav__link">
+      35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../36-mongodb-replication-oplog/" title="36. MongoDB Replication Part 6. - oplog" class="md-nav__link">
+      36. MongoDB Replication Part 6. - oplog
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../37-mongodb-replication-sync/" title="37. MongoDB Replication Part 7. - sync" class="md-nav__link">
+      37. MongoDB Replication Part 7. - sync
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../38-mongodb-replication-replication_state_and_local_db/" title="38. MongoDB Replication Part 8. - Replication State and Local DB" class="md-nav__link">
+      38. MongoDB Replication Part 8. - Replication State and Local DB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../39-mongodb-replication-replication_with_authentication/" title="39. MongoDB Replication Part 9. - Replication with Authentication" class="md-nav__link">
+      39. MongoDB Replication Part 9. - Replication with Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../40-mongodb-sharding-introduction/" title="40. MongoDB Sharding Part 1. - Introduction" class="md-nav__link">
+      40. MongoDB Sharding Part 1. - Introduction
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../41-mongodb-sharding-shard_keys/" title="41. MongoDB Sharding Part 2. - Shard Keys" class="md-nav__link">
+      41. MongoDB Sharding Part 2. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-nav__link">
+      42. MongoDB Sharding Part 3. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../43-mongodb-sharding-product_configurations/" title="43. MongoDB Sharding Part 4. - Product Configurations" class="md-nav__link">
+      43. MongoDB Sharding Part 4. - Product Configurations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-nav__link">
+      44. MongoDB Sharding Part 5. - Sharding Administration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../45-mongodb-tips-db_collection_remove_commands/" title="45. MongoDB Tips Part 1. - DB & Collection Remove Commands" class="md-nav__link">
+      45. MongoDB Tips Part 1. - DB & Collection Remove Commands
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <p>이번 포스팅에서는 MongoDB의 관리자 입장에서 보안 측면을 다루도록 하겠습니다.</p>
+<p>어떻게 MongoDB가 안전한 환경에서 운용되도록 할 것인지에 대한 내용을 다루도록 하겠습니다.</p>
+<hr />
+<ul>
+<li>관리자 계정</li>
+</ul>
+<p>MongoDB에는 <code>admin</code>이라는 데이터베이스가 기본적으로 존재합니다. 어느 데이터베이스든 간에 사용자를 등록할 수 있지만, <code>admin</code> 데이터베이스에 사용자로 등록되면 일종의 관리자 권한이 부여됩니다.</p>
+<p>즉, <code>admin</code> 외의 사용자는 다른 데이터베이스에 쓰기나 읽기가 불가능하지만 admin의 사용자는 다른 데이터베이스에 접근하여 쓰기나 읽기가 가능합니다. 또한 <code>shutdown</code> 등과 같은 <code>admin</code>에서만 사용할 수 있는 명령어를 수행할 수 있습니다.</p>
+<p>관리자 계정을 이해하기 위해 다음과 같이 사용자를 등록합니다:</p>
+<table>
+<thead>
+<tr>
+<th align="center">db</th>
+<th align="center">username</th>
+<th align="center">password</th>
+<th align="center">read-only</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">admin</td>
+<td align="center">admin_user1</td>
+<td align="center">abcd</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">admin</td>
+<td align="center">admin_user2</td>
+<td align="center">efgh</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center">test</td>
+<td align="center">test_user1</td>
+<td align="center">ijkl</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">test</td>
+<td align="center">test_user2</td>
+<td align="center">mnop</td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center">[표 1.] 사용자 등록 예.</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>우선 <code>db</code>를 <code>admin</code>으로 변경합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use admin
+switched to db admin
+</code></pre></div>
+
+<p>[표 1.]과 같이 <code>admin_user1</code>을 <code>admin</code>에 등록합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.addUser(&quot;admin_user1&quot;,&quot;abcd&quot;,false)
+{
+  &quot;user&quot; : &quot;admin_user1&quot;,
+  &quot;readOnly&quot; : false,
+  &quot;pwd&quot; : &quot;a39513576494a9cde6a85ea31dc5cb2e&quot;,
+  &quot;_id&quot; : ObjectId(&quot;53317dea005c146bf418480e&quot;)
+}
+</code></pre></div>
+
+<p>[표 1.]과 같이 <code>admin_user2</code>를 <code>admin</code>에 등록합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.addUser(&quot;admin_user2&quot;,&quot;efgh&quot;,true)
+{
+  &quot;user&quot; : &quot;admin_user2&quot;,
+  &quot;readOnly&quot; : true,
+  &quot;pwd&quot; : &quot;09084d5b44dea126caa61dc5636a0cec&quot;,
+  &quot;_id&quot; : ObjectId(&quot;53317e18005c146bf418480f&quot;)
+}
+</code></pre></div>
+
+<p>현재 사용중인 <code>db</code>인 <code>admin</code>의 컬렉션 리스트를 확인하면 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.getCollectionNames()
+[ &quot;system.indexes&quot;, &quot;system.users&quot; ]
+</code></pre></div>
+
+<p>컬렉션을 살펴보면, <code>system.users</code>를 확인할 수 있는데, 이 컬렉션에 방금 등록한 사용자 정보가 저장되어 있습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.system.users.find().pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;53317dea005c146bf418480e&quot;),
+  &quot;user&quot; : &quot;admin_user1&quot;,
+  &quot;readOnly&quot; : false,
+  &quot;pwd&quot; : &quot;a39513576494a9cde6a85ea31dc5cb2e&quot;
+}
+{
+  &quot;_id&quot; : ObjectId(&quot;53317e18005c146bf418480f&quot;),
+  &quot;user&quot; : &quot;admin_user2&quot;,
+  &quot;readOnly&quot; : true,
+  &quot;pwd&quot; : &quot;09084d5b44dea126caa61dc5636a0cec&quot;
+}
+</code></pre></div>
+
+<p>이제 <code>db</code>를 셧다운하고 <code>--auth</code> 커맨드라인 옵션을 추가하여 보안 모드를 활성화합니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongod -dbpath [YOUR_DB_PATH] --auth
+</code></pre></div>
+
+<p>이제 MongoDB 쉘에서 <code>db</code>를 <code>test</code>로 변경한 후 다음과 같이 입력해 봅니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use test
+switched to db test
+&gt; db.getCollectionNames()
+Tue Mar 25 22:12:04.524 error: {
+  &quot;$err&quot; : &quot;not authorized for query on test.system.namespaces&quot;,
+  &quot;code&quot; : 16550
+} at src/mongo/shell/query.js:128
+</code></pre></div>
+
+<p>현재 db의 컬렉션 리스트를 출력해 보려고 했는데 <code>not authorized ...</code>라는 에러 메시지가 출력되는 것을 확인할 수 있을 것인데, 권한이 없다는 것입니다.</p>
+<p><code>db.auth(username, password)</code> 명령으로 <code>admin_user1</code>으로 로그인 해보겠습니다. 로그인 하려면 다시 <code>admin</code>으로 복귀해야 합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use admin
+switched to db admin
+&gt; db.auth(&quot;admin_user1&quot;,&quot;abcd&quot;)
+1
+</code></pre></div>
+
+<p><code>db.auth()</code>를 실행 후 결과값으로 1인 반환되면 로그인에 성공한 것입니다. 만약 실패하면 <code>auth fails</code>라는 에러 메시지가 출력될 것입니다.</p>
+<p>이제 <code>db</code>를 <code>test</code>로 이동하여 <code>aa</code>라는 컬렉션에 필드값 b에 1을 저장해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use test
+switched to db test
+&gt; db.aa.insert({b: 1})
+&gt; db.aa.find()
+{ &quot;_id&quot; : ObjectId(&quot;5331832c747d3ab116d80204&quot;), &quot;b&quot; : 1 }
+</code></pre></div>
+
+<p><code>admin_user1</code>은 <code>read-only</code>가 <code>false</code>, 즉 값을 쓸 수 있는 권한이 있으므로 값이 잘 저장되었음을 확인할 수 있을 것입니다. 그러면 쓰기 권한이 없는 <code>admin_user2</code>는 어떻게 될까요?</p>
+<p>다시 <code>admin</code>으로 이동하여 이번에는 <code>admin_user2</code>로 로그인 해보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use admin
+switched to db admin
+&gt; db.auth(&quot;admin_user2&quot;,&quot;efgh&quot;)
+1
+&gt; use test
+switched to db test
+&gt; db.bb.insert({c: 1})
+not authorized for insert on test.bb
+</code></pre></div>
+
+<p>예상했듯이 <code>db</code>에 쓸 수 있는 권한이 없다는 메시지가 출력됩니다.</p>
+<p>지금까지의 내용을 정리해 보자면, <code>admin</code>에 등록된 사용자는 다른 <code>db</code>의 내용을 읽을 수 있으며, <code>read-only</code>가 <code>false</code>라면 다른 <code>db</code>의 컬렉션에 내용을 쓸 수도 있습니다.</p>
+<p><code>admin</code>외의 <code>db</code>에 등록된 사용자는 오직 해당 <code>db</code>에서만 읽기와 쓰기(<code>read-only</code>가 <code>false</code>인 경우)가 가능합니다. <code>test</code>에서 직접 사용자를 등록하고 테스트 해 보기 바랍니다. <code>admin</code>에서 사용자를 등록하는 것과 마찬가지이며, 로그인하는 방식도 동일합니다.</p>
+<hr />
+<h1 id="_1">기타 보안 이슈</h1>
+<p>보안을 위해 MongoDB가 어플리케이션 서버를 통해서만 데이터를 읽고 쓸 수 있도록 해야할 것입니다. 즉, 외부 IP에서 MongoDB에 직접 접근하는 일을 방지하는 것은 보안을 위한 필수조건이 될 것입니다. 이를 위해 MongoDB는 <code>--bind_ip</code> 옵션을 제공하며 이 옵션은 특정 IP에서만 데이터에 접근할 수 있도록 하는 기능입니다.\</p>
+<p>예를 들어, MongoDB 서버와 어플리케이션 서버가 동일한 머쉰에서 작동할 때(즉 이 두 서버가 같은 IP를 공유할 때) 어플리케이션을 통해 데이터를 읽고 쓸 수 있으며, 다른 IP에서 직접적으로 MongoDB 서버에 접근을 막을 수 있습니다.</p>
+<p>다음과 같이 입력하면 <code>localhost</code>로 MongoDB 서버의 IP권한을 설정할 수 있습니다:</p>
+<p><code>$ mongod -dbpath [YOUR_DATA_PATH] -bind_ip localhost</code></p>
+<p>이전 포스팅(<a href="../../../posts/mongodb/29-mongodb-administration-monitoring/">29. MongoDB Administration Part 2. - Monitoring</a>)에서 MongoDB가 웹페이지 형식으로 모니터링 도구를 제공한다고 언급한 바 있습니다. 만약 HTTP를 통해 이러한 정보가 노출되는 것을 원하지 않는다면 <code>--nohttpinterface</code> 옵션을 사용합니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongod -dbpath [YOUR_DATA_PATH] --nohttpinterface
+</code></pre></div>
+
+<hr />
+<h1 id="_2">데이터베이스 백업하기</h1>
+<p>두 말할 필요도 없이 데이터를 백업하는 것은 관리자 업무 중 가장 중요한 것 중 하나입니다. 고객의 귀중한 정보이자 이를 운영하는 기업의 중요한 정보 자산을 지키려면 수시로 데이터를 백업해야 합니다.</p>
+<hr />
+<h1 id="_3">데이터 폴더 저장</h1>
+<p>데이터를 백업하는 방법에는 여러가지가 있는데, 가장 원시적이면서도 이상적인 방법은 MongoDB 서버를 셧다운한 후 <code>db</code> 폴더를 따로 저장하는 것입니다. 해당 <code>db</code> 폴더는 <code>--dbpath</code> 옵션을 통해 지정된 경우라면 해당 폴더를, 디폴트로는 Linux에서는 <code>/data/db</code>, Windows에서는 <code>C:\Program Files\MongoDB\Server\{VERSION}\data</code>에 저장되어 있다.</p>
+<p>그러나, 이 방법은 서버를 셧다운 해야하기 때문에 서비스가 일시 중단되어야 한다는 문제가 있으므로, 서버가 가동 중인 상태에서 데이터를 백업하는 방법을 사용해야 합니다.</p>
+<hr />
+<h1 id="mongodump-mongorestore"><code>mongodump</code>와 <code>mongorestore</code></h1>
+<p>MongoDB 서버가 가동 상태에서 데이터를 백업할 수 있도록 MongoDB는 <code>mongodump</code>와 <code>mongorestore</code> 유틸리티를 제공합니다.</p>
+<p><code>mongorestore</code>는 데이터를 따로 저장하는 역할을 수행하며, <code>mongorestore</code>는 따로 저장된 데이터를 불러오는 역할을 합니다.</p>
+<p>MongoDB의 다른 유틸리티와 마찬가지로 <code>mongodump</code>와 <code>mongorestore</code>도 <code>--help</code> 옵션을 통해 관련 옵션을 확인할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongodump --help
+Export MongoDB data to BSON files.
+
+options:
+  --help                                produce help message
+  -v [ --verbose ]                      be more verbose (include multiple times
+                                        for more verbosity e.g. -vvvvv)
+  --version                             print the program&#39;s version and exit
+  -h [ --host ] arg                     mongo host to connect to ( &lt;set
+                                        name&gt;/s1,s2 for sets)
+  --port arg                            server port. Can also use --host
+                                        hostname:port
+  --ipv6                                enable IPv6 support (disabled by
+                                        default)
+  -u [ --username ] arg                 username
+  -p [ --password ] arg                 password
+  --authenticationDatabase arg          user source (defaults to dbname)
+  --authenticationMechanism arg (=MONGODB-CR)
+                                        authentication mechanism
+  --dbpath arg                          directly access mongod database files
+                                        in the given path, instead of
+                                        connecting to a mongod  server - needs
+                                        to lock the data directory, so cannot
+                                        be used if a mongod is currently
+                                        accessing the same path
+  --directoryperdb                      each db is in a separate directly
+                                        (relevant only if dbpath specified)
+  --journal                             enable journaling (relevant only if
+                                        dbpath specified)
+  -d [ --db ] arg                       database to use
+  -c [ --collection ] arg               collection to use (some commands)
+  -o [ --out ] arg (=dump)              output directory or &quot;-&quot; for stdout
+  -q [ --query ] arg                    json query
+  --oplog                               Use oplog for point-in-time
+                                        snapshotting
+  --repair                              try to recover a crashed database
+  --forceTableScan                      force a table scan (do not use
+                                        $snapshot)
+</code></pre></div>
+
+<p>그러면 이 두 유틸리티가 실제로 어떻게 사용되는지 다음 예를 통해 설명하도록 하겠습니다.</p>
+<p><code>mongodump</code>의 옵션 중 <code>-d</code>는 사용할 데이터베이스의 이름을, <code>-o</code>는 출력할 디렉터리를 지정하는 것이다.</p>
+<p>예를 들어, 사용할 데이터베이스트는 <code>test</code>를 디렉터리 <code>/backup/db</code>(또는 <code>C:\backup\db</code>)에 백업 파일을 생성하려면 다음과 같이 입력합니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongodump -d test -o /backup/db
+</code></pre></div>
+
+<figure>
+  <img src="../../../assets/img/posts/mongodb/30-mongodb-administration-security_and_authentication/01.png" width="100%" />
+  <figcaption>[그림 1.] mongodump 유틸리티를 통한 test에 대한 백업 폴더 생성.</figcaption>
+</figure>
+
+<p>[그림 1.]에서 보는 바와 같이 폴더 <code>/backup/db</code> 내에 <code>test</code>라는 이름의 폴더가 생성된 것을 확인할 수 있을 것입니다. 백업 파일은 <code>bson</code> 및 <code>json</code> 파일로 구성되어 있습니다.</p>
+<p>이제 <code>mongorestore</code> 유틸리티를 통해 방금 백업한 파일을 임포트 해보자. 데이터베이스의 이름은 <code>test_backup</code>으로 하였습니다 (실행 중인 MongoDB 서버를 셧다운 할 필요없습니다!):</p>
+<div class="highlight"><pre><span></span><code>$ mongorestore -d test_backup --drop /backup/db/test
+</code></pre></div>
+
+<p><code>-d</code>는 새로 생성할 데이터베이스의 이름으로 <code>test_backup</code>으로 지정하였으며, <code>--drop</code>은 임포트하기 전에 각 컬렉션을 제거하는 것이며, 가장 마지막 argument인 <code>/backup/db/test</code>는 백업한 파일이 저장된 위치입니다.</p>
+<p>이제 MongoDB 쉘에서 현재 등록된 <code>db</code> 리스트를 확인해 보겠습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; show dbs
+foo 0.203125GB
+local 0.078125GB
+test  0.203125GB
+test_backup 0.203125GB
+</code></pre></div>
+
+<p><code>test_backup</code>이 등록되어 있음을 확인할 수 있을 것입니다. 그리고 그것의 사이즈는 원본 데이터베이스인 <code>test</code>의 사이즈와 정확히 일치합니다.</p>
+<p>다음과 같이 입력하여 원본의 컬렉션과 일치하는지 확인합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use test_backup
+switched to db test_backup
+&gt; db.getCollectionNames()
+[ &quot;notes&quot;, &quot;system.indexes&quot;, &quot;users&quot; ]
+</code></pre></div>
+
+<hr />
+<h1 id="fsync-lock"><code>fsync</code>와 <code>Lock</code></h1>
+<p><code>fsync</code>는 앞서 언급한 백업 방법보다 가장 안정성있는 방법입니다. <code>fsync</code>는 MongoDB 서버로 하여금 메모리 상에 올려여 있는 모든 데이터를 디스크로 쓰도록 한 후, 이 과정이 완료되면 백업이 완료될 때까지 쓰기에 잠금(Lock)을 걸어둡니다.</p>
+<p>관리자가 백업을 완료하면 잠금을 해제하여야 합니다.</p>
+<p><code>admin</code>으로 이동 후 다음과 같이 입력하여 쓰기 잠금을 활성화합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use admin
+switched to db admin
+&gt; db.runCommand({&quot;fsync&quot; : 1, &quot;lock&quot; : 1});
+{
+  &quot;info&quot; : &quot;now locked against writes, use db.fsyncUnlock() to unlock&quot;,
+  &quot;seeAlso&quot; : &quot;http://dochub.mongodb.org/core/fsynccommand&quot;,
+  &quot;ok&quot; : 1
+}
+</code></pre></div>
+
+<p><code>info</code>를 살펴보면 쓰기가 잠금 상태가 되었다는 메시지와 함께 잠금을 해제하는 방법에 대한 안내 메시지를 표시합니다.</p>
+<p>제대로 쓰기 잠금이 되어있는지 테스트 해보겠습니다. <code>db</code>를 <code>admin</code>에서 <code>test</code>로 이동하여 컬렉션에 데이터를 저장해 보았습니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use test
+switched to db test
+&gt; db.getCollectionNames()
+[ &quot;notes&quot;, &quot;system.indexes&quot;, &quot;users&quot; ]
+&gt; db.test.insert({aa: 1})
+</code></pre></div>
+
+<p><code>db.test.insert({aa: 1})</code>를 실행하고 나서 아무 반응이 없습니다. 즉, 잠금이 제대로 걸린 것입니다.</p>
+<p>이제 맘놓고 백업을 수행하고 완료되면 잠금 해제를 한다:</p>
+<div class="highlight"><pre><span></span><code>&gt; db.fsyncUnlock()
+{ &quot;ok&quot; : 1, &quot;info&quot; : &quot;unlock completed&quot; }
+</code></pre></div>
+
+<hr />
+<h1 id="slave">Slave 백업</h1>
+<p><code>slave</code>는 앞으로 다루게 될 DB 복제(Replication)에 대한 주제에서 자세하게 다룰 예정이지만, 기본적으로 DB 운용의 안정성을 위해 <code>Master-Slave</code> 관계로 <code>master</code>의 데이터를 여러 개의 <code>slave</code>에 복제하는 방식입니다.</p>
+<p><code>Slave</code>는 <code>master</code>와 거의 실시간에 가까운 수준으로 데이터를 동기화합니다. <code>Slave</code>는 <code>master</code>처럼 성능을 중요시 여기지 않기 때문에 앞서 언급한 방법 중 어느 방법이든 사용가능합니다.</p>
+<hr />
+<h1 id="_4">데이터베이스 복구하기</h1>
+<p>관리자에게 있어 어쩌면 최악의 사태를 대비하는 것은 당연합니다. 정전이 되거나 소프트웨어 충돌이 일어나는 등으로 인해 예상치 못하게 MongoDB가 셧다운 될 수 있습니다.</p>
+<p>다행히 MongoDB는 셧다운 되기 전까지 DB를 보존합니다. 단, 디스크가 무사해야 합니다. 만약 이런 일로 인해 데이터 파일에 손상이 될 경우를 대비해 MongoDB는 복구 기능을 제공합니다.</p>
+<p>데이터 파일 복구는 반드시 MongoDB 서버가 <code>unclean shutdown</code> 상태에서만 실행해야 합니다. 그럼 <code>unclean shutdown</code>을 어떻게 진단할까요?</p>
+<p>간단합니다. 데이터 디렉터리 내 <code>mongod.lock</code> 파일의 사이즈가 0 바이트가 아니라면 <code>mongod</code>는 실행되지 않습니다. 그리고 이 파일을 텍스트 편집기로 열어보면 다음과 같은 메시지를 볼 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code>Unclean shutdown detected.
+</code></pre></div>
+
+<p>이 경우가 바로 <code>unclean shutdown</code> 상태입니다.</p>
+<p>데이터베이스 전체를 복구시키는 방법은 다음과 같습니다. <code>mongod</code>의 <code>--repair</code> 옵션으로 실행하는 것입니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongod --repair
+</code></pre></div>
+
+<p>파일 사이즈에 따라 복구하는데 걸리는 시간이 차이가 납니다. 즉, 데이터가 많을수록 복구 시간을 오래 걸립니다.</p>
+<p>특정 데이터베이스를 복구하려면 해당 <code>db</code>로 이동하여 다음과 같이 실행합니다:</p>
+<div class="highlight"><pre><span></span><code>&gt; use test
+switched to db test
+&gt; db.repairDatabase()
+{ &quot;ok&quot; : 1 }
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                29. MongoDB Administration Part 2. - Monitoring
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                31. MongoDB Replication Part 1. - Master-Slave Replication
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

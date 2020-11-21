@@ -1,0 +1,1292 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/43-mongodb-sharding-product_configurations/">
+      
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+    
+    
+      
+        <title>43. MongoDB Sharding Part 4. - Product Configurations - Alex Choi's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#routing-server" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Alex Choi's Blog
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              43. MongoDB Sharding Part 4. - Product Configurations
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Alex Choi's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../about/" title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Posts
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Posts" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Posts
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Deep Learning
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Deep Learning" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        <span class="md-nav__icon md-icon"></span>
+        Deep Learning
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+      Introduction to Artificial Neural Network Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+      Deep Learning from Scratch Part 1.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+      Deep Learning from Scratch Part 2.
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+      Object Detection Using R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+      Object Detection Using Fast R-CNN
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+      How to Set Up PyTorch CenterNet Development Environment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Scientific Computing
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Scientific Computing" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon"></span>
+        Scientific Computing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+      Realtime Fluid Simulation Using CUDA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+    
+    <label class="md-nav__link" for="nav-3-3">
+      MongoDB
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="MongoDB" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-3">
+        <span class="md-nav__icon md-icon"></span>
+        MongoDB
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+      01. MongoDB 시작하기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+      02. MongoDB 기본 Query 명령문 테스트
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+      03. MongoDB 라이프사이클
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+      04. MongoDB Update Operators Part 1. - $inc
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+      05. MongoDB Update Operators Part 2. - $set, $unset
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+      06. MongoDB Update Operators Part 3. - $push
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+      07. MongoDB Update Operators Part 4. - $addToSet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+      08. MongoDB Update Operators Part 5. - $pop, $pull
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+      09. MongoDB Update Operators Part 6. - $upsert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+      10. MongoDB Update Operators Part 7. - Updating Multiple Documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+      11. MongoDB Query Part 1. - find
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+      12. MongoDB Query Part 2. - findAndModify
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+      13. MongoDB Query Part 3. - $all
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+      14. MongoDB Query Part 4. - $size
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+      15. MongoDB Query Part 5. - $slice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+      16. MongoDB Query Part 6. - $where
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+      17. MongoDB Query Part 7. - querying_embedded_documents
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+      18. MongoDB Query Part 8. - cursors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+      19. MongoDB Query Part 9. - skip 속도 높이기
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+      20. MongoDB Query Part 10. - 기타 쿼리 연산자들
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+      21. MongoDB Query Part 11. - $snap
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../22-mongodb-aggregation-basic/" title="22. MongoDB Aggregation Part 1. - Basic" class="md-nav__link">
+      22. MongoDB Aggregation Part 1. - Basic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../23-mongodb-aggregation-mapreduce/" title="23. MongoDB Aggregation Part 2. - MapReduce" class="md-nav__link">
+      23. MongoDB Aggregation Part 2. - MapReduce
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../24-mongodb-db-commands/" title="24. MongoDB DB Commands" class="md-nav__link">
+      24. MongoDB DB Commands
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../25-mongodb-capped-collections/" title="25. MongoDB Capped Collections" class="md-nav__link">
+      25. MongoDB Capped Collections
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-nav__link">
+      26. MongoDB GridFS
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../27-mongodb-database-references/" title="27. MongoDB Database Refences" class="md-nav__link">
+      27. MongoDB Database Refences
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-nav__link">
+      28. MongoDB Administration Part 1. - Starting MongoDB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-nav__link">
+      29. MongoDB Administration Part 2. - Monitoring
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../30-mongodb-administration-security_and_authentication/" title="30. MongoDB Administration Part 3. - Security & Authentication" class="md-nav__link">
+      30. MongoDB Administration Part 3. - Security & Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-nav__link">
+      31. MongoDB Replication Part 1. - Master-Slave Replication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../32-mongodb-replication-replica_sets_part1/" title="32. MongoDB Replication Part 2. - Replica Sets Part 1" class="md-nav__link">
+      32. MongoDB Replication Part 2. - Replica Sets Part 1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-nav__link">
+      33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../34-mongodb-replication-replica_sets_part2/" title="34. MongoDB Replication Part 4. - Replica Sets Part 2" class="md-nav__link">
+      34. MongoDB Replication Part 4. - Replica Sets Part 2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../35-mongodb-replication-usage_of_slaves-data_processing/" title="35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing" class="md-nav__link">
+      35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../36-mongodb-replication-oplog/" title="36. MongoDB Replication Part 6. - oplog" class="md-nav__link">
+      36. MongoDB Replication Part 6. - oplog
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../37-mongodb-replication-sync/" title="37. MongoDB Replication Part 7. - sync" class="md-nav__link">
+      37. MongoDB Replication Part 7. - sync
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../38-mongodb-replication-replication_state_and_local_db/" title="38. MongoDB Replication Part 8. - Replication State and Local DB" class="md-nav__link">
+      38. MongoDB Replication Part 8. - Replication State and Local DB
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../39-mongodb-replication-replication_with_authentication/" title="39. MongoDB Replication Part 9. - Replication with Authentication" class="md-nav__link">
+      39. MongoDB Replication Part 9. - Replication with Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../40-mongodb-sharding-introduction/" title="40. MongoDB Sharding Part 1. - Introduction" class="md-nav__link">
+      40. MongoDB Sharding Part 1. - Introduction
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../41-mongodb-sharding-shard_keys/" title="41. MongoDB Sharding Part 2. - Shard Keys" class="md-nav__link">
+      41. MongoDB Sharding Part 2. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-nav__link">
+      42. MongoDB Sharding Part 3. - Shard Keys
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="43. MongoDB Sharding Part 4. - Product Configurations" class="md-nav__link md-nav__link--active">
+      43. MongoDB Sharding Part 4. - Product Configurations
+    </a>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-nav__link">
+      44. MongoDB Sharding Part 5. - Sharding Administration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../45-mongodb-tips-db_collection_remove_commands/" title="45. MongoDB Tips Part 1. - DB & Collection Remove Commands" class="md-nav__link">
+      45. MongoDB Tips Part 1. - DB & Collection Remove Commands
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <p>지난 포스팅에서는 개발단계 수준에서의 데이터 샤딩에 대하여 알아보았다. 실제 어플리케이션의 서비스 단계에서는 보다 안정성이 요구되기 때문에 이번 글에서는 이에 필요한 설정에 대해 알아보도록 하겠습니다.</p>
+<p>데이터 운용의 안정성을 위해서는 다음과 같은 항목들이 요구됩니다:</p>
+<ul>
+<li>다중의 config server들</li>
+<li>다중의 mongos server들</li>
+<li>각 샤드에 대한 리플리카(Replica) 구성</li>
+</ul>
+<p>샤딩에 대한 내용을 다루면서 익숙치 않은 많은 용어들이 한꺼번에 등장하여 혼란스러울 수 있으므로 다음 그림을 통해 전체적인 용어와 이들의 관계에 대하여 이해하도록 합니다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/43-mongodb-sharding-product_configurations/01.png" width="100%" />
+  <figcaption>[그림 1.] App Server, Router(Routing Server), Config Server, Shard(Replica Set)에 대한 관계도. 샤드 클러스터 구성의 예.</figcaption>
+</figure>
+
+<p>[그림 1.]의 샤드 클러스터 예를 보면, 이는 3개의 Config Server들과 2개 이상의 mongos Router(어플리케이션 서버) 및 2개 이상의 샤드(Replica Set)로 구성되어 있음을 알 수 있습니다.</p>
+<p>지난 포스팅에서도 언급하였었지만 각각의 역할에 대해 간단히 언급하면 다음과 같습니다:</p>
+<p>Shard(Replica Set)는 데이터를 저장하는 저장소입니다. 프로덕션 레벨에서의 샤드 클러스터에 있어 높은 가용성과 데이터 일치성을 위해 각 샤드는 리플리카 세트가 됩니다.</p>
+<p>Query Router 또는 <code>mongos</code> 인스턴스는 클라이언트 어플리케이션에 대한 인터페이스 역할을 하며 해당 샤드(들)에게 연산을 수행하도록 합니다. 즉, 클라이언트 어플리케이션으로부터 요청을 받아 해당 샤드(들)에게 연산을 수행하도록 명령하고 해당 샤드(들)에게로부터 결과를 받아 클라이언트 어플리케이션에 전달하는 역할을 합니다. 클라이언트 요청에 대한 부담을 분산하기 위해 샤드 클러스터는 여러 개의 Query Router를 가질 수 있으며, 서비스를 위한 대부분의 경우 많은 Query Router를 구성하도록 합니다.</p>
+<p>Config Server는 클러스터의 메타데이터를 저장합니다. 이 데이터는 클러스터의 데이터 세트를 샤드들에 맵핑하는(연관짓는) 것에 대한 것입니다. Query Router는 이 메타데이터를 이용하여 특정 연산에 해당하는 샤드를 어떤 것인지 파악합니다. 실제 서비스를 하는 프로덕션 레벨에서는 정확히 3개의 Config Server를 갖습니다.</p>
+<p>이제 본격적으로 예제를 통해 프로덕션 레벨의 샤드 클러스터를 구성해 보겠습니다. 사용된 머쉰의 대수는 2대이며, 이해를 돕기위해 머쉰 및 서버 구성은 다음 표와 같습니다:</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/43-mongodb-sharding-product_configurations/07.jpg" width="100%" />
+  <figcaption>[표 1.] 샤드 클러스터 구성 정보.</figcaption>
+</figure>
+
+<p>샤드 클러스터 구성 정보를 표로 정리해 보았는데, 꽤 복잡해 보일 것입니다. 샤드 클러스터 구성에 대한 이해를 돕기 위해 오히려 구성을 좀 더 복잡하게 하였습니다. 총 2대의 머쉰을 사용하였는데 첫번째 머쉰 M1의 IP주소는 <code>192.168.10.103</code>이며, 두번째 머쉰 M2의 IP주소는 <code>192.168.10.101</code>입니다. 각자의 머쉰에 따라 IP주소는 다르니 유의하기 바랍니다.</p>
+<p>표에서 "Machine"이라고 표현한 부분은 각 구성요소의 서버가 실행되는 머쉰을 의미합니다. 위의 표를 바탕으로 전체 샤드 클러스터 구성도를 작성하면 다음과 같습니다:</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/43-mongodb-sharding-product_configurations/02.png" width="100%" />
+  <figcaption>[그림 2.] 예제에서 사용될 샤드 클러스터 구성도.</figcaption>
+</figure>
+
+<p>다중의 Config Server들
+[그림 2.]에서 보는 바와 같이 Config Server들 M1에서만 설정하였습니다.</p>
+<p>Config Server 1에 대한 mongod 인스턴스 실행은 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongod --configsvr --dbpath /[YOUR_DB_PATH]/config1 --port 20001
+</code></pre></div>
+
+<p>Config Server 2에 대한 mongod 인스턴스 실행은 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongod --configsvr --dbpath /[YOUR_DB_PATH]/config2 --port 20002
+</code></pre></div>
+
+<p>Config Server 3에 대한 mongod 인스턴스 실행은 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongod --configsvr --dbpath /[YOUR_DB_PATH]/config3 --port 20003
+</code></pre></div>
+
+<hr />
+<h1 id="routing-server">다중의 Routing Server들</h1>
+<p><code>mongos</code> 인스턴스 또는 Routing Server는 원하는 만큼 설정이 가능하나 클라이언트 어플리케이션 서버의 수만큼 설정하는 것이 일반적입니다.</p>
+<p>[표 1.]에서 보는 바와 같이 Routing Server 1은 M1에서 실행되며, Routing Server 2는 M2에서 실행됩니다.</p>
+<p>Routing Server 1에 대한 mongos 인스턴스 실행은 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongos --configdb 192.168.10.103:20001 --port 30001
+</code></pre></div>
+
+<p>Routing Server 2에 대한 mongos 인스턴스 실행은 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>$ mongos --configdb 192.168.10.103:20002 --port 30002
+</code></pre></div>
+
+<hr />
+<h1 id="shard">Shard 설정</h1>
+<p>[표 1.]에서 보는 바와 같이 Shard 1과 Shard 4는 M1에서 실행되며, Shard 2와 Shard 3는 M2에서 실행됩니다.</p>
+<p>Shard 1에 대한 <code>mongod</code> 인스턴스 실행은 다음과 같습니다 (M1에서 실행):</p>
+<div class="highlight"><pre><span></span><code>$ mongod --dbpath /[YOUR_DB_PATH]/shard1 --port 40001
+</code></pre></div>
+
+<p>Shard 2에 대한 mongod 인스턴스 실행은 다음과 같습니다 (M2에서 실행):</p>
+<div class="highlight"><pre><span></span><code>$ mongod --dbpath /[YOUR_DB_PATH]/shard2 --port 40002
+</code></pre></div>
+
+<p>Shard 3에 대한 mongod 인스턴스 실행은 다음과 같습니다 (M2에서 실행):</p>
+<div class="highlight"><pre><span></span><code>$ mongod --dbpath /[YOUR_DB_PATH]/shard3 --port 40003
+</code></pre></div>
+
+<p>Shard 4에 대한 mongod 인스턴스 실행은 다음과 같습니다 (M1에서 실행):</p>
+<div class="highlight"><pre><span></span><code>$ mongod --dbpath /[YOUR_DB_PATH]/shard4 --port 40004
+</code></pre></div>
+
+<hr />
+<h1 id="mongos"><code>mongos</code> 인스턴스 실행</h1>
+<p>[표 1.]과 같이 mongos 1은 M2에서, mongos 2는 M1에서 실행합니다.</p>
+<p>mongos 1에 대한 실행 명령은 다음과 같습니다 (M2에서 실행):</p>
+<div class="highlight"><pre><span></span><code>$ mongo --host 192.168.10.103 --port 30001
+</code></pre></div>
+
+<p>mongos 2에 대한 실행 명령은 다음과 같습니다 (M1에서 실행):</p>
+<div class="highlight"><pre><span></span><code>$ mongo --host 192.168.10.101 --port 30002
+</code></pre></div>
+
+<p>mongos 1과 mongos 2에 대해 mongos 인스턴스 실행 시 디폴트 db는 test이므로 다음과 같이 admin db로 이동합니다 (각각의 mongos 명령 쉘에서 실행해야 합니다):</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; use admin
+switched to db admin
+</code></pre></div>
+
+<p>앞서 언급한 바와 같이 mongos 인스턴스의 개수는 클라이언트 어플리케이션의 개수와 동일하게 설정합니다고 하였습니다. 즉, 본 예제의 경우 2개의 mongos 인스턴스를 실행합니다는 것은 클라이언트 어플리케이션 또한 2개인 것을 가정하고 있습니다.</p>
+<hr />
+<h1 id="shard_1">Shard 추가</h1>
+<p>이제 모든 서버 인스턴스 실행은 마무리 되었다. 남은 것은 샤드를 추가하는 것입니다. 총 4개의 샤드 서버가 실행 중이며 현재 실행되고 있는 mongos 명령 쉘에서 "addShard" 명령을 통해 이들을 추가합니다.</p>
+<p>M1에서 실행되고 있는 mongos 2(클라이언트 어플리케이션 #2)에 shard 1을 추가합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.runCommand({addShard: &quot;192.168.10.103:40001&quot;})
+{ &quot;shardAdded&quot; : &quot;shard0000&quot;, &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<p>M1에서 실행되고 있는 mongos 2(클라이언트 어플리케이션 #2)에 shard 2를 추가합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.runCommand({addShard: &quot;192.168.10.101:40002&quot;})
+{ &quot;shardAdded&quot; : &quot;shard0001&quot;, &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<p>M2에서 실행되고 있는 mongos 1(클라이언트 어플리케이션 #1)에 shard 3를 추가합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.runCommand({addShard: &quot;192.168.10.101:40003&quot;})
+{ &quot;shardAdded&quot; : &quot;shard0001&quot;, &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<p>M2에서 실행되고 있는 mongos 1(클라이언트 어플리케이션 #1)에 shard 4를 추가합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.runCommand({addShard: &quot;192.168.10.103:40004&quot;})
+{ &quot;shardAdded&quot; : &quot;shard0001&quot;, &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<p>데이터 샤딩
+이제 길고 길었던 여정이 어느덧 마무리 되어 가는 듯 하다. 마지막으로 데이터 샤딩만 남았습니다.</p>
+<p>우선 클라이언트 어플리케이션 #1(mongos 1)에 대한 데이터를 입력합니다. mongos 1의 명령 쉘에서 jobs라는 이름의 <code>db</code>로 이동합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; use jobs
+switched to db jobs
+</code></pre></div>
+
+<p>그리고 이 <code>db</code>에 다음과 같이 데이터가 존재합니다고 하겠습니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.tasks.insert({todo : &quot;shopping&quot;, status : &quot;READY&quot;, priority : &quot;4&quot;, _id: 1})
+mongos&gt; db.tasks.insert({todo : &quot;studying Mongo DB&quot;, status : &quot;READY&quot;, priority : &quot;1&quot;, _id: 2})
+mongos&gt; db.tasks.insert({todo : &quot;reporting the current job&quot;, status : &quot;DONE&quot;, priority : &quot;8&quot;, _id: 3})
+mongos&gt; db.tasks.insert({todo : &quot;cleaning my room&quot;, status : &quot;READY&quot;, priority : &quot;3&quot;, _id: 4})
+mongos&gt; db.tasks.insert({todo : &quot;meeting friends&quot;, status : &quot;DONE&quot;, priority : &quot;7&quot;, _id: 5})
+mongos&gt; db.tasks.insert({todo : &quot;depositing money&quot;, status : &quot;RUNNING&quot;, priority : &quot;6&quot;, _id: 6})
+mongos&gt; db.tasks.insert({todo : &quot;take a walk&quot;, status : &quot;RUNNING&quot;, priority : &quot;5&quot;, _id: 7})
+mongos&gt; db.tasks.insert({todo : &quot;sending an email&quot;, status : &quot;READY&quot;, priority : &quot;2&quot;, _id: 8})
+</code></pre></div>
+
+<p>입력된 데이터를 살펴보면 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.tasks.find().pretty()
+{ &quot;_id&quot; : 1, &quot;todo&quot; : &quot;shopping&quot;, &quot;status&quot; : &quot;READY&quot;, &quot;priority&quot; : &quot;4&quot; }
+{
+    &quot;_id&quot; : 2,
+    &quot;todo&quot; : &quot;studying Mongo DB&quot;,
+    &quot;status&quot; : &quot;READY&quot;,
+    &quot;priority&quot; : &quot;1&quot;
+}
+{
+    &quot;_id&quot; : 3,
+    &quot;todo&quot; : &quot;reporting the current job&quot;,
+    &quot;status&quot; : &quot;DONE&quot;,
+    &quot;priority&quot; : &quot;8&quot;
+}
+{
+    &quot;_id&quot; : 4,
+    &quot;todo&quot; : &quot;cleaning my room&quot;,
+    &quot;status&quot; : &quot;READY&quot;,
+    &quot;priority&quot; : &quot;3&quot;
+}
+{
+    &quot;_id&quot; : 5,
+    &quot;todo&quot; : &quot;meeting friends&quot;,
+    &quot;status&quot; : &quot;DONE&quot;,
+    &quot;priority&quot; : &quot;7&quot;
+}
+{
+    &quot;_id&quot; : 6,
+    &quot;todo&quot; : &quot;depositing money&quot;,
+    &quot;status&quot; : &quot;RUNNING&quot;,
+    &quot;priority&quot; : &quot;6&quot;
+}
+{
+    &quot;_id&quot; : 7,
+    &quot;todo&quot; : &quot;take a walk&quot;,
+    &quot;status&quot; : &quot;RUNNING&quot;,
+    &quot;priority&quot; : &quot;5&quot;
+}
+{
+    &quot;_id&quot; : 8,
+    &quot;todo&quot; : &quot;sending an email&quot;,
+    &quot;status&quot; : &quot;READY&quot;,
+    &quot;priority&quot; : &quot;2&quot;
+}
+</code></pre></div>
+
+<p>샤딩을 활성화하기 위해 다시 <code>admin db</code>로 이동합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; use admin
+switched to db admin
+</code></pre></div>
+
+<p><code>enableSharding</code> 명령을 입력하여 <code>jobs db</code>에 대한 데이터를 샤딩합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.runCommand({enableSharding: &quot;jobs&quot;})
+{ &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<p>이번에는 클라이언트 어플리케이션 #2 (mongos 2)에 대한 데이터를 샤딩합니다. mongos 1에 대한 내용과 방식은 동일하며 <code>db</code> 이름과 데이터만 다를 뿐입니다. mongos 2의 명령 쉘에서 <code>users</code>라는 이름의 <code>db</code>로 이동합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; use users
+switched to db users
+</code></pre></div>
+
+<p>이 <code>db</code>에 다음과 같이 데이터가 존재합니다고 하겠습니다.</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.member.insert({user: &quot;cinema4d&quot;, pwd: &quot;1234&quot;, email: &quot;aaa@gmail.com&quot;})
+mongos&gt; db.member.insert({user: &quot;raspberry01&quot;, pwd: &quot;asdf&quot;, email: &quot;bbb@gmail.com&quot;})
+mongos&gt; db.member.insert({user: &quot;ozerodie&quot;, pwd: &quot;asdf&quot;, email: &quot;ccc@gmail.com&quot;})
+mongos&gt; db.member.insert({user: &quot;nicesubi&quot;, pwd: &quot;asdf&quot;, email: &quot;ddd@gmail.com&quot;})
+</code></pre></div>
+
+<p>입력된 데이터를 살펴보면 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.member.find().pretty()
+{
+    &quot;_id&quot; : ObjectId(&quot;535920a5e1679452b81e1b83&quot;),
+    &quot;user&quot; : &quot;cinema4d&quot;,
+    &quot;pwd&quot; : &quot;1234&quot;,
+    &quot;email&quot; : &quot;aaa@gmail.com&quot;
+}
+{
+    &quot;_id&quot; : ObjectId(&quot;535920a6e1679452b81e1b84&quot;),
+    &quot;user&quot; : &quot;raspberry01&quot;,
+    &quot;pwd&quot; : &quot;asdf&quot;,
+    &quot;email&quot; : &quot;bbb@gmail.com&quot;
+}
+{
+    &quot;_id&quot; : ObjectId(&quot;535920a6e1679452b81e1b85&quot;),
+    &quot;user&quot; : &quot;ozerodie&quot;,
+    &quot;pwd&quot; : &quot;asdf&quot;,
+    &quot;email&quot; : &quot;ccc@gmail.com&quot;
+}
+{
+    &quot;_id&quot; : ObjectId(&quot;535920a7e1679452b81e1b86&quot;),
+    &quot;user&quot; : &quot;nicesubi&quot;,
+    &quot;pwd&quot; : &quot;asdf&quot;,
+    &quot;email&quot; : &quot;ddd@gmail.com&quot;
+}
+</code></pre></div>
+
+<p>샤딩을 활성화하기 위해 다시 <code>admin db</code>로 이동합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; use admin
+switched to db admin
+</code></pre></div>
+
+<p><code>enableSharding</code> 명령을 입력하여 <code>users db</code>에 대한 데이터를 샤딩합니다:</p>
+<div class="highlight"><pre><span></span><code>mongos&gt; db.runCommand({enableSharding: &quot;users&quot;})
+{ &quot;ok&quot; : 1 }
+</code></pre></div>
+
+<p>이번 예제는 샤딩을 연습하기 위해 꽤 복잡한 샤드 클러스터를 구성하여 보았습니다. 결국 클라이언트 어플리케이션과의 연계성을 포함하여 전체 구성을 그림으로 표현하면 다음과 같습니다.</p>
+<figure>
+  <img src="../../../assets/img/posts/mongodb/43-mongodb-sharding-product_configurations/03.png" width="100%" />
+  <figcaption>[그림 3.] 예제에서 사용된 샤드 클러스터와 클라이언트 어플리케이션과의 관계도.</figcaption>
+</figure>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                42. MongoDB Sharding Part 3. - Shard Keys
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                44. MongoDB Sharding Part 5. - Sharding Administration
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: ['navigation.tabs'],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
