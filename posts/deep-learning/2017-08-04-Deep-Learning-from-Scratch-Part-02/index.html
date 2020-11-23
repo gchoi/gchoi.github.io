@@ -1219,7 +1219,7 @@ testdata = iris[-samp,]
 <p><br></p>
 <h2 id="3-feed-forward-operations">3. Feed-forward Operations</h2>
 <hr />
-<p>전체적인 네트워크 구성은 위의 이미지와 같지만, 사실 활성화 함수(Activation Function), Softmax Classifier 등 더 많은 복잡한 계산이 포함됩니다.</p>
+<p>전체적인 네트워크 구성은 위의 이미지와 같지만, 사실 활성 함수(Activation Function), Softmax Classifier 등 더 많은 복잡한 계산이 포함됩니다.</p>
 <p>그래서 좀 더 구체적으로 표현한 것이 다음 이미지입니다.</p>
 <p></br>
 <figure>
@@ -1231,7 +1231,7 @@ testdata = iris[-samp,]
 <p>첫번째 Weight <span class="arithmatex">\(\mathbf{W}^{(1)}\)</span>는 차원 [D×H]를 갖는 행렬이며, 첫번째 Bias <span class="arithmatex">\(\mathbf{b}^{(1)}\)</span>는 차원 [1×D]를 갖는 벡터입니다(사실 1차원 행렬이라고해도 무방합니다).</p>
 <p><span class="arithmatex">\(\mathbf{\Sigma}^{(1)}\)</span>은 <span class="arithmatex">\(\mathbf{W}^{(1)}\)</span>과 <span class="arithmatex">\(\mathbf{X}\)</span>를 행렬곱하고 <span class="arithmatex">\(\mathbf{b}^{(1)}\)</span>을 더한 것입니다. 이를 수학적으로 표현하면 다음과 같습니다(편의 상 Tensor 형식으로 수식을 표현하고자 하며 중복첨자는 Summation을 의미합니다):</p>
 <p>Op.[1] : <span class="arithmatex">\(\displaystyle{ \sigma_{i}^{(1)} = x_k w_{ki}^{(1)} + b_{i}^{(1)} }, i = 1, ..., H, k=1,...,D\)</span></p>
-<p>활성화 함수는 ReLU(Rectified Linear Unit)을 사용하였으며, 이는 0보다 작은 경우에는 0을, 0보다 큰 경우에는 자기 자신을 출력하는 함수입니다. 이에 대한 수식을 다음과 같습니다:</p>
+<p>활성 함수는 ReLU(Rectified Linear Unit)을 사용하였으며, 이는 0보다 작은 경우에는 0을, 0보다 큰 경우에는 자기 자신을 출력하는 함수입니다. 이에 대한 수식을 다음과 같습니다:</p>
 <p>Op.[2] : <span class="arithmatex">\(h_i = \mathrm{max}(0, \sigma_{i}^{(1)}), i = 1,...,H\)</span></p>
 <p>Hidden Layer <span class="arithmatex">\(\mathbf{H}\)</span>는 두번째 Weight 행렬인 <span class="arithmatex">\(\mathbf{W}^{(2)}\)</span>(차원 [H×K])와 행렬곱을 한 후 두번째 Bias 벡터인 <span class="arithmatex">\(\mathbf{b}^{(2)}\)</span>(차원 [1×K])와 더해집니다:</p>
 <p>Op.[3] : <span class="arithmatex">\(\sigma_{i}^{(2)} = h_k w_{ki}^{(2)} + b_{i}^{(2)}, i = 1,...,K, k = 1,...,H\)</span></p>

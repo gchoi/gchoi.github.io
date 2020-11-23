@@ -1245,7 +1245,7 @@ ANN 초기 50년간에는 AND, OR, NOT 등 간단한 논리를 처리하는 수�
 <p><br/>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/03.png" width="100%" />
-  <figcaption>활성화 함수 예시</figcaption>
+  <figcaption>활성 함수 예시</figcaption>
 </figure></p>
 <p>단위 스텝 활성 함수(또는 임계 활성 함수)는 생물학의 동작원리에 부합되기는 하지만 수학적 특성이 바람직하지 않기 때문에 인공신경망에서 거의 사용되지 않습니다. 가장 널리 사용되는 함수는 Sigmoid 활성 함수(또는 Logistic Sigmoid라고도 함)(위의 그림 (b))입니다(사실, Sigmoid 함수도 Saturation 및 Non-zero Centered 특성으로 인해 실무에서 사용하는 것은 바람직하지 않으며, 최근 Rectifier Linear Unit;ReLU이 실무에서 가장 널리 사용됩니다). 출력신호의 범위는 모두 [0, +1]이지만 Sigmoid 함수는 입력신호 범위 전체에서 미분가능합니다. Sigmoid 활성함수의 미분가능 특성 덕분에 ANN 최적화 알고리즘을 적용할 수 있습니다.
 <br/></p>
