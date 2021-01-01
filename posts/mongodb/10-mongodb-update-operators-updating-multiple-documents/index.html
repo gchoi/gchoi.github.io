@@ -1,7 +1,4 @@
 
-
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -10,11 +7,12 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
+      
+      
         <link rel="canonical" href="https://gchoi.github.io/posts/mongodb/10-mongodb-update-operators-updating-multiple-documents/">
       
-      
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
     
     
       
@@ -22,14 +20,18 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3b61ea93.min.css">
       
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.39b8e14a.min.css">
+        
       
     
     
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
@@ -43,7 +45,13 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -56,9 +64,11 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+    <a href="https://gchoi.github.io" title="Alex Choi&#39;s Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -68,18 +78,20 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
     <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             Alex Choi's Blog
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             
               10. MongoDB Update Operators Part 7. - Updating Multiple Documents
             
           </span>
         </div>
-      
+      </div>
     </div>
     
       <label class="md-header-nav__button md-icon" for="__search">
@@ -90,7 +102,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
@@ -118,21 +130,85 @@
     
     <div class="md-container" data-md-component="container">
       
+      
         
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../about/" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" class="md-tabs__link md-tabs__link--active">
+        Posts
+      </a>
+    </li>
+  
+
+  
+
+      
+    </ul>
+  </div>
+</nav>
         
       
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+    <a href="https://gchoi.github.io" title="Alex Choi&#39;s Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -148,8 +224,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../../.." title="Home" class="md-nav__link">
+    <a href="../../.." class="md-nav__link">
       Home
     </a>
   </li>
@@ -160,8 +237,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../../../about/" title="About" class="md-nav__link">
+    <a href="../../../about/" class="md-nav__link">
       About
     </a>
   </li>
@@ -171,10 +249,13 @@
       
       
 
+
   
 
 
+  
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
     
       <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
@@ -195,9 +276,12 @@
           
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" >
     
     <label class="md-nav__link" for="nav-3-1">
       Deep Learning
@@ -216,8 +300,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+    <a href="../../deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" class="md-nav__link">
       Introduction to Artificial Neural Network Part 1.
     </a>
   </li>
@@ -228,8 +313,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+    <a href="../../deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" class="md-nav__link">
       Introduction to Artificial Neural Network Part 2.
     </a>
   </li>
@@ -240,8 +326,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+    <a href="../../deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/" class="md-nav__link">
       Deep Learning from Scratch Part 1.
     </a>
   </li>
@@ -252,8 +339,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+    <a href="../../deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/" class="md-nav__link">
       Deep Learning from Scratch Part 2.
     </a>
   </li>
@@ -264,8 +352,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../deep-learning/2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+    <a href="../../deep-learning/2019-02-09-object-detection-using-rcnn/" class="md-nav__link">
       Object Detection Using R-CNN
     </a>
   </li>
@@ -276,8 +365,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../deep-learning/2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+    <a href="../../deep-learning/2019-02-10-object-detection-using-fast-rcnn/" class="md-nav__link">
       Object Detection Using Fast R-CNN
     </a>
   </li>
@@ -288,8 +378,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+    <a href="../../deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/" class="md-nav__link">
       How to Set Up PyTorch CenterNet Development Environment
     </a>
   </li>
@@ -305,9 +396,12 @@
           
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2" >
     
     <label class="md-nav__link" for="nav-3-2">
       Scientific Computing
@@ -326,8 +420,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" class="md-nav__link">
       Realtime Fluid Simulation Using CUDA
     </a>
   </li>
@@ -338,8 +433,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../scientific-computing/2014-03-30-gpu-technical-trend/" title="GPU 기술동향" class="md-nav__link">
+    <a href="../../scientific-computing/2014-03-30-gpu-technical-trend/" class="md-nav__link">
       GPU 기술동향
     </a>
   </li>
@@ -354,10 +450,13 @@
           
           
 
+
   
 
 
+  
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
     
       <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
     
@@ -378,8 +477,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+    <a href="../01-starting-mongodb/" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
   </li>
@@ -390,8 +490,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+    <a href="../02-mongodb-basic-queries/" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
   </li>
@@ -402,8 +503,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+    <a href="../03-mongodb-lifecycle/" class="md-nav__link">
       03. MongoDB 라이프사이클
     </a>
   </li>
@@ -414,8 +516,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+    <a href="../04-mongodb-update-operators-inc/" class="md-nav__link">
       04. MongoDB Update Operators Part 1. - $inc
     </a>
   </li>
@@ -426,8 +529,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+    <a href="../05-mongodb-update-operators-set-unset/" class="md-nav__link">
       05. MongoDB Update Operators Part 2. - $set, $unset
     </a>
   </li>
@@ -438,8 +542,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+    <a href="../06-mongodb-update-operators-push/" class="md-nav__link">
       06. MongoDB Update Operators Part 3. - $push
     </a>
   </li>
@@ -450,8 +555,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+    <a href="../07-mongodb-update-operators-addToSet/" class="md-nav__link">
       07. MongoDB Update Operators Part 4. - $addToSet
     </a>
   </li>
@@ -462,8 +568,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+    <a href="../08-mongodb-update-operators-pop-pull/" class="md-nav__link">
       08. MongoDB Update Operators Part 5. - $pop, $pull
     </a>
   </li>
@@ -474,8 +581,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+    <a href="../09-mongodb-update-operators-upsert/" class="md-nav__link">
       09. MongoDB Update Operators Part 6. - $upsert
     </a>
   </li>
@@ -485,6 +593,7 @@
           
           
 
+
   
 
 
@@ -493,7 +602,7 @@
     <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
     
-    <a href="./" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       10. MongoDB Update Operators Part 7. - Updating Multiple Documents
     </a>
     
@@ -505,8 +614,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+    <a href="../11-mongodb-query-find/" class="md-nav__link">
       11. MongoDB Query Part 1. - find
     </a>
   </li>
@@ -517,8 +627,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+    <a href="../12-mongodb-query-findAndModify/" class="md-nav__link">
       12. MongoDB Query Part 2. - findAndModify
     </a>
   </li>
@@ -529,8 +640,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+    <a href="../13-mongodb-query-all/" class="md-nav__link">
       13. MongoDB Query Part 3. - $all
     </a>
   </li>
@@ -541,8 +653,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+    <a href="../14-mongodb-query-size/" class="md-nav__link">
       14. MongoDB Query Part 4. - $size
     </a>
   </li>
@@ -553,8 +666,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+    <a href="../15-mongodb-query-slice/" class="md-nav__link">
       15. MongoDB Query Part 5. - $slice
     </a>
   </li>
@@ -565,8 +679,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+    <a href="../16-mongodb-query-where/" class="md-nav__link">
       16. MongoDB Query Part 6. - $where
     </a>
   </li>
@@ -577,8 +692,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+    <a href="../17-mongodb-query-querying_embedded_documents/" class="md-nav__link">
       17. MongoDB Query Part 7. - querying_embedded_documents
     </a>
   </li>
@@ -589,8 +705,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+    <a href="../18-mongodb-query-cursors/" class="md-nav__link">
       18. MongoDB Query Part 8. - cursors
     </a>
   </li>
@@ -601,8 +718,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+    <a href="../19-mongodb-query-skip/" class="md-nav__link">
       19. MongoDB Query Part 9. - skip 속도 높이기
     </a>
   </li>
@@ -613,8 +731,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+    <a href="../20-mongodb-query-other-operations/" class="md-nav__link">
       20. MongoDB Query Part 10. - 기타 쿼리 연산자들
     </a>
   </li>
@@ -625,8 +744,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+    <a href="../21-mongodb-query-snapshot/" class="md-nav__link">
       21. MongoDB Query Part 11. - $snap
     </a>
   </li>
@@ -637,8 +757,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../22-mongodb-aggregation-basic/" title="22. MongoDB Aggregation Part 1. - Basic" class="md-nav__link">
+    <a href="../22-mongodb-aggregation-basic/" class="md-nav__link">
       22. MongoDB Aggregation Part 1. - Basic
     </a>
   </li>
@@ -649,8 +770,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../23-mongodb-aggregation-mapreduce/" title="23. MongoDB Aggregation Part 2. - MapReduce" class="md-nav__link">
+    <a href="../23-mongodb-aggregation-mapreduce/" class="md-nav__link">
       23. MongoDB Aggregation Part 2. - MapReduce
     </a>
   </li>
@@ -661,8 +783,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../24-mongodb-db-commands/" title="24. MongoDB DB Commands" class="md-nav__link">
+    <a href="../24-mongodb-db-commands/" class="md-nav__link">
       24. MongoDB DB Commands
     </a>
   </li>
@@ -673,8 +796,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../25-mongodb-capped-collections/" title="25. MongoDB Capped Collections" class="md-nav__link">
+    <a href="../25-mongodb-capped-collections/" class="md-nav__link">
       25. MongoDB Capped Collections
     </a>
   </li>
@@ -685,8 +809,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-nav__link">
+    <a href="../26-mongodb-gridfs/" class="md-nav__link">
       26. MongoDB GridFS
     </a>
   </li>
@@ -697,8 +822,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../27-mongodb-database-references/" title="27. MongoDB Database Refences" class="md-nav__link">
+    <a href="../27-mongodb-database-references/" class="md-nav__link">
       27. MongoDB Database Refences
     </a>
   </li>
@@ -709,8 +835,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-nav__link">
+    <a href="../28-mongodb-administration-starting_mongodb/" class="md-nav__link">
       28. MongoDB Administration Part 1. - Starting MongoDB
     </a>
   </li>
@@ -721,8 +848,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-nav__link">
+    <a href="../29-mongodb-administration-monitoring/" class="md-nav__link">
       29. MongoDB Administration Part 2. - Monitoring
     </a>
   </li>
@@ -733,8 +861,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../30-mongodb-administration-security_and_authentication/" title="30. MongoDB Administration Part 3. - Security & Authentication" class="md-nav__link">
+    <a href="../30-mongodb-administration-security_and_authentication/" class="md-nav__link">
       30. MongoDB Administration Part 3. - Security & Authentication
     </a>
   </li>
@@ -745,8 +874,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-nav__link">
+    <a href="../31-mongodb-replication-master_slave_replication/" class="md-nav__link">
       31. MongoDB Replication Part 1. - Master-Slave Replication
     </a>
   </li>
@@ -757,8 +887,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../32-mongodb-replication-replica_sets_part1/" title="32. MongoDB Replication Part 2. - Replica Sets Part 1" class="md-nav__link">
+    <a href="../32-mongodb-replication-replica_sets_part1/" class="md-nav__link">
       32. MongoDB Replication Part 2. - Replica Sets Part 1
     </a>
   </li>
@@ -769,8 +900,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-nav__link">
+    <a href="../33-mongodb-replication-usage_of_slaves-read_scaling/" class="md-nav__link">
       33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
     </a>
   </li>
@@ -781,8 +913,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../34-mongodb-replication-replica_sets_part2/" title="34. MongoDB Replication Part 4. - Replica Sets Part 2" class="md-nav__link">
+    <a href="../34-mongodb-replication-replica_sets_part2/" class="md-nav__link">
       34. MongoDB Replication Part 4. - Replica Sets Part 2
     </a>
   </li>
@@ -793,8 +926,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../35-mongodb-replication-usage_of_slaves-data_processing/" title="35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing" class="md-nav__link">
+    <a href="../35-mongodb-replication-usage_of_slaves-data_processing/" class="md-nav__link">
       35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing
     </a>
   </li>
@@ -805,8 +939,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../36-mongodb-replication-oplog/" title="36. MongoDB Replication Part 6. - oplog" class="md-nav__link">
+    <a href="../36-mongodb-replication-oplog/" class="md-nav__link">
       36. MongoDB Replication Part 6. - oplog
     </a>
   </li>
@@ -817,8 +952,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../37-mongodb-replication-sync/" title="37. MongoDB Replication Part 7. - sync" class="md-nav__link">
+    <a href="../37-mongodb-replication-sync/" class="md-nav__link">
       37. MongoDB Replication Part 7. - sync
     </a>
   </li>
@@ -829,8 +965,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../38-mongodb-replication-replication_state_and_local_db/" title="38. MongoDB Replication Part 8. - Replication State and Local DB" class="md-nav__link">
+    <a href="../38-mongodb-replication-replication_state_and_local_db/" class="md-nav__link">
       38. MongoDB Replication Part 8. - Replication State and Local DB
     </a>
   </li>
@@ -841,8 +978,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../39-mongodb-replication-replication_with_authentication/" title="39. MongoDB Replication Part 9. - Replication with Authentication" class="md-nav__link">
+    <a href="../39-mongodb-replication-replication_with_authentication/" class="md-nav__link">
       39. MongoDB Replication Part 9. - Replication with Authentication
     </a>
   </li>
@@ -853,8 +991,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../40-mongodb-sharding-introduction/" title="40. MongoDB Sharding Part 1. - Introduction" class="md-nav__link">
+    <a href="../40-mongodb-sharding-introduction/" class="md-nav__link">
       40. MongoDB Sharding Part 1. - Introduction
     </a>
   </li>
@@ -865,8 +1004,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../41-mongodb-sharding-shard_keys/" title="41. MongoDB Sharding Part 2. - Shard Keys" class="md-nav__link">
+    <a href="../41-mongodb-sharding-shard_keys/" class="md-nav__link">
       41. MongoDB Sharding Part 2. - Shard Keys
     </a>
   </li>
@@ -877,8 +1017,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-nav__link">
+    <a href="../42-mongodb-sharding-setting_up_sharding/" class="md-nav__link">
       42. MongoDB Sharding Part 3. - Shard Keys
     </a>
   </li>
@@ -889,8 +1030,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../43-mongodb-sharding-product_configurations/" title="43. MongoDB Sharding Part 4. - Product Configurations" class="md-nav__link">
+    <a href="../43-mongodb-sharding-product_configurations/" class="md-nav__link">
       43. MongoDB Sharding Part 4. - Product Configurations
     </a>
   </li>
@@ -901,8 +1043,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-nav__link">
+    <a href="../44-mongodb-sharding-sharding_administration/" class="md-nav__link">
       44. MongoDB Sharding Part 5. - Sharding Administration
     </a>
   </li>
@@ -913,8 +1056,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../45-mongodb-tips-db_collection_remove_commands/" title="45. MongoDB Tips Part 1. - DB & Collection Remove Commands" class="md-nav__link">
+    <a href="../45-mongodb-tips-db_collection_remove_commands/" class="md-nav__link">
       45. MongoDB Tips Part 1. - DB & Collection Remove Commands
     </a>
   </li>
@@ -943,9 +1087,6 @@
               
                 
                 
-                  
-                
-                
                   <h1>10. MongoDB Update Operators Part 7. - Updating Multiple Documents</h1>
                 
                 <p>이번 포스팅에서는 다중의 도큐먼트를 업데이트 하는 방법에 대하여 알아보겠습니다.</p>
@@ -960,7 +1101,6 @@ db.customers.insert({name: &quot;tjkwak&quot;, birthday:&quot;11/11&quot;})
 db.customers.insert({name: &quot;hskim&quot;, birthday:&quot;12/08&quot;})
 db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
 </code></pre></div>
-
 <p>입력한 결과는 다음과 같습니다.</p>
 <div class="highlight"><pre><span></span><code>&gt; db.customers.find()
 { &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325073&quot;), &quot;name&quot; : &quot;gchoi&quot;, &quot;birthday&quot; : &quot;08/22&quot; }
@@ -969,19 +1109,16 @@ db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
 { &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325076&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;birthday&quot; : &quot;12/08&quot; }
 { &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325077&quot;), &quot;name&quot; : &quot;dsha&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
 </code></pre></div>
-
 <p>입력된 결과를 눈여겨 보면, "jmpark"과 "dsha"의 생일이 모두 "04/02"로 동일함을 알 수 있습니다.</p>
 <p>생일이 "04/02"인 고객을 기준으로 검색해 보면,</p>
 <div class="highlight"><pre><span></span><code>&gt; db.customers.find({&quot;birthday&quot; : &quot;04/02&quot;})
 { &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325074&quot;), &quot;name&quot; : &quot;jmpark&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
 { &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325077&quot;), &quot;name&quot; : &quot;dsha&quot;, &quot;birthday&quot; : &quot;04/02&quot; }
 </code></pre></div>
-
 <p>예상대로 "jmpark"과 "dsha"가 검색되었습니다.</p>
 <p>오늘이 4월2일이라고 하고 오늘이 생일인 두 명의 고객에 대해 "gift" key를 업데이트 해 보겠습니다:</p>
 <div class="highlight"><pre><span></span><code>db.customers.update({birthday : &quot;04/02&quot;}, {$set : {gift : &quot;Happy Birthday!&quot;}}, false, true)
 </code></pre></div>
-
 <p>만약 업데이트 된 도큐먼트에 대한 정보를 얻고자 한다면 <code>getLastError</code> 명령어를 입력한다.</p>
 <div class="highlight"><pre><span></span><code>&gt; db.runCommand({getLastError : 1})
 {
@@ -992,7 +1129,6 @@ db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
     &quot;ok&quot; : 1
 }
 </code></pre></div>
-
 <p><code>updatedExisting</code> 값 true는 업데이트 된 도큐먼트가 존재함을 의미하며, <code>n</code> 값 2는 업데이트 된 도큐먼트의 수가 2개임을 의미합니다.</p>
 <p>현재 업데이트 된 결과를 출력해 보면 다음과 같습니다:</p>
 <div class="highlight"><pre><span></span><code>&gt; db.customers.find()
@@ -1001,7 +1137,6 @@ db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
 { &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325076&quot;), &quot;name&quot; : &quot;hskim&quot;, &quot;birthday&quot; : &quot;12/08&quot; }
 { &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325074&quot;), &quot;birthday&quot; : &quot;04/02&quot;, &quot;gift&quot; : &quot;Happy Birthday!&quot;, &quot;name&quot; : &quot;jmpark&quot; }{ &quot;_id&quot; : ObjectId(&quot;52ea464d5e3b86c2a7325077&quot;), &quot;birthday&quot; : &quot;04/02&quot;, &quot;gift&quot; : &quot;Happy Birthday!&quot;, &quot;name&quot; : &quot;dsha&quot; }
 </code></pre></div>
-
 <p><code>$set</code> update operator의 네번째 파라미터가 "true"로 설정했음을 주목합니다.</p>
 <p>예상대로 <code>birthday</code> key가 "04/02"로 되어있는 "jmpark"과 "dsha"에 <code>gift</code> key가 생성되었음을 확인할 수 있습니다.</p>
                 
@@ -1022,7 +1157,7 @@ db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../09-mongodb-update-operators-upsert/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -1037,7 +1172,7 @@ db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
           </a>
         
         
-          <a href="../11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../11-mongodb-query-find/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -1070,15 +1205,15 @@ db.customers.insert({name: &quot;dsha&quot;, birthday:&quot;04/02&quot;})
       
     </div>
     
-      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
-      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../../assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
           base: "../../..",
           features: ['navigation.tabs'],
           search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+            worker: "../../../assets/javascripts/worker/search.8c7e0a7e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

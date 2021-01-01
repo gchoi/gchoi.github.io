@@ -1,7 +1,4 @@
 
-
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -10,11 +7,12 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
+      
+      
         <link rel="canonical" href="https://gchoi.github.io/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/">
       
-      
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
     
     
       
@@ -22,14 +20,18 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3b61ea93.min.css">
       
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.39b8e14a.min.css">
+        
       
     
     
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
@@ -43,7 +45,13 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -61,9 +69,11 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+    <a href="https://gchoi.github.io" title="Alex Choi&#39;s Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -73,18 +83,20 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
     <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             Alex Choi's Blog
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             
               Deep Learning from Scratch Part 2.
             
           </span>
         </div>
-      
+      </div>
     </div>
     
       <label class="md-header-nav__button md-icon" for="__search">
@@ -95,7 +107,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
@@ -123,21 +135,85 @@
     
     <div class="md-container" data-md-component="container">
       
+      
         
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../about/" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" class="md-tabs__link md-tabs__link--active">
+        Posts
+      </a>
+    </li>
+  
+
+  
+
+      
+    </ul>
+  </div>
+</nav>
         
       
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+    <a href="https://gchoi.github.io" title="Alex Choi&#39;s Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -153,8 +229,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../../.." title="Home" class="md-nav__link">
+    <a href="../../.." class="md-nav__link">
       Home
     </a>
   </li>
@@ -165,8 +242,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../../../about/" title="About" class="md-nav__link">
+    <a href="../../../about/" class="md-nav__link">
       About
     </a>
   </li>
@@ -176,10 +254,13 @@
       
       
 
+
   
 
 
+  
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
     
       <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
@@ -199,10 +280,13 @@
           
           
 
+
   
 
 
+  
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
     
       <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
     
@@ -223,8 +307,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" class="md-nav__link">
       Introduction to Artificial Neural Network Part 1.
     </a>
   </li>
@@ -235,8 +320,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link">
+    <a href="../2019-02-07-IntroductionToArtificialNeuralNetworksPart2/" class="md-nav__link">
       Introduction to Artificial Neural Network Part 2.
     </a>
   </li>
@@ -247,8 +333,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+    <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" class="md-nav__link">
       Deep Learning from Scratch Part 1.
     </a>
   </li>
@@ -257,6 +344,7 @@
           
           
           
+
 
   
 
@@ -271,7 +359,7 @@
         <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="Deep Learning from Scratch Part 2." class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       Deep Learning from Scratch Part 2.
     </a>
     
@@ -388,8 +476,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+    <a href="../2019-02-09-object-detection-using-rcnn/" class="md-nav__link">
       Object Detection Using R-CNN
     </a>
   </li>
@@ -400,8 +489,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+    <a href="../2019-02-10-object-detection-using-fast-rcnn/" class="md-nav__link">
       Object Detection Using Fast R-CNN
     </a>
   </li>
@@ -412,8 +502,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" class="md-nav__link">
       How to Set Up PyTorch CenterNet Development Environment
     </a>
   </li>
@@ -429,9 +520,12 @@
           
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2" >
     
     <label class="md-nav__link" for="nav-3-2">
       Scientific Computing
@@ -450,8 +544,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" class="md-nav__link">
       Realtime Fluid Simulation Using CUDA
     </a>
   </li>
@@ -462,8 +557,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../scientific-computing/2014-03-30-gpu-technical-trend/" title="GPU 기술동향" class="md-nav__link">
+    <a href="../../scientific-computing/2014-03-30-gpu-technical-trend/" class="md-nav__link">
       GPU 기술동향
     </a>
   </li>
@@ -479,9 +575,12 @@
           
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" >
     
     <label class="md-nav__link" for="nav-3-3">
       MongoDB
@@ -500,8 +599,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+    <a href="../../mongodb/01-starting-mongodb/" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
   </li>
@@ -512,8 +612,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+    <a href="../../mongodb/02-mongodb-basic-queries/" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
   </li>
@@ -524,8 +625,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+    <a href="../../mongodb/03-mongodb-lifecycle/" class="md-nav__link">
       03. MongoDB 라이프사이클
     </a>
   </li>
@@ -536,8 +638,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+    <a href="../../mongodb/04-mongodb-update-operators-inc/" class="md-nav__link">
       04. MongoDB Update Operators Part 1. - $inc
     </a>
   </li>
@@ -548,8 +651,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+    <a href="../../mongodb/05-mongodb-update-operators-set-unset/" class="md-nav__link">
       05. MongoDB Update Operators Part 2. - $set, $unset
     </a>
   </li>
@@ -560,8 +664,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+    <a href="../../mongodb/06-mongodb-update-operators-push/" class="md-nav__link">
       06. MongoDB Update Operators Part 3. - $push
     </a>
   </li>
@@ -572,8 +677,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+    <a href="../../mongodb/07-mongodb-update-operators-addToSet/" class="md-nav__link">
       07. MongoDB Update Operators Part 4. - $addToSet
     </a>
   </li>
@@ -584,8 +690,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+    <a href="../../mongodb/08-mongodb-update-operators-pop-pull/" class="md-nav__link">
       08. MongoDB Update Operators Part 5. - $pop, $pull
     </a>
   </li>
@@ -596,8 +703,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+    <a href="../../mongodb/09-mongodb-update-operators-upsert/" class="md-nav__link">
       09. MongoDB Update Operators Part 6. - $upsert
     </a>
   </li>
@@ -608,8 +716,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+    <a href="../../mongodb/10-mongodb-update-operators-updating-multiple-documents/" class="md-nav__link">
       10. MongoDB Update Operators Part 7. - Updating Multiple Documents
     </a>
   </li>
@@ -620,8 +729,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+    <a href="../../mongodb/11-mongodb-query-find/" class="md-nav__link">
       11. MongoDB Query Part 1. - find
     </a>
   </li>
@@ -632,8 +742,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+    <a href="../../mongodb/12-mongodb-query-findAndModify/" class="md-nav__link">
       12. MongoDB Query Part 2. - findAndModify
     </a>
   </li>
@@ -644,8 +755,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+    <a href="../../mongodb/13-mongodb-query-all/" class="md-nav__link">
       13. MongoDB Query Part 3. - $all
     </a>
   </li>
@@ -656,8 +768,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+    <a href="../../mongodb/14-mongodb-query-size/" class="md-nav__link">
       14. MongoDB Query Part 4. - $size
     </a>
   </li>
@@ -668,8 +781,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+    <a href="../../mongodb/15-mongodb-query-slice/" class="md-nav__link">
       15. MongoDB Query Part 5. - $slice
     </a>
   </li>
@@ -680,8 +794,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+    <a href="../../mongodb/16-mongodb-query-where/" class="md-nav__link">
       16. MongoDB Query Part 6. - $where
     </a>
   </li>
@@ -692,8 +807,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+    <a href="../../mongodb/17-mongodb-query-querying_embedded_documents/" class="md-nav__link">
       17. MongoDB Query Part 7. - querying_embedded_documents
     </a>
   </li>
@@ -704,8 +820,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+    <a href="../../mongodb/18-mongodb-query-cursors/" class="md-nav__link">
       18. MongoDB Query Part 8. - cursors
     </a>
   </li>
@@ -716,8 +833,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+    <a href="../../mongodb/19-mongodb-query-skip/" class="md-nav__link">
       19. MongoDB Query Part 9. - skip 속도 높이기
     </a>
   </li>
@@ -728,8 +846,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+    <a href="../../mongodb/20-mongodb-query-other-operations/" class="md-nav__link">
       20. MongoDB Query Part 10. - 기타 쿼리 연산자들
     </a>
   </li>
@@ -740,8 +859,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+    <a href="../../mongodb/21-mongodb-query-snapshot/" class="md-nav__link">
       21. MongoDB Query Part 11. - $snap
     </a>
   </li>
@@ -752,8 +872,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/22-mongodb-aggregation-basic/" title="22. MongoDB Aggregation Part 1. - Basic" class="md-nav__link">
+    <a href="../../mongodb/22-mongodb-aggregation-basic/" class="md-nav__link">
       22. MongoDB Aggregation Part 1. - Basic
     </a>
   </li>
@@ -764,8 +885,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/23-mongodb-aggregation-mapreduce/" title="23. MongoDB Aggregation Part 2. - MapReduce" class="md-nav__link">
+    <a href="../../mongodb/23-mongodb-aggregation-mapreduce/" class="md-nav__link">
       23. MongoDB Aggregation Part 2. - MapReduce
     </a>
   </li>
@@ -776,8 +898,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/24-mongodb-db-commands/" title="24. MongoDB DB Commands" class="md-nav__link">
+    <a href="../../mongodb/24-mongodb-db-commands/" class="md-nav__link">
       24. MongoDB DB Commands
     </a>
   </li>
@@ -788,8 +911,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/25-mongodb-capped-collections/" title="25. MongoDB Capped Collections" class="md-nav__link">
+    <a href="../../mongodb/25-mongodb-capped-collections/" class="md-nav__link">
       25. MongoDB Capped Collections
     </a>
   </li>
@@ -800,8 +924,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-nav__link">
+    <a href="../../mongodb/26-mongodb-gridfs/" class="md-nav__link">
       26. MongoDB GridFS
     </a>
   </li>
@@ -812,8 +937,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/27-mongodb-database-references/" title="27. MongoDB Database Refences" class="md-nav__link">
+    <a href="../../mongodb/27-mongodb-database-references/" class="md-nav__link">
       27. MongoDB Database Refences
     </a>
   </li>
@@ -824,8 +950,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-nav__link">
+    <a href="../../mongodb/28-mongodb-administration-starting_mongodb/" class="md-nav__link">
       28. MongoDB Administration Part 1. - Starting MongoDB
     </a>
   </li>
@@ -836,8 +963,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-nav__link">
+    <a href="../../mongodb/29-mongodb-administration-monitoring/" class="md-nav__link">
       29. MongoDB Administration Part 2. - Monitoring
     </a>
   </li>
@@ -848,8 +976,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/30-mongodb-administration-security_and_authentication/" title="30. MongoDB Administration Part 3. - Security & Authentication" class="md-nav__link">
+    <a href="../../mongodb/30-mongodb-administration-security_and_authentication/" class="md-nav__link">
       30. MongoDB Administration Part 3. - Security & Authentication
     </a>
   </li>
@@ -860,8 +989,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-nav__link">
+    <a href="../../mongodb/31-mongodb-replication-master_slave_replication/" class="md-nav__link">
       31. MongoDB Replication Part 1. - Master-Slave Replication
     </a>
   </li>
@@ -872,8 +1002,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/32-mongodb-replication-replica_sets_part1/" title="32. MongoDB Replication Part 2. - Replica Sets Part 1" class="md-nav__link">
+    <a href="../../mongodb/32-mongodb-replication-replica_sets_part1/" class="md-nav__link">
       32. MongoDB Replication Part 2. - Replica Sets Part 1
     </a>
   </li>
@@ -884,8 +1015,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-nav__link">
+    <a href="../../mongodb/33-mongodb-replication-usage_of_slaves-read_scaling/" class="md-nav__link">
       33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
     </a>
   </li>
@@ -896,8 +1028,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/34-mongodb-replication-replica_sets_part2/" title="34. MongoDB Replication Part 4. - Replica Sets Part 2" class="md-nav__link">
+    <a href="../../mongodb/34-mongodb-replication-replica_sets_part2/" class="md-nav__link">
       34. MongoDB Replication Part 4. - Replica Sets Part 2
     </a>
   </li>
@@ -908,8 +1041,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/35-mongodb-replication-usage_of_slaves-data_processing/" title="35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing" class="md-nav__link">
+    <a href="../../mongodb/35-mongodb-replication-usage_of_slaves-data_processing/" class="md-nav__link">
       35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing
     </a>
   </li>
@@ -920,8 +1054,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/36-mongodb-replication-oplog/" title="36. MongoDB Replication Part 6. - oplog" class="md-nav__link">
+    <a href="../../mongodb/36-mongodb-replication-oplog/" class="md-nav__link">
       36. MongoDB Replication Part 6. - oplog
     </a>
   </li>
@@ -932,8 +1067,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/37-mongodb-replication-sync/" title="37. MongoDB Replication Part 7. - sync" class="md-nav__link">
+    <a href="../../mongodb/37-mongodb-replication-sync/" class="md-nav__link">
       37. MongoDB Replication Part 7. - sync
     </a>
   </li>
@@ -944,8 +1080,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/38-mongodb-replication-replication_state_and_local_db/" title="38. MongoDB Replication Part 8. - Replication State and Local DB" class="md-nav__link">
+    <a href="../../mongodb/38-mongodb-replication-replication_state_and_local_db/" class="md-nav__link">
       38. MongoDB Replication Part 8. - Replication State and Local DB
     </a>
   </li>
@@ -956,8 +1093,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/39-mongodb-replication-replication_with_authentication/" title="39. MongoDB Replication Part 9. - Replication with Authentication" class="md-nav__link">
+    <a href="../../mongodb/39-mongodb-replication-replication_with_authentication/" class="md-nav__link">
       39. MongoDB Replication Part 9. - Replication with Authentication
     </a>
   </li>
@@ -968,8 +1106,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/40-mongodb-sharding-introduction/" title="40. MongoDB Sharding Part 1. - Introduction" class="md-nav__link">
+    <a href="../../mongodb/40-mongodb-sharding-introduction/" class="md-nav__link">
       40. MongoDB Sharding Part 1. - Introduction
     </a>
   </li>
@@ -980,8 +1119,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/41-mongodb-sharding-shard_keys/" title="41. MongoDB Sharding Part 2. - Shard Keys" class="md-nav__link">
+    <a href="../../mongodb/41-mongodb-sharding-shard_keys/" class="md-nav__link">
       41. MongoDB Sharding Part 2. - Shard Keys
     </a>
   </li>
@@ -992,8 +1132,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-nav__link">
+    <a href="../../mongodb/42-mongodb-sharding-setting_up_sharding/" class="md-nav__link">
       42. MongoDB Sharding Part 3. - Shard Keys
     </a>
   </li>
@@ -1004,8 +1145,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/43-mongodb-sharding-product_configurations/" title="43. MongoDB Sharding Part 4. - Product Configurations" class="md-nav__link">
+    <a href="../../mongodb/43-mongodb-sharding-product_configurations/" class="md-nav__link">
       43. MongoDB Sharding Part 4. - Product Configurations
     </a>
   </li>
@@ -1016,8 +1158,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-nav__link">
+    <a href="../../mongodb/44-mongodb-sharding-sharding_administration/" class="md-nav__link">
       44. MongoDB Sharding Part 5. - Sharding Administration
     </a>
   </li>
@@ -1028,8 +1171,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/45-mongodb-tips-db_collection_remove_commands/" title="45. MongoDB Tips Part 1. - DB & Collection Remove Commands" class="md-nav__link">
+    <a href="../../mongodb/45-mongodb-tips-db_collection_remove_commands/" class="md-nav__link">
       45. MongoDB Tips Part 1. - DB & Collection Remove Commands
     </a>
   </li>
@@ -1052,7 +1196,8 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -1169,9 +1314,6 @@
               
                 
                 
-                  
-                
-                
                   <h1>Deep Learning from Scratch Part 2.</h1>
                 
                 <p><em>Written by Alex Choi, Aug. 04, 2017.</em></p>
@@ -1191,7 +1333,6 @@
 <span class="m">5</span>          <span class="m">5.0</span>         <span class="m">3.6</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
 <span class="m">6</span>          <span class="m">5.4</span>         <span class="m">3.9</span>          <span class="m">1.7</span>         <span class="m">0.4</span>  <span class="n">setosa</span>
 </code></pre></div>
-
 <p>총 4개의 Features(<code>Sepal.Length</code>, <code>Sepal.Width</code>, <code>Petal.Length</code>, <code>Petal.Width</code>)를 가지며, Species는 꽃을 분류한 클래스(<code>setosa</code>, <code>versicolor</code>, <code>virginica</code>로 총 3개의 클래스)입니다. 데이터의 개수는 총 150개입니다.</p>
 <p>주어진 데이터를 이용하여 학습 및 테스트를 위해 <code>test dataset</code>과 <code>train dataset</code>으로 나눕니다:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># 1. split data into test/train</span>
@@ -1199,33 +1340,33 @@
                 <span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">51</span><span class="o">:</span><span class="m">100</span><span class="p">,</span><span class="m">25</span><span class="p">),</span>
                 <span class="n">base</span><span class="o">::</span><span class="nf">sample</span><span class="p">(</span><span class="m">101</span><span class="o">:</span><span class="m">150</span><span class="p">,</span><span class="m">25</span><span class="p">))</span>
 </code></pre></div>
-
 <p><code>samp</code>는 test dataset으로 데이터의 인덱스를 1~50 범위에서 25개, 51~100 범위에서 25개, 101~150 범위에서 25개씩 총 75개를 가급적 고르게 선택한 것입니다.</p>
 <p>선택된 인덱스에 해당하는 데이터셋(Dataset)을 traindata로, 이들을 제외한 나머지를 test data로 지정합니다:</p>
 <div class="highlight"><pre><span></span><code>traindata = iris[samp,]
 testdata = iris[-samp,]
 </code></pre></div>
-
 <p><br></p>
 <h2 id="2-neural-network">2. Neural Network 구성</h2>
 <hr />
 <p>구성한 Neural Network는 Multilayer Perceptron(MLP) 형태로, 4개의 Input Feature를 갖는 입력 레이어(Layer)와 6개의 노드(Node)를 포함하는 1개의 Hidden Layer, 3개의 출력 노드를 갖는 출력 레이어로 구성하였습니다. 다음 이미지를 참고하시기 바랍니다.</p>
-<p></br>
+<p></br></p>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/01.png" width="100%" />
   <figcaption></figcaption>
-</figure></p>
+</figure>
+
 <p><code>D(=4)</code>는 Input Feature의 개수를, <code>H(=6)</code>는 Hidden Layer 내 노드 개수를, <code>K(=3)</code>는 클래스 개수를 의미합니다. 앞으로의 설명은 구체적인 숫자를 언급하기 보다는 가급적 일반화를 위해 이들 변수 이름을 이용하여 설명을 사용할 것이니 각 변수의 값을 기억해 두시면 설명을 좀 더 이해하는데 도움이 될 것입니다.</p>
 <p><br></p>
 <h2 id="3-feed-forward-operations">3. Feed-forward Operations</h2>
 <hr />
 <p>전체적인 네트워크 구성은 위의 이미지와 같지만, 사실 활성 함수(Activation Function), Softmax Classifier 등 더 많은 복잡한 계산이 포함됩니다.</p>
 <p>그래서 좀 더 구체적으로 표현한 것이 다음 이미지입니다.</p>
-<p></br>
+<p></br></p>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/02.jpg" width="80%" />
   <figcaption></figcaption>
-</figure></p>
+</figure>
+
 <p>조금 복잡해 보이지만 수학적 설명을 곁들여 하나씩 풀어 나가보도록 하겠습니다.</p>
 <p><span class="arithmatex">\(\mathbf{X}\)</span>는 Input Feature 벡터입니다. 75개의 데이터로 구성되어 있지만 설명을 간단하게 하기 위해 1개의 데이터를 갖는다고 가정하도록 하겠습니다. 따라서, <span class="arithmatex">\(\mathbf{X}\)</span>의 차원은 [75×4] (또는 [N×D])가 아닌 [1×4] (또는 [1×D])입니다.</p>
 <p>첫번째 Weight <span class="arithmatex">\(\mathbf{W}^{(1)}\)</span>는 차원 [D×H]를 갖는 행렬이며, 첫번째 Bias <span class="arithmatex">\(\mathbf{b}^{(1)}\)</span>는 차원 [1×D]를 갖는 벡터입니다(사실 1차원 행렬이라고해도 무방합니다).</p>
@@ -1298,11 +1439,12 @@ testdata = iris[-samp,]
 <p>Backward Pass 또는 <a href="http://cs231n.github.io/optimization-2/">Backpropagation</a>은 학습을 하는 과정 동안 최적화 파라미터들(Optimization Parameters)을 업데이트 하기 위해 이 파라미터들에 대한 전체 Loss의 민감도(Sensitivity)를 계산하는 과정인데, Loss로부터 네트워크를 Feed-forward 방향의 역으로 거슬러 올라가면서 계산하기 때문에 Backward Pass라고 불리워집니다.</p>
 <p>다시 데이터셋트의 1개의 데이터에 대하여 설명을 진행하겠으나, N개의 데이터에서도 쉽게 확장할 수 있으니, 1개의 데이터에 대해 확실히 이해를 하는 것이 중요합니다.</p>
 <p>좀 더 명확한 설명을 위해 Hidden Layer ~ Classification 부분을 다음과 같이 따로 떼어 놓겠습니다.</p>
-<p></br>
+<p></br></p>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/03.jpg" width="100%" />
   <figcaption></figcaption>
-</figure></p>
+</figure>
+
 <p>간단하게 그림을 설명 드리면, 우선 Hidden Layer <span class="arithmatex">\(\mathbf{h}\)</span>로부터,</p>
 <p><span class="arithmatex">\( \sigma_{i}^{(2)} = w_{ki}^{(2)}h_k + b_{i}^{(2)} \)</span>, <span class="arithmatex">\(i=1,...,K\)</span> <span class="arithmatex">\(k=1,...,H\)</span></p>
 <p>이며, <span class="arithmatex">\(K\)</span>와 <span class="arithmatex">\(H\)</span>는 각각 Class의 개수와 Hidden Layer 내 Neuron의 개수를 의미합니다. 별다른 설명이 없는 한, Tensor Notation에 의해 중복첨자에 대해서는 합 연산(Summation)을 하는 것으로 간주하도록 하겠습니다.</p>
@@ -1439,11 +1581,12 @@ testdata = iris[-samp,]
 <p><code>dhidden</code> = <code>dscores</code> <span class="arithmatex">\(\cdot\)</span> <span class="arithmatex">\(\mathbf{W}^{(2)T}\)</span> = <span class="arithmatex">\( \displaystyle{ \begin{bmatrix} d_{1,1} &amp; d_{1,2} &amp; \cdots &amp; d_{1,K} \\ d_{2,1} &amp; d_{2,2} &amp; \cdots &amp; d_{2,K} \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\ d_{N,1} &amp; d_{N,2} &amp; \cdots &amp; d_{N,K} \end{bmatrix} \begin{bmatrix} w_{1,1}^{(2)} &amp; w_{2,1}^{(2)} &amp; \cdots &amp; w_{K,1}^{(2)} \\ w_{1,2}^{(2)} &amp; w_{2,2}^{(2)} &amp; \cdots &amp; w_{K,2}^{(2)} \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\ w_{1,H}^{(2)} &amp; w_{2,H}^{(2)} &amp; \cdots &amp; w_{K,H}^{(2)} \end{bmatrix} } \)</span></p>
 <p>과 같습니다.</p>
 <p>이제 Input에서 Hidden Layer까지 이르는 전반부를 살펴보겠습니다.</p>
-<p></br>
+<p></br></p>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/04.png" width="80%" />
   <figcaption></figcaption>
-</figure></p>
+</figure>
+
 <p>아시는 바와 같이, <span class="arithmatex">\(\mathrm{ReLU}(x) = \mathrm{max}(0,x)\)</span>는 <span class="arithmatex">\(x \le 0\)</span>에 대해서는 0을, <span class="arithmatex">\(x &gt; 0\)</span>에 대해서는 입력값을 그대로 출력합니다. 따라서, ReLU의 미분값은,</p>
 <p><span class="arithmatex">\( \displaystyle{ \frac{d ReLU(x)}{dx} = \begin{cases} 1, &amp; x &gt; 0 \\ 0, &amp; x \le 0  \end{cases} } \)</span></p>
 <p>과 같습니다.</p>
@@ -1456,7 +1599,6 @@ testdata = iris[-samp,]
 <div class="highlight"><pre><span></span><code><span class="n">dhidden</span> <span class="o">&lt;-</span> <span class="n">dscores</span> <span class="o">%*%</span> <span class="n">base</span><span class="o">::</span><span class="nf">t</span><span class="p">(</span><span class="n">W2</span><span class="p">)</span>
 <span class="n">dhidden</span><span class="p">[</span><span class="n">hidden.layer</span> <span class="o">&lt;=</span> <span class="m">0</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="m">0</span>
 </code></pre></div>
-
 <p>위의 코드의 Line 2는 <code>hidden.layer</code>의 Element가 0과 같거나 0 보다 작을 때 동일한 행과 열에 해당하는 <code>dhidden</code>의 Element를 0으로 변경한다는 의미입니다.</p>
 <p>Op.[28]을 얻는 방식과 동일한 방식으로,</p>
 <p>Op.[32] : <code>dW</code><span class="arithmatex">\(^{(1)}\)</span> = X<span class="arithmatex">\(^{T}\)</span> <span class="arithmatex">\(\cdot\)</span> <code>dhidden</code>, <code>db</code><span class="arithmatex">\(^{(1)}\)</span> = <code>ColumnSums(dhidden)</code></p>
@@ -1544,7 +1686,6 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
                       <span class="n">display</span> <span class="o">=</span> <span class="m">100</span><span class="p">,</span>
                       <span class="n">random.seed</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
 </code></pre></div>
-
 <p>인데, 각각의 파라미터에 대한 설명은 다음과 같습니다:</p>
 <ul>
 <li><code>x</code> : 입력 데이터(Input Features)의 Column Index입니다. <code>main.R</code>을 보면 <code>x = 1:4</code>를 파라미터로 전달하는데, 이는 첫번째부터 네번째까지의 Column(Sepal.Length ~ Petal.Width)을 Input Features로 정한다는 뜻입니다.</li>
@@ -1566,23 +1707,19 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
 <div class="highlight"><pre><span></span><code><span class="c1"># to make the case reproducible.</span>
 <span class="n">base</span><span class="o">::</span><span class="nf">set.seed</span><span class="p">(</span><span class="n">random.seed</span><span class="p">)</span>
 </code></pre></div>
-
 <p>학습시킬 데이터(traindata)의 전체 개수를 변수 <code>N</code>에 저장합니다(데이터 개수는 75개입니다).</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># total number of training set</span>
 <span class="n">N</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">nrow</span><span class="p">(</span><span class="n">traindata</span><span class="p">)</span>
 </code></pre></div>
-
 <p>Data Frame 형식으로 입력받은 파라미터 <code>traindata</code>에서 Input Features에 해당하는 Columns(1~4)를 취하되 Features의 이름은 필요없으므로 이를 제거합니다:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># extract the data and label</span>
 <span class="c1"># don&#39;t need atribute</span>
 <span class="n">X</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">unname</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">data.matrix</span><span class="p">(</span><span class="n">traindata</span><span class="p">[,</span><span class="n">x</span><span class="p">]))</span>
 </code></pre></div>
-
 <p>Output Class에 해당하는 Column(5)을 취하여 변수 Y에 저</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># correct categories represented by integer</span>
 <span class="n">Y</span> <span class="o">&lt;-</span> <span class="n">traindata</span><span class="p">[,</span><span class="n">y</span><span class="p">]</span>
 </code></pre></div>
-
 <p><code>Y</code>에 저장된 형태는 nominal value인 경우, 이를 정수 형태로 변환합니다. 즉, Y에는 다음과 같이 세 개의 클래스 이름이 저장되어 있습니다.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">Y</span>
  <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>     <span class="n">setosa</span>
@@ -1593,24 +1730,20 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
 <span class="p">[</span><span class="m">66</span><span class="p">]</span> <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>  <span class="n">virginica</span>
 <span class="n">Levels</span><span class="o">:</span> <span class="n">setosa</span> <span class="n">versicolor</span> <span class="n">virginica</span>
 </code></pre></div>
-
 <div class="highlight"><pre><span></span><code><span class="nf">if</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">is.factor</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span> <span class="p">{</span> <span class="n">Y</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">as.integer</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="p">}</span>
 </code></pre></div>
-
 <p>다음 코드를 살펴보시면,</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># create index for both row and col</span>
 <span class="n">Y.len</span>   <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">length</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
 <span class="n">Y.set</span>   <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">sort</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
 <span class="n">Y.index</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">cbind</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">N</span><span class="p">,</span> <span class="n">base</span><span class="o">::</span><span class="nf">match</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">Y.set</span><span class="p">))</span>
 </code></pre></div>
-
 <p><strong>Line 2</strong>에서 <code>base::unique()</code> 함수를 이용하여 중복되지 않은 엘리먼트들(Elements)을 뽑아내고 이들의 개수를 구하여 <code>Y.len</code>에 저장합니다.</p>
 <p><strong>Line 3</strong>에서는 이 엘리먼트들을 오름차순(Ascending Order)으로 정렬한 결과를 <code>Y.set</code>에 저장합니다.</p>
 <p><strong>Line 4</strong>에서 <code>base::match()</code> 함수를 이용하여 Y의 각 엘리먼트가 <code>Y.set</code>의 엘리먼트와 일치하는 위치를 찾습니다. 다음 예를 통해 <code>base::match()</code> 함수를 설명하도록 하겠습니다.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">base</span><span class="o">::</span><span class="nf">match</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">c</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">base</span><span class="o">::</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
  <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="kc">NA</span>  <span class="m">2</span> <span class="kc">NA</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">2</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">2</span> <span class="kc">NA</span> <span class="kc">NA</span>
 </code></pre></div>
-
 <p>위의 코드에서 <code>base::match()</code> 함수의 첫번째 파라미터의 첫번째 엘리먼트 4는 두번째 파라미터의 일치하는 엘리먼트가 없으므로 결과는 <code>NA</code>입니다. 첫번째 파라미터의 두번째 엘리먼트 3은 두번째 파라미터에 일치하는 엘리먼트가 존재하며 인덱스는 2입니다. 첫번째 파라미터의 아홉번째 엘리먼트 1은 두번째 파라미터에 일치하는 엘리먼트가 존재하면 인덱스는 1입니다. 이와 같이 첫번째 파라미터의 각 엘리먼트가 두번째 파라미터의 일치하는 엘리먼트의 인덱스를 넘겨주는 함수가 <code>base::match()</code>입니다.</p>
 <p><code>1:N</code> 벡터와 <code>base::match(Y, Y.set)</code> 벡터를 <code>base::cbind()</code> 함수를 이용하여 Column Binding한 결과를 <code>Y.index</code>에 저장합니다.</p>
 <p><br></p>
@@ -1631,7 +1764,6 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
 <span class="n">b2</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">matrix</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="n">K</span><span class="p">)</span>
 <span class="n">cs</span>
 </code></pre></div>
-
 <p>Line 1~6은 Input Dimensionality(D), Hidden Layer 내 Neuron개수(H), Class 개수(H)를 저장합니다.</p>
 <p>Line 8~13은 Model Parameters를 주어진 Dimension 크기의 행렬로 초기화합니다.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># use all train data to update weights since it&#39;s a small dataset</span>
@@ -1639,7 +1771,6 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
 <span class="c1"># initialize loss to a very big value</span>
 <span class="n">loss</span> <span class="o">&lt;-</span> <span class="m">100000</span>
 </code></pre></div>
-
 <p>위의 코드에서는 Batch Size와 Loss를 초기화합니다. Batch Size를 전체 데이터의 개수 N으로 설정한 것은 Full Batch를 의미하며 N이 매우 클 경우 Full Batch가 비효율적일 수 있으므로 Mini Batch(<span class="arithmatex">\(\mathrm{batchsize} &lt; N\)</span>)로 수행하며, Loss는 최소화의 대상이므로 충분히 큰 값으로 초기화합니다.</p>
 <p>자, 이제 본격적으로 학습을 진행합니다.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Training the network</span>
@@ -1693,7 +1824,6 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
     <span class="n">b2</span> <span class="o">&lt;-</span> <span class="n">b2</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">db2</span>
   <span class="p">}</span>
 </code></pre></div>
-
 <p>앞서 이론 부분에서 충분히 설명드렸다고 생각되는데, Op.[ForwardPass]와 Op.[BackwardPass]를 대응시켜 보시면 코드가 완벽하게 이해되리라 믿습니다.</p>
 <p>학습이 완료되면 아래의 코드와 같이 <code>model</code>이라는 list 변수에 모델 파라미터들을 저장하고 결과로 리턴해 줍니다.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># final results</span>
@@ -1730,13 +1860,11 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
 
 <span class="nf">return</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </code></pre></div>
-
 <p><br></p>
 <h3 id="54-predictdnn">5.4. predict.dnn( ) 프로토타입</h3>
 <p><code>predict.dnn()</code> 함수는 <code>predict.dnn.R</code> 소스 파일에 있습니다. 함수 선언은 다음과 같은데,</p>
 <div class="highlight"><pre><span></span><code><span class="n">predict.dnn</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">X.test</span><span class="p">)</span>
 </code></pre></div>
-
 <p>입력 변수에 대한 설명은 다음과 같습니다:</p>
 <ul>
 <li><code>model</code> : <code>train.dnn()</code>에서 학습시킨 모델 파라미터들.</li>
@@ -1766,7 +1894,6 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
   <span class="nf">return</span><span class="p">(</span><span class="n">labels.predicted</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <p><br></p>
 <h3 id="55-mainr">5.5. <code>main.R</code></h3>
 <p><code>main.R</code>에서 하는 작업은 다음과 같습니다:</p>
@@ -1830,7 +1957,6 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
 <span class="nf">print</span><span class="p">(</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;Accuracy: %f&quot;</span><span class="p">,</span> <span class="n">base</span><span class="o">::</span><span class="nf">mean</span><span class="p">(</span><span class="nf">as.integer</span><span class="p">(</span><span class="n">iris</span><span class="p">[</span><span class="o">-</span><span class="n">samp</span><span class="p">,</span> <span class="m">5</span><span class="p">])</span> <span class="o">==</span> <span class="n">labels.dnn</span><span class="p">))</span> <span class="p">)</span>
 <span class="c1"># 0.98</span>
 </code></pre></div>
-
 <p><br></p>
 <h3 id="56">5.6. 실행결과</h3>
 <p><code>main.R</code> 코드를 실행한 결과는 다음과 같습니다.</p>
@@ -1914,7 +2040,7 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -1929,7 +2055,7 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
           </a>
         
         
-          <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../2019-02-09-object-detection-using-rcnn/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -1962,15 +2088,15 @@ db<span class="arithmatex">\(^{(2)}\)</span> = <span class="arithmatex">\( \disp
       
     </div>
     
-      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
-      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../../assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
           base: "../../..",
           features: ['navigation.tabs'],
           search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+            worker: "../../../assets/javascripts/worker/search.8c7e0a7e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

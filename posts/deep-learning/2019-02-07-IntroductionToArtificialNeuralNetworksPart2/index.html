@@ -1,7 +1,4 @@
 
-
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -10,11 +7,12 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
+      
+      
         <link rel="canonical" href="https://gchoi.github.io/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/">
       
-      
       <link rel="shortcut icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.14">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
     
     
       
@@ -22,14 +20,18 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.d3202873.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3b61ea93.min.css">
       
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.39b8e14a.min.css">
+        
       
     
     
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
       
@@ -43,7 +45,13 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -61,9 +69,11 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
+    <a href="https://gchoi.github.io" title="Alex Choi&#39;s Blog" class="md-header-nav__button md-logo" aria-label="Alex Choi's Blog">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -73,18 +83,20 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
     <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             Alex Choi's Blog
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
             
               Introduction to Artificial Neural Network Part 2.
             
           </span>
         </div>
-      
+      </div>
     </div>
     
       <label class="md-header-nav__button md-icon" for="__search">
@@ -95,7 +107,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
@@ -123,21 +135,85 @@
     
     <div class="md-container" data-md-component="container">
       
+      
         
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../about/" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" class="md-tabs__link md-tabs__link--active">
+        Posts
+      </a>
+    </li>
+  
+
+  
+
+      
+    </ul>
+  </div>
+</nav>
         
       
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="https://gchoi.github.io" title="Alex Choi's Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
+    <a href="https://gchoi.github.io" title="Alex Choi&#39;s Blog" class="md-nav__button md-logo" aria-label="Alex Choi's Blog">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -153,8 +229,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../../.." title="Home" class="md-nav__link">
+    <a href="../../.." class="md-nav__link">
       Home
     </a>
   </li>
@@ -165,8 +242,9 @@
       
 
 
+
   <li class="md-nav__item">
-    <a href="../../../about/" title="About" class="md-nav__link">
+    <a href="../../../about/" class="md-nav__link">
       About
     </a>
   </li>
@@ -176,10 +254,13 @@
       
       
 
+
   
 
 
+  
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
     
       <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
@@ -199,10 +280,13 @@
           
           
 
+
   
 
 
+  
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
     
       <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
     
@@ -223,8 +307,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-nav__link">
+    <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" class="md-nav__link">
       Introduction to Artificial Neural Network Part 1.
     </a>
   </li>
@@ -233,6 +318,7 @@
           
           
           
+
 
   
 
@@ -247,7 +333,7 @@
         <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="Introduction to Artificial Neural Network Part 2." class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       Introduction to Artificial Neural Network Part 2.
     </a>
     
@@ -316,8 +402,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-nav__link">
+    <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" class="md-nav__link">
       Deep Learning from Scratch Part 1.
     </a>
   </li>
@@ -328,8 +415,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2017-08-04-Deep-Learning-from-Scratch-Part-02/" title="Deep Learning from Scratch Part 2." class="md-nav__link">
+    <a href="../2017-08-04-Deep-Learning-from-Scratch-Part-02/" class="md-nav__link">
       Deep Learning from Scratch Part 2.
     </a>
   </li>
@@ -340,8 +428,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2019-02-09-object-detection-using-rcnn/" title="Object Detection Using R-CNN" class="md-nav__link">
+    <a href="../2019-02-09-object-detection-using-rcnn/" class="md-nav__link">
       Object Detection Using R-CNN
     </a>
   </li>
@@ -352,8 +441,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2019-02-10-object-detection-using-fast-rcnn/" title="Object Detection Using Fast R-CNN" class="md-nav__link">
+    <a href="../2019-02-10-object-detection-using-fast-rcnn/" class="md-nav__link">
       Object Detection Using Fast R-CNN
     </a>
   </li>
@@ -364,8 +454,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" title="How to Set Up PyTorch CenterNet Development Environment" class="md-nav__link">
+    <a href="../2020-10-08-setting-up-pytorch-centernet-dev-env/" class="md-nav__link">
       How to Set Up PyTorch CenterNet Development Environment
     </a>
   </li>
@@ -381,9 +472,12 @@
           
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2" >
     
     <label class="md-nav__link" for="nav-3-2">
       Scientific Computing
@@ -402,8 +496,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" title="Realtime Fluid Simulation Using CUDA" class="md-nav__link">
+    <a href="../../scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/" class="md-nav__link">
       Realtime Fluid Simulation Using CUDA
     </a>
   </li>
@@ -414,8 +509,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../scientific-computing/2014-03-30-gpu-technical-trend/" title="GPU 기술동향" class="md-nav__link">
+    <a href="../../scientific-computing/2014-03-30-gpu-technical-trend/" class="md-nav__link">
       GPU 기술동향
     </a>
   </li>
@@ -431,9 +527,12 @@
           
 
 
+
+  
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" >
     
     <label class="md-nav__link" for="nav-3-3">
       MongoDB
@@ -452,8 +551,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/01-starting-mongodb/" title="01. MongoDB 시작하기" class="md-nav__link">
+    <a href="../../mongodb/01-starting-mongodb/" class="md-nav__link">
       01. MongoDB 시작하기
     </a>
   </li>
@@ -464,8 +564,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/02-mongodb-basic-queries/" title="02. MongoDB 기본 Query 명령문 테스트" class="md-nav__link">
+    <a href="../../mongodb/02-mongodb-basic-queries/" class="md-nav__link">
       02. MongoDB 기본 Query 명령문 테스트
     </a>
   </li>
@@ -476,8 +577,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/03-mongodb-lifecycle/" title="03. MongoDB 라이프사이클" class="md-nav__link">
+    <a href="../../mongodb/03-mongodb-lifecycle/" class="md-nav__link">
       03. MongoDB 라이프사이클
     </a>
   </li>
@@ -488,8 +590,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/04-mongodb-update-operators-inc/" title="04. MongoDB Update Operators Part 1. - $inc" class="md-nav__link">
+    <a href="../../mongodb/04-mongodb-update-operators-inc/" class="md-nav__link">
       04. MongoDB Update Operators Part 1. - $inc
     </a>
   </li>
@@ -500,8 +603,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/05-mongodb-update-operators-set-unset/" title="05. MongoDB Update Operators Part 2. - $set, $unset" class="md-nav__link">
+    <a href="../../mongodb/05-mongodb-update-operators-set-unset/" class="md-nav__link">
       05. MongoDB Update Operators Part 2. - $set, $unset
     </a>
   </li>
@@ -512,8 +616,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/06-mongodb-update-operators-push/" title="06. MongoDB Update Operators Part 3. - $push" class="md-nav__link">
+    <a href="../../mongodb/06-mongodb-update-operators-push/" class="md-nav__link">
       06. MongoDB Update Operators Part 3. - $push
     </a>
   </li>
@@ -524,8 +629,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/07-mongodb-update-operators-addToSet/" title="07. MongoDB Update Operators Part 4. - $addToSet" class="md-nav__link">
+    <a href="../../mongodb/07-mongodb-update-operators-addToSet/" class="md-nav__link">
       07. MongoDB Update Operators Part 4. - $addToSet
     </a>
   </li>
@@ -536,8 +642,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/08-mongodb-update-operators-pop-pull/" title="08. MongoDB Update Operators Part 5. - $pop, $pull" class="md-nav__link">
+    <a href="../../mongodb/08-mongodb-update-operators-pop-pull/" class="md-nav__link">
       08. MongoDB Update Operators Part 5. - $pop, $pull
     </a>
   </li>
@@ -548,8 +655,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/09-mongodb-update-operators-upsert/" title="09. MongoDB Update Operators Part 6. - $upsert" class="md-nav__link">
+    <a href="../../mongodb/09-mongodb-update-operators-upsert/" class="md-nav__link">
       09. MongoDB Update Operators Part 6. - $upsert
     </a>
   </li>
@@ -560,8 +668,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/10-mongodb-update-operators-updating-multiple-documents/" title="10. MongoDB Update Operators Part 7. - Updating Multiple Documents" class="md-nav__link">
+    <a href="../../mongodb/10-mongodb-update-operators-updating-multiple-documents/" class="md-nav__link">
       10. MongoDB Update Operators Part 7. - Updating Multiple Documents
     </a>
   </li>
@@ -572,8 +681,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/11-mongodb-query-find/" title="11. MongoDB Query Part 1. - find" class="md-nav__link">
+    <a href="../../mongodb/11-mongodb-query-find/" class="md-nav__link">
       11. MongoDB Query Part 1. - find
     </a>
   </li>
@@ -584,8 +694,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/12-mongodb-query-findAndModify/" title="12. MongoDB Query Part 2. - findAndModify" class="md-nav__link">
+    <a href="../../mongodb/12-mongodb-query-findAndModify/" class="md-nav__link">
       12. MongoDB Query Part 2. - findAndModify
     </a>
   </li>
@@ -596,8 +707,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/13-mongodb-query-all/" title="13. MongoDB Query Part 3. - $all" class="md-nav__link">
+    <a href="../../mongodb/13-mongodb-query-all/" class="md-nav__link">
       13. MongoDB Query Part 3. - $all
     </a>
   </li>
@@ -608,8 +720,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/14-mongodb-query-size/" title="14. MongoDB Query Part 4. - $size" class="md-nav__link">
+    <a href="../../mongodb/14-mongodb-query-size/" class="md-nav__link">
       14. MongoDB Query Part 4. - $size
     </a>
   </li>
@@ -620,8 +733,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/15-mongodb-query-slice/" title="15. MongoDB Query Part 5. - $slice" class="md-nav__link">
+    <a href="../../mongodb/15-mongodb-query-slice/" class="md-nav__link">
       15. MongoDB Query Part 5. - $slice
     </a>
   </li>
@@ -632,8 +746,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/16-mongodb-query-where/" title="16. MongoDB Query Part 6. - $where" class="md-nav__link">
+    <a href="../../mongodb/16-mongodb-query-where/" class="md-nav__link">
       16. MongoDB Query Part 6. - $where
     </a>
   </li>
@@ -644,8 +759,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/17-mongodb-query-querying_embedded_documents/" title="17. MongoDB Query Part 7. - querying_embedded_documents" class="md-nav__link">
+    <a href="../../mongodb/17-mongodb-query-querying_embedded_documents/" class="md-nav__link">
       17. MongoDB Query Part 7. - querying_embedded_documents
     </a>
   </li>
@@ -656,8 +772,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/18-mongodb-query-cursors/" title="18. MongoDB Query Part 8. - cursors" class="md-nav__link">
+    <a href="../../mongodb/18-mongodb-query-cursors/" class="md-nav__link">
       18. MongoDB Query Part 8. - cursors
     </a>
   </li>
@@ -668,8 +785,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/19-mongodb-query-skip/" title="19. MongoDB Query Part 9. - skip 속도 높이기" class="md-nav__link">
+    <a href="../../mongodb/19-mongodb-query-skip/" class="md-nav__link">
       19. MongoDB Query Part 9. - skip 속도 높이기
     </a>
   </li>
@@ -680,8 +798,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/20-mongodb-query-other-operations/" title="20. MongoDB Query Part 10. - 기타 쿼리 연산자들" class="md-nav__link">
+    <a href="../../mongodb/20-mongodb-query-other-operations/" class="md-nav__link">
       20. MongoDB Query Part 10. - 기타 쿼리 연산자들
     </a>
   </li>
@@ -692,8 +811,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/21-mongodb-query-snapshot/" title="21. MongoDB Query Part 11. - $snap" class="md-nav__link">
+    <a href="../../mongodb/21-mongodb-query-snapshot/" class="md-nav__link">
       21. MongoDB Query Part 11. - $snap
     </a>
   </li>
@@ -704,8 +824,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/22-mongodb-aggregation-basic/" title="22. MongoDB Aggregation Part 1. - Basic" class="md-nav__link">
+    <a href="../../mongodb/22-mongodb-aggregation-basic/" class="md-nav__link">
       22. MongoDB Aggregation Part 1. - Basic
     </a>
   </li>
@@ -716,8 +837,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/23-mongodb-aggregation-mapreduce/" title="23. MongoDB Aggregation Part 2. - MapReduce" class="md-nav__link">
+    <a href="../../mongodb/23-mongodb-aggregation-mapreduce/" class="md-nav__link">
       23. MongoDB Aggregation Part 2. - MapReduce
     </a>
   </li>
@@ -728,8 +850,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/24-mongodb-db-commands/" title="24. MongoDB DB Commands" class="md-nav__link">
+    <a href="../../mongodb/24-mongodb-db-commands/" class="md-nav__link">
       24. MongoDB DB Commands
     </a>
   </li>
@@ -740,8 +863,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/25-mongodb-capped-collections/" title="25. MongoDB Capped Collections" class="md-nav__link">
+    <a href="../../mongodb/25-mongodb-capped-collections/" class="md-nav__link">
       25. MongoDB Capped Collections
     </a>
   </li>
@@ -752,8 +876,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/26-mongodb-gridfs/" title="26. MongoDB GridFS" class="md-nav__link">
+    <a href="../../mongodb/26-mongodb-gridfs/" class="md-nav__link">
       26. MongoDB GridFS
     </a>
   </li>
@@ -764,8 +889,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/27-mongodb-database-references/" title="27. MongoDB Database Refences" class="md-nav__link">
+    <a href="../../mongodb/27-mongodb-database-references/" class="md-nav__link">
       27. MongoDB Database Refences
     </a>
   </li>
@@ -776,8 +902,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/28-mongodb-administration-starting_mongodb/" title="28. MongoDB Administration Part 1. - Starting MongoDB" class="md-nav__link">
+    <a href="../../mongodb/28-mongodb-administration-starting_mongodb/" class="md-nav__link">
       28. MongoDB Administration Part 1. - Starting MongoDB
     </a>
   </li>
@@ -788,8 +915,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/29-mongodb-administration-monitoring/" title="29. MongoDB Administration Part 2. - Monitoring" class="md-nav__link">
+    <a href="../../mongodb/29-mongodb-administration-monitoring/" class="md-nav__link">
       29. MongoDB Administration Part 2. - Monitoring
     </a>
   </li>
@@ -800,8 +928,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/30-mongodb-administration-security_and_authentication/" title="30. MongoDB Administration Part 3. - Security & Authentication" class="md-nav__link">
+    <a href="../../mongodb/30-mongodb-administration-security_and_authentication/" class="md-nav__link">
       30. MongoDB Administration Part 3. - Security & Authentication
     </a>
   </li>
@@ -812,8 +941,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/31-mongodb-replication-master_slave_replication/" title="31. MongoDB Replication Part 1. - Master-Slave Replication" class="md-nav__link">
+    <a href="../../mongodb/31-mongodb-replication-master_slave_replication/" class="md-nav__link">
       31. MongoDB Replication Part 1. - Master-Slave Replication
     </a>
   </li>
@@ -824,8 +954,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/32-mongodb-replication-replica_sets_part1/" title="32. MongoDB Replication Part 2. - Replica Sets Part 1" class="md-nav__link">
+    <a href="../../mongodb/32-mongodb-replication-replica_sets_part1/" class="md-nav__link">
       32. MongoDB Replication Part 2. - Replica Sets Part 1
     </a>
   </li>
@@ -836,8 +967,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/33-mongodb-replication-usage_of_slaves-read_scaling/" title="33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling" class="md-nav__link">
+    <a href="../../mongodb/33-mongodb-replication-usage_of_slaves-read_scaling/" class="md-nav__link">
       33. MongoDB Replication Part 3. - Usage of Slaves / Read Scaling
     </a>
   </li>
@@ -848,8 +980,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/34-mongodb-replication-replica_sets_part2/" title="34. MongoDB Replication Part 4. - Replica Sets Part 2" class="md-nav__link">
+    <a href="../../mongodb/34-mongodb-replication-replica_sets_part2/" class="md-nav__link">
       34. MongoDB Replication Part 4. - Replica Sets Part 2
     </a>
   </li>
@@ -860,8 +993,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/35-mongodb-replication-usage_of_slaves-data_processing/" title="35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing" class="md-nav__link">
+    <a href="../../mongodb/35-mongodb-replication-usage_of_slaves-data_processing/" class="md-nav__link">
       35. MongoDB Replication Part 5. - Usage of Slaves / Data Processing
     </a>
   </li>
@@ -872,8 +1006,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/36-mongodb-replication-oplog/" title="36. MongoDB Replication Part 6. - oplog" class="md-nav__link">
+    <a href="../../mongodb/36-mongodb-replication-oplog/" class="md-nav__link">
       36. MongoDB Replication Part 6. - oplog
     </a>
   </li>
@@ -884,8 +1019,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/37-mongodb-replication-sync/" title="37. MongoDB Replication Part 7. - sync" class="md-nav__link">
+    <a href="../../mongodb/37-mongodb-replication-sync/" class="md-nav__link">
       37. MongoDB Replication Part 7. - sync
     </a>
   </li>
@@ -896,8 +1032,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/38-mongodb-replication-replication_state_and_local_db/" title="38. MongoDB Replication Part 8. - Replication State and Local DB" class="md-nav__link">
+    <a href="../../mongodb/38-mongodb-replication-replication_state_and_local_db/" class="md-nav__link">
       38. MongoDB Replication Part 8. - Replication State and Local DB
     </a>
   </li>
@@ -908,8 +1045,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/39-mongodb-replication-replication_with_authentication/" title="39. MongoDB Replication Part 9. - Replication with Authentication" class="md-nav__link">
+    <a href="../../mongodb/39-mongodb-replication-replication_with_authentication/" class="md-nav__link">
       39. MongoDB Replication Part 9. - Replication with Authentication
     </a>
   </li>
@@ -920,8 +1058,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/40-mongodb-sharding-introduction/" title="40. MongoDB Sharding Part 1. - Introduction" class="md-nav__link">
+    <a href="../../mongodb/40-mongodb-sharding-introduction/" class="md-nav__link">
       40. MongoDB Sharding Part 1. - Introduction
     </a>
   </li>
@@ -932,8 +1071,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/41-mongodb-sharding-shard_keys/" title="41. MongoDB Sharding Part 2. - Shard Keys" class="md-nav__link">
+    <a href="../../mongodb/41-mongodb-sharding-shard_keys/" class="md-nav__link">
       41. MongoDB Sharding Part 2. - Shard Keys
     </a>
   </li>
@@ -944,8 +1084,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/42-mongodb-sharding-setting_up_sharding/" title="42. MongoDB Sharding Part 3. - Shard Keys" class="md-nav__link">
+    <a href="../../mongodb/42-mongodb-sharding-setting_up_sharding/" class="md-nav__link">
       42. MongoDB Sharding Part 3. - Shard Keys
     </a>
   </li>
@@ -956,8 +1097,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/43-mongodb-sharding-product_configurations/" title="43. MongoDB Sharding Part 4. - Product Configurations" class="md-nav__link">
+    <a href="../../mongodb/43-mongodb-sharding-product_configurations/" class="md-nav__link">
       43. MongoDB Sharding Part 4. - Product Configurations
     </a>
   </li>
@@ -968,8 +1110,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/44-mongodb-sharding-sharding_administration/" title="44. MongoDB Sharding Part 5. - Sharding Administration" class="md-nav__link">
+    <a href="../../mongodb/44-mongodb-sharding-sharding_administration/" class="md-nav__link">
       44. MongoDB Sharding Part 5. - Sharding Administration
     </a>
   </li>
@@ -980,8 +1123,9 @@
           
 
 
+
   <li class="md-nav__item">
-    <a href="../../mongodb/45-mongodb-tips-db_collection_remove_commands/" title="45. MongoDB Tips Part 1. - DB & Collection Remove Commands" class="md-nav__link">
+    <a href="../../mongodb/45-mongodb-tips-db_collection_remove_commands/" class="md-nav__link">
       45. MongoDB Tips Part 1. - DB & Collection Remove Commands
     </a>
   </li>
@@ -1004,7 +1148,8 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -1073,9 +1218,6 @@
               
                 
                 
-                  
-                
-                
                   <h1>Introduction to Artificial Neural Network Part 2.</h1>
                 
                 <p><em>Written by Alex Choi, Feb. 07, 2019.</em></p>
@@ -1102,11 +1244,9 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 5 NA  1    1    1    2    1  2    2 data_28
 6 NA  1    1    1    2    2  3    1 data_37
 </code></pre></div>
-
 <p>과 같은데, 각 피쳐(Feature)의 이름을 정해놓지 않았기 때문에 자동으로 생성되어 있음을 알 수 있습니다. 우선 <code>X열</code>을 삭제합니다.</p>
 <div class="highlight"><pre><span></span><code>monk_train$X &lt;- NULL
 </code></pre></div>
-
 <p>다시 데이터 몇 개를 살펴보면,</p>
 <div class="highlight"><pre><span></span><code>&gt; utils::head(monk_train)
   X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
@@ -1117,7 +1257,6 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 5  1    1    1    2    1  2    2 data_28
 6  1    1    1    2    2  3    1 data_37
 </code></pre></div>
-
 <p>첫번째 열이었던 X 피쳐가 삭제되었음을 확인할 수 있습니다. 이제 피쳐들의 이름을 지정하도록 합니다. UCI Machine Learning Repository의 몽크 문제 사이트를 살펴보면, Attribute Information에서 각 피쳐의 이름을 알 수 있습니다:</p>
 <div class="highlight"><pre><span></span><code>Attribute Information:
 
@@ -1130,11 +1269,9 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 7. a6: 1, 2
 8. Id: (A unique symbol for each instance)
 </code></pre></div>
-
 <p>총 8개의 피쳐가 있고 이름은 위와 같습니다. 따라서, 위와 같이 피쳐의 이름을 부여하고,</p>
 <div class="highlight"><pre><span></span><code>base::names(monk_train) &lt;- c(&quot;class&quot;,&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;,&quot;a4&quot;,&quot;a5&quot;,&quot;a6&quot;,&quot;id&quot;)
 </code></pre></div>
-
 <p>다시 데이터를 몇 개 살펴보면,</p>
 <div class="highlight"><pre><span></span><code>&gt; utils::head(monk_train)
   class a1 a2 a3 a4 a5 a6      id
@@ -1145,11 +1282,9 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 5     1  1  1  2  1  2  2 data_28
 6     1  1  1  2  2  3  1 data_37
 </code></pre></div>
-
 <p>이 중 사실 id는 필요가 없으므로, 다시 이 피쳐를 삭제하도록 합니다:</p>
 <div class="highlight"><pre><span></span><code><span class="n">monk_train</span><span class="o">$</span><span class="n">id</span> <span class="o">&lt;-</span> <span class="kc">NULL</span>
 </code></pre></div>
-
 <p>이제 <code>id</code> 피쳐가 삭제되었습니다:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">utils</span><span class="o">::</span><span class="nf">head</span><span class="p">(</span><span class="n">monk_train</span><span class="p">)</span>
   <span class="n">class</span> <span class="n">a1</span> <span class="n">a2</span> <span class="n">a3</span> <span class="n">a4</span> <span class="n">a5</span> <span class="n">a6</span>
@@ -1160,7 +1295,6 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 <span class="m">5</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">2</span>
 <span class="m">6</span>     <span class="m">1</span>  <span class="m">1</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">1</span>
 </code></pre></div>
-
 <p>이제 전체적으로 데이터를 살펴보면,</p>
 <div class="highlight"><pre><span></span><code>&gt; utils::str(monk_train)
 &#39;data.frame&#39;:   123 obs. of  7 variables:
@@ -1172,7 +1306,6 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
  $ a5   : int  3 2 3 2 2 3 4 1 1 2 ...
  $ a6   : int  2 1 2 1 2 1 1 2 2 1 ...
 </code></pre></div>
-
 <p><code>monk_train</code>은 7개의 피쳐를 갖는 총 123개의 데이터로 구성되어 있음을 알 수 있습니다. 학습 데이터와 마찬가지로, 테스트 데이터 또한 동일한 방식으로 가공하도록 합니다:</p>
 <div class="highlight"><pre><span></span><code><span class="n">monk_test</span> <span class="o">&lt;-</span> <span class="n">utils</span><span class="o">::</span><span class="nf">read.csv</span><span class="p">(</span><span class="n">file</span> <span class="o">=</span> <span class="s">&quot;monk_test_1.csv&quot;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
 <span class="n">monk_test</span><span class="o">$</span><span class="n">X</span> <span class="o">&lt;-</span> <span class="kc">NULL</span>
@@ -1180,37 +1313,30 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 <span class="n">monk_test</span><span class="o">$</span><span class="n">id</span> <span class="o">&lt;-</span> <span class="kc">NULL</span>
 <span class="n">utils</span><span class="o">::</span><span class="nf">str</span><span class="p">(</span><span class="n">monk_test</span><span class="p">)</span>
 </code></pre></div>
-
 <p>피쳐마다 값의 범위가 제각각이기 때문에 이를 정규화(Normalization)할 필요가 있으므로, 정규화 함수를 정의하도록 합니다. 정규화 함수는 벡터의 값에서 해당 벡터의 최소값을 뺀 값을 최대값과 최소값과의 차이로 나눈 것입니다:</p>
 <div class="highlight"><pre><span></span><code><span class="n">normalize</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
   <span class="nf">return</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="nf">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="nf">min</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <p>따라서, 위의 함수를 이용하면, 입력된 값에 <code>[0,1]</code>의 범위로 변환됩니다. <code>lapply</code> 함수를 이용하여 <code>monk_train</code>의 각 열에 <code>normalize()</code> 함수를 적용하고, 이를 Data Frame으로 변환합니다:</p>
 <div class="highlight"><pre><span></span><code><span class="n">monk_train_norm</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">lapply</span><span class="p">(</span><span class="n">monk_train</span><span class="p">,</span> <span class="n">normalize</span><span class="p">))</span>
 </code></pre></div>
-
 <p>그러나, <code>class</code> 피쳐는 정규화 되지 않기를 원하기 때문에 이 피쳐에 대해서는 다시 원래 데이터를 저장하도록 합니다:
 (사실 class 피쳐값들은 0 아니면 1이므로 굳이 데이터를 되돌릴 필요는 없지만, 몽크 문제가 아닌 다른 데이터인 경우에는 이 과정이 반드시 필요합니다.)</p>
 <div class="highlight"><pre><span></span><code><span class="n">monk_train_norm</span><span class="o">$</span><span class="n">class</span> <span class="o">&lt;-</span> <span class="n">monk_train</span><span class="o">$</span><span class="n">class</span>
 </code></pre></div>
-
 <p>테스트 데이터에 대해서도 동일한 과정을 수행합니다:</p>
 <div class="highlight"><pre><span></span><code><span class="n">monk_test_norm</span> <span class="o">&lt;-</span> <span class="n">base</span><span class="o">::</span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">base</span><span class="o">::</span><span class="nf">lapply</span><span class="p">(</span><span class="n">monk_test</span><span class="p">,</span> <span class="n">normalize</span><span class="p">))</span>
 <span class="n">monk_test_norm</span><span class="o">$</span><span class="n">class</span> <span class="o">&lt;-</span> <span class="n">monk_test</span><span class="o">$</span><span class="n">class</span>
 </code></pre></div>
-
 <h2 id="3-nuralnet">3. nuralnet 패키지 설치</h2>
 <hr />
 <p>이제 R의 인공신경망 패키지 중 하나인 <code>neuralnet</code>을 다운 받습니다:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;neuralnet&quot;</span><span class="p">)</span>
 </code></pre></div>
-
 <p>그리고 이 패키지를 로딩합니다:</p>
 <div class="highlight"><pre><span></span><code>base::library(neuralnet)
 </code></pre></div>
-
 <h2 id="4-ann">4. ANN 모델 및 가시화</h2>
 <hr />
 <p>은닉 레이어를 1개만 갖는 간단한 ANN 모델을 세웁니다:</p>
@@ -1219,16 +1345,15 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
                                    <span class="n">data</span> <span class="o">=</span> <span class="n">monk_train</span><span class="p">,</span>
                                    <span class="n">hidden</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
 </code></pre></div>
-
 <p>이제 세워진 ANN 모델에 대한 네트워크 토폴로지를 가시화해 보겠습니다.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">graphics</span><span class="o">::</span><span class="nf">plot</span><span class="p">(</span><span class="n">monk_model</span><span class="p">)</span>
 </code></pre></div>
-
-<p><br/>
+<p><br/></p>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/01.png" width="100%" />
   <figcaption>모델 아키텍쳐</figcaption>
-</figure></p>
+</figure>
+
 <p>구성된 노드 및 레이어와 노드 가중치를 한 눈에 볼 수 있습니다.</p>
 <p>상기 이미지의 파란색 노드는 편향(Bias)값을 나타내며, 이 값은 노드의 값이 이동하도록 하는 상수값인데, 마치 선형 회귀모델에서 좌표 Intercept와 유사합니다. 그러나, 에러값이 상당히 높으므로 이 모델로 예측할 경우 상당히 안 좋은 결과를 얻게 될 것이라는 것을 알 수 있습니다.</p>
 <h2 id="5-ann">5. ANN 모델을 이용한 테스트 데이터 예측</h2>
@@ -1236,18 +1361,15 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 <p>세워진 모델을 이용하여 테스트 데이터의 모델 결과를 얻어보도록 합니다.</p>
 <div class="highlight"><pre><span></span><code><span class="n">model_results</span> <span class="o">&lt;-</span> <span class="n">neuralnet</span><span class="o">::</span><span class="nf">compute</span><span class="p">(</span><span class="n">monk_model</span><span class="p">,</span> <span class="n">monk_test</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="m">7</span><span class="p">])</span>
 </code></pre></div>
-
 <p>위의 코드의 의미는 <code>monk_model</code>을 이용하여 <code>monk_test[2:7]</code>에 대한 예측 모델 결과를 얻는 것입니다.</p>
 <p><code>monk_test[2:7]</code>는 <code>monk_test[1]</code>인 Class 피쳐에 대한 모델 결과를 얻기 위하여 나머지 피쳐인 a1~a6를 이용한다는 의미입니다. <code>model_results</code>가 가지고 있는 데이터 이름를 살펴보면,</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="nf">names</span><span class="p">(</span><span class="n">model_results</span><span class="p">)</span>
 <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s">&quot;neurons&quot;</span>    <span class="s">&quot;net.result&quot;</span>
 </code></pre></div>
-
 <p>인데, <code>neurons</code>는 뉴럴 네트워크의 각 레이어의 뉴런 출력값들이며, <code>net.result</code>는 뉴럴 네트워크의 전체 결과를 행렬 형태로 저장한 값(현재 우리가 풀고 있는 문제에서는 벡터)입니다.</p>
 <p><code>net.result</code>이 테스트 데이터에 대한 분류 결과입니다. 이 값을 예측 결과값이라는 다른 변수에 저장합니다.</p>
 <div class="highlight"><pre><span></span><code><span class="n">predicted_monk</span> <span class="o">&lt;-</span> <span class="n">model_results</span><span class="o">$</span><span class="n">net.result</span>
 </code></pre></div>
-
 <p>값을 몇 개 살펴보면,</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">predicted_monk</span><span class="p">)</span>
              <span class="p">[,</span><span class="m">1</span><span class="p">]</span>
@@ -1258,7 +1380,6 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 <span class="p">[</span><span class="m">5</span><span class="p">,]</span> <span class="m">0.3010585096</span>
 <span class="p">[</span><span class="m">6</span><span class="p">,]</span> <span class="m">0.3010585095</span>
 </code></pre></div>
-
 <p>첫번째 값을 볼 수 있듯이 테스트 데이터에서 class의 값은 0과 1사이였는데 1을 살짝 넘는 값도 보입니다. 즉, 계산이 충분히 정확하지 않음을 다시 한 번 확인할 수 있습니다.</p>
 <p>그러면 실제 데이터의 class와  ANN을 통해 예측된 값의 오차를 확인해 보도록 합니다. 이를 확인하려면 두 값 사이의 의존성을 분석하면 되는데, 이것을 상관관계(Correlation) 분석이라고 하며 대표적인 것으로 피어슨(Pearson), 켄달(Kendall), 스피어만(Spearman) 상관계수 등이 있습니다.</p>
 <p>테스트 데이터와 ANN을 통해 예측된 데이터와의 상관관계를 계산해 보도록 합니다:</p>
@@ -1266,7 +1387,6 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
              <span class="p">[,</span><span class="m">1</span><span class="p">]</span>
 <span class="p">[</span><span class="m">1</span><span class="p">,]</span> <span class="m">0.5479135178</span>
 </code></pre></div>
-
 <p>상관관계 결과값은 <code>[-1,1]</code> 범위를 갖는데, -1은 음의 완전상관관계, 0은 상관관계가 하나도 없는 것이며, 1은 양의 완전상관관계입니다.</p>
 <p>값이 0.5 근처로 두 값 사이에 상관관계는 있긴 하지만 크지 않음을 알 수 있습니다. 즉, 계산 결과가 그리 만족스럽지 못하며, 실제 에러도 컸음을 알 수 있었습니다.</p>
 <h2 id="6-ann">6. ANN 모델 성능 개선</h2>
@@ -1284,18 +1404,17 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 <span class="n">model_results</span> <span class="o">&lt;-</span> <span class="n">neuralnet</span><span class="o">::</span><span class="nf">compute</span><span class="p">(</span><span class="n">monk_model</span><span class="p">,</span> <span class="n">monk_test</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="m">7</span><span class="p">])</span>
 <span class="n">predicted_monk</span> <span class="o">&lt;-</span> <span class="n">model_results</span><span class="o">$</span><span class="n">net.result</span>
 </code></pre></div>
-
-<p><br/>
+<p><br/></p>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/02.png" width="100%" />
   <figcaption></figcaption>
-</figure></p>
+</figure>
+
 <p>이 때의 결과는,</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;</span> <span class="n">stats</span><span class="o">::</span><span class="nf">cor</span><span class="p">(</span><span class="n">predicted_monk</span><span class="p">,</span> <span class="n">monk_test</span><span class="o">$</span><span class="n">class</span><span class="p">)</span>
              <span class="p">[,</span><span class="m">1</span><span class="p">]</span>
 <span class="p">[</span><span class="m">1</span><span class="p">,]</span> <span class="m">0.5604624596</span>
 </code></pre></div>
-
 <p>이며, 은닉 레이어가 1개인 경우보다 결과가 약간 개선 되었음을 알 수 있습니다. 은닉 레이어를 5개까지 늘리면서 테스트 해 보면,</p>
 <table>
 <thead>
@@ -1341,11 +1460,12 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
 </table>
 <p>와 같은데, 은닉 레이어가 3개 사용된 경우 극적으로 결과가 좋아졌음을 알 수 있습니다.</p>
 <p>그러나, 3개 사용된 경우에 비해 4개 사용되는 경우 계산량은 2개 가까이 많아졌는데 결과는 오히려 더 안 좋아졌으며, 5개 사용된 경우 결과는 다시 좋아졌음을 알 수 있습니다.</p>
-<p><br/>
+<p><br/></p>
 <figure>
   <img src="../../../assets/img/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/03.png" width="100%" />
   <figcaption></figcaption>
-</figure></p>
+</figure>
+
 <p>위의 이미지는 시험삼아 은닉 레이어를 10개 사용한 경우인데 눈이 돌아갈 정도로 복잡해 보입니다.</p>
 <p>UCI Machine Learning Repository의 <a href="http://archive.ics.uci.edu/ml/datasets/MONK's+Problems">몽크 문제(Monk's Problem) 데이터</a>에서 데이터셋 2와 3에 대해서도 연습삼아 위의 과정을 테스트해 보길 바랍니다.</p>
 <p>이로써 R의 ANN 패키지인 neuralnet을 이용하여 분류 문제를 푸는 방법에 대해서 알아보았습니다.</p>
@@ -1367,7 +1487,7 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" title="Introduction to Artificial Neural Network Part 1." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../2018-11-09-IntroductionToArtificialNeuralNetworksPart1/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -1382,7 +1502,7 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
           </a>
         
         
-          <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" title="Deep Learning from Scratch Part 1." class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../2017-02-21-Deep-Learning-from-Scratch-Part-01/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -1415,15 +1535,15 @@ X X1 X1.1 X1.2 X1.3 X1.4 X3 X1.5  data_5
       
     </div>
     
-      <script src="../../../assets/javascripts/vendor.2d1db4bd.min.js"></script>
-      <script src="../../../assets/javascripts/bundle.6627ddf3.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../../assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
           base: "../../..",
           features: ['navigation.tabs'],
           search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.5eca75d3.min.js"
+            worker: "../../../assets/javascripts/worker/search.8c7e0a7e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

@@ -1,227 +1,227 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://gchoi.github.io/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/about/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2018-11-09-IntroductionToArtificialNeuralNetworksPart1/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2019-02-07-IntroductionToArtificialNeuralNetworksPart2/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2017-02-21-Deep-Learning-from-Scratch-Part-01/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2017-08-04-Deep-Learning-from-Scratch-Part-02/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2019-02-09-object-detection-using-rcnn/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2019-02-10-object-detection-using-fast-rcnn/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/deep-learning/2020-10-08-setting-up-pytorch-centernet-dev-env/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/scientific-computing/2012-02-09-realtime-fluid-simulation-using-cuda/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/scientific-computing/2014-03-30-gpu-technical-trend/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/01-starting-mongodb/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/02-mongodb-basic-queries/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/03-mongodb-lifecycle/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/04-mongodb-update-operators-inc/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/05-mongodb-update-operators-set-unset/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/06-mongodb-update-operators-push/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/07-mongodb-update-operators-addToSet/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/08-mongodb-update-operators-pop-pull/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/09-mongodb-update-operators-upsert/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/10-mongodb-update-operators-updating-multiple-documents/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/11-mongodb-query-find/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/12-mongodb-query-findAndModify/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/13-mongodb-query-all/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/14-mongodb-query-size/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/15-mongodb-query-slice/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/16-mongodb-query-where/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/17-mongodb-query-querying_embedded_documents/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/18-mongodb-query-cursors/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/19-mongodb-query-skip/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/20-mongodb-query-other-operations/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/21-mongodb-query-snapshot/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/22-mongodb-aggregation-basic/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/23-mongodb-aggregation-mapreduce/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/24-mongodb-db-commands/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/25-mongodb-capped-collections/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/26-mongodb-gridfs/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/27-mongodb-database-references/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/28-mongodb-administration-starting_mongodb/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/29-mongodb-administration-monitoring/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/30-mongodb-administration-security_and_authentication/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/31-mongodb-replication-master_slave_replication/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/32-mongodb-replication-replica_sets_part1/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/33-mongodb-replication-usage_of_slaves-read_scaling/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/34-mongodb-replication-replica_sets_part2/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/35-mongodb-replication-usage_of_slaves-data_processing/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/36-mongodb-replication-oplog/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/37-mongodb-replication-sync/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/38-mongodb-replication-replication_state_and_local_db/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/39-mongodb-replication-replication_with_authentication/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/40-mongodb-sharding-introduction/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/41-mongodb-sharding-shard_keys/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/42-mongodb-sharding-setting_up_sharding/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/43-mongodb-sharding-product_configurations/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/44-mongodb-sharding-sharding_administration/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://gchoi.github.io/posts/mongodb/45-mongodb-tips-db_collection_remove_commands/</loc>
-     <lastmod>2020-11-27</lastmod>
+     <lastmod>2021-01-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
